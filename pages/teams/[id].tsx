@@ -4,14 +4,16 @@ import Layout from '@components/ui/Layout';
 import { Team, User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 
-interface TeamWithPlayers extends Team {
+interface TeamWithPlayersAndOwner extends Team {
   players: User[];
+  owner: User;
 }
 
 interface TeamPageProps {
-  team: TeamWithPlayers;
+  team: TeamWithPlayersAndOwner;
 }
 
 export default function TeamPage({ team }: TeamPageProps) {
@@ -39,13 +41,23 @@ export default function TeamPage({ team }: TeamPageProps) {
     });
     if (request.status !== 200) setError('Something went wrong.');
   };
+  console.log(team);
   return (
-    <div className="container prose">
-      <h1>{team.name}</h1>
-      <h2>Players</h2>
+    <div className="container">
+      <h1 className="text-4xl">{team.name}</h1>
+      <Link href={`/player/${team.owner.id}`}>
+        <a className="text-black text-xs uppercase">
+          Owner - {team.owner.name}
+        </a>
+      </Link>
+      <h2 className="text-2xl mt-3">Players</h2>
       <ul>
         {team.players.map((player) => (
-          <li>{player.name}</li>
+          <li>
+            <Link href={`/player/${player.id}`}>
+              <a>{player.name}</a>
+            </Link>
+          </li>
         ))}
       </ul>
       <form onSubmit={searchPlayer}>
@@ -88,6 +100,7 @@ export default function TeamPage({ team }: TeamPageProps) {
           </Button>
         </div>
       )}
+      {error && <span className="text-red-600">Error: {error}</span>}
     </div>
   );
 }

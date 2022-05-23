@@ -20,18 +20,24 @@ export default function Nav() {
       <div className="flex justify-between container py-1">
         <div>
           <div className="space-x-10 flex items-center">
-            <div className="flex justify-center items-center space-x-2">
-              {session?.user.image && (
-                <Image
-                  src={session.user.image}
-                  height="30px"
-                  width="30px"
-                  alt="Your profile picture"
-                  className="rounded-full"
-                />
-              )}
-              <span>{session?.user.name}</span>
-            </div>
+            <Link href={`/player/${session?.user.id}`}>
+              <a>
+                <div className="flex justify-center items-center space-x-2">
+                  {session?.user.image && (
+                    <Image
+                      src={session.user.image}
+                      height="30px"
+                      width="30px"
+                      alt="Your profile picture"
+                      className="rounded-full"
+                    />
+                  )}
+                  <span className="font-normal text-black">
+                    {session?.user.name}
+                  </span>
+                </div>
+              </a>
+            </Link>
 
             <Button
               onClick={() => signOut()}
