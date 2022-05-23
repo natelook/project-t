@@ -113,7 +113,7 @@ export default function Nav() {
                         <Menu.Item>
                           {({ active }) => (
                             <div>
-                              <Link href={`/settings`}>
+                              <Link href="/settings">
                                 <a
                                   className={classNames(
                                     active ? 'bg-gray-100' : '',
