@@ -32,6 +32,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     `${process.env.NEXTAUTH_URL}/api/user/${context.params?.id}`,
   );
   const player = await request.json();
+  if (!player) {
+    return { notFound: true };
+  }
 
   return { props: { player } };
 }

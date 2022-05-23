@@ -7,7 +7,11 @@ module.exports = {
     container: {
       center: true,
     },
-    extend: {},
+    extend: {
+      height: {
+        '90vh': '90vh',
+      },
+    },
   },
   plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms')],
 };
