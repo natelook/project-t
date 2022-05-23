@@ -63,10 +63,10 @@ model VerificationToken {
 model Tournament {
   id          String             @id @unique @default(cuid())
   name        String
-  slug        String             @default(uuid())
+  slug        String             @default(uuid()) @unique
   createdBy   String
   creator     User               @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-  startDate   DateTime
+  startDate   DateTime 
   createdAt   DateTime           @default(now())
   registrants TeamOnTournament[]
   format      String

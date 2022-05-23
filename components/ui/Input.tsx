@@ -2,7 +2,6 @@ import { ChangeEvent } from 'react';
 
 interface InputProps {
   name: string;
-  id: string;
   value: string;
   onChange: (value: string) => void;
   label: string;
@@ -12,13 +11,13 @@ interface InputProps {
 
 export default function Input({
   name,
-  id,
   value,
   onChange,
   label,
   type,
   hideLabel,
 }: InputProps) {
+  const id = `${name}-input`;
   return (
     <div className="w-full">
       {!hideLabel && (
@@ -36,7 +35,7 @@ export default function Input({
           name={name}
           id={id}
           value={value}
-          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+          className="input"
           placeholder={`${label}...`}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             onChange(e.target.value)

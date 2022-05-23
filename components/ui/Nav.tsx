@@ -7,6 +7,7 @@ import Button from './Button';
 const NavList = [
   { name: 'Home', slug: '/' },
   { name: 'Teams', slug: '/teams' },
+  { name: 'Tournaments', slug: '/tournaments' },
 ];
 
 export default function Nav() {
