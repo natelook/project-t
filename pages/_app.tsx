@@ -9,6 +9,7 @@ const Noop: FC<{ children: ReactNode }> = ({ children }) => (
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const Layout = (Component as any).Layout || Noop;
+
   return (
     <SessionProvider session={session}>
       {/* eslint-disable react/jsx-props-no-spreading */}

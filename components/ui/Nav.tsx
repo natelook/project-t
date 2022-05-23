@@ -1,76 +1,201 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { LogoutIcon } from '@heroicons/react/solid';
+import { Fragment } from 'react';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
-import Button from './Button';
+import classNames from 'classnames';
+import { useRouter } from 'next/router';
 
-const NavList = [
+const navItems = [
   { name: 'Home', slug: '/' },
   { name: 'Teams', slug: '/teams' },
   { name: 'Tournaments', slug: '/tournaments' },
 ];
 
 export default function Nav() {
+  const router = useRouter();
   const { data: session } = useSession();
-  if (session) {
-    if (!session.user) {
-      return <div>Something went wrong</div>;
-    }
+  const getBaseSlug = (slug: string) => slug.split('/')[1];
 
-    return (
-      <div className="flex justify-between container py-1">
-        <div>
-          <div className="space-x-10 flex items-center">
-            <Link href={`/player/${session?.user.id}`}>
-              <a>
-                <div className="flex justify-center items-center space-x-2">
-                  {session?.user.image && (
-                    <Image
-                      src={session.user.image}
-                      height="30px"
-                      width="30px"
-                      alt="Your profile picture"
-                      className="rounded-full"
-                    />
-                  )}
-                  <span className="font-normal text-black">
-                    {session?.user.name}
-                  </span>
-                </div>
-              </a>
-            </Link>
-
-            <Button
-              onClick={() => signOut()}
-              icon={<LogoutIcon />}
-              label="Sign Out"
-              size="text-sm"
-            >
-              Sign out
-            </Button>
-          </div>
-        </div>
-        <div className="flex items-center">
-          <ul className="flex space-x-3 items-center">
-            {NavList.map((item) => (
-              <li key={item.name}>
-                <Link href={item.slug}>
-                  <a className="text-black">{item.name}</a>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    );
-  }
   return (
-    <div className="flex justify-center py-1">
-      <Button type="button" onClick={() => signIn()} label="Sign In">
-        Sign in
-      </Button>
-    </div>
+    <Disclosure as="nav" className="bg-white shadow">
+      {({ open }) => (
+        <>
+          <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div className="relative flex justify-between h-16">
+              <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                {/* Mobile menu button */}
+                <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                  <span className="sr-only">Open main menu</span>
+                  {open ? (
+                    <XIcon className="block h-6 w-6" aria-hidden="true" />
+                  ) : (
+                    <MenuIcon className="block h-6 w-6" aria-hidden="true" />
+                  )}
+                </Disclosure.Button>
+              </div>
+              <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+                <div className="flex-shrink-0 flex items-center">
+                  <span className="text-xl font-bold">Project T</span>
+                </div>
+                <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                  {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
+                  {navItems.map((item) => (
+                    <Link href={item.slug} key={item.name}>
+                      <a
+                        className={classNames({
+                          'nav-link':
+                            getBaseSlug(router.pathname) !==
+                            getBaseSlug(item.slug),
+                          'nav-link-active':
+                            getBaseSlug(router.pathname) ===
+                            getBaseSlug(item.slug),
+                        })}
+                      >
+                        {item.name}
+                      </a>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              {session ? (
+                <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                  <button
+                    type="button"
+                    className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    <span className="sr-only">View notifications</span>
+                    <BellIcon className="h-6 w-6" aria-hidden="true" />
+                  </button>
+
+                  <Menu as="div" className="ml-3 relative">
+                    <div>
+                      <Menu.Button className="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <span className="sr-only">Open user menu</span>
+                        <Image
+                          className="h-8 w-8 rounded-full"
+                          src={
+                            session?.user.image || '/default-profile-pic.svg'
+                          }
+                          height="30px"
+                          width="30px"
+                          alt="Your profile picture"
+                        />
+                      </Menu.Button>
+                    </div>
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-200"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <div>
+                              <Link href={`/player/${session?.user.id}`}>
+                                <a
+                                  className={classNames(
+                                    active ? 'bg-gray-100' : '',
+                                    'block px-4 py-2 text-sm text-gray-700',
+                                  )}
+                                >
+                                  Your Profile
+                                </a>
+                              </Link>
+                            </div>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <div>
+                              <Link href={`/settings`}>
+                                <a
+                                  className={classNames(
+                                    active ? 'bg-gray-100' : '',
+                                    'block px-4 py-2 text-sm text-gray-700',
+                                  )}
+                                >
+                                  Settings
+                                </a>
+                              </Link>
+                            </div>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <div>
+                              <button
+                                type="button"
+                                onClick={() => signOut()}
+                                className={classNames(
+                                  active ? 'bg-gray-100' : '',
+                                  'block px-4 py-2 text-sm text-gray-700 w-full text-left',
+                                )}
+                              >
+                                Sign out
+                              </button>
+                            </div>
+                          )}
+                        </Menu.Item>
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
+                </div>
+              ) : (
+                <div className="flex items-center">
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={() => signIn()}
+                  >
+                    Sign In
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <Disclosure.Panel className="sm:hidden">
+            <div className="pt-2 pb-4 space-y-1">
+              {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
+              <Disclosure.Button
+                as="a"
+                href="#"
+                className="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+              >
+                Dashboard
+              </Disclosure.Button>
+              <Disclosure.Button
+                as="a"
+                href="#"
+                className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+              >
+                Team
+              </Disclosure.Button>
+              <Disclosure.Button
+                as="a"
+                href="#"
+                className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+              >
+                Projects
+              </Disclosure.Button>
+              <Disclosure.Button
+                as="a"
+                href="#"
+                className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+              >
+                Calendar
+              </Disclosure.Button>
+            </div>
+          </Disclosure.Panel>
+        </>
+      )}
+    </Disclosure>
   );
 }
-
 Nav.auth = true;
