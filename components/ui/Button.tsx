@@ -7,6 +7,7 @@ interface ButtonProps {
   label: string;
   children: React.ReactNode;
   icon?: JSX.Element;
+  size?: 'text-xs' | 'text-sm' | 'text-base' | 'text-lg' | 'text-xl';
   onClick: () => void;
 }
 
@@ -16,11 +17,15 @@ export default function Button({
   label,
   children,
   icon,
+  size,
   onClick,
 }: ButtonProps) {
   return (
     <button
-      className={classnames(style === 'secondary' ? 'btn-secondary' : 'btn')}
+      className={classnames(
+        style === 'secondary' ? 'btn-secondary' : 'btn',
+        size,
+      )}
       aria-label={label}
       type={type === 'button' ? 'button' : 'submit'}
       onClick={() => onClick()}
@@ -38,5 +43,6 @@ export default function Button({
 Button.defaultProps = {
   type: 'button',
   style: 'primary',
+  size: 'text-base',
   icon: undefined,
 };
