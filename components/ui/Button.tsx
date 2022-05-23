@@ -22,10 +22,10 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
-      className={classnames(
+      className={classnames([
         style === 'secondary' ? 'btn-secondary' : 'btn',
         size,
-      )}
+      ])}
       aria-label={label}
       type={type === 'button' ? 'button' : 'submit'}
       onClick={() => onClick()}

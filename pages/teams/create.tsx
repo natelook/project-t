@@ -28,7 +28,7 @@ export default function CreateTeam() {
             name="name"
             value={teamName}
             onChange={(value: string) => setTeamName(value)}
-            placeholder="Team Name"
+            label="Team Name"
           />
         </div>
         <button type="submit" className="btn">
