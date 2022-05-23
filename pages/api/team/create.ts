@@ -8,14 +8,20 @@ export default async function CreateTeam(
   res: NextApiResponse,
 ) {
   const session = await getSession({ req });
-  console.log({ session, req });
   if (!session) {
-    console.log('not authed');
     return res.status(401).json({
       error: true,
       message: 'You must be logged in to create a team.',
     });
   }
+
+  if (!session.user) {
+    return res.status(400).json({
+      error: true,
+      message: 'User object not found',
+    });
+  }
+
   const body = JSON.parse(req.body);
   const { teamName } = body;
 
@@ -24,16 +30,14 @@ export default async function CreateTeam(
       .status(400)
       .json({ error: true, message: 'Must submit a team name.' });
   }
-  console.log(session?.user);
 
   try {
     const data = await prisma.team.create({
-      data: { name: teamName, owner_user_id: '1' },
+      data: { name: teamName, owner_user_id: session.user.id },
     });
     return res.status(200).json({ data });
   } catch (error: any) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      console.log(error.message);
       return res
         .status(400)
         .json({ error: true, message: error.message, code: error.code });

@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth/next';
-import DiscordProvider, { DiscordProfile } from 'next-auth/providers/discord';
+import DiscordProvider from 'next-auth/providers/discord';
 import prisma from '@lib/prisma';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
@@ -14,7 +14,7 @@ export default NextAuth({
       //     const defaultAvatarNumber = parseInt(profile.discriminator) % 5;
       //     profile.image_url = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
       //   } else {
-      //     const format = profile.avatar.startsWith("a_") ? "gif" : "png";
+      //     const format = profile.avatar.startsWith('a_') ? 'gif' : 'png';
       //     profile.image_url = `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.${format}`;
       //   }
       //   return {
@@ -29,12 +29,10 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    session: async ({ session, token }) => {
-      console.log({ session, token });
-      // if (session?.user) {
-      //   session.user.id = token.uid;
-      // }
-      return session;
+    session: async (session: any) => {
+      /* eslint no-param-reassign: "error" */
+      session.userId = session.user.id;
+      return Promise.resolve(session);
     },
   },
   adapter: PrismaAdapter(prisma),
