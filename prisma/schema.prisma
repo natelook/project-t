@@ -65,6 +65,7 @@ model Tournament {
   name        String
   slug        String       @unique @default(uuid())
   createdBy   String
+  game        String
   creator     User         @relation(fields: [createdBy], references: [id], onDelete: Cascade)
   startDate   DateTime
   createdAt   DateTime     @default(now())
@@ -74,17 +75,17 @@ model Tournament {
 }
 
 model Match {
-  id           String      @id @unique @default(cuid())
-  matchIdentifier Int @default(autoincrement())
-  nextMatch Int?
-  teamOneId    String?
-  teamTwoId    String?
-  teams        TeamMatch[]
+  id              String      @id @unique @default(cuid())
+  matchIdentifier Int         @default(autoincrement())
+  nextMatch       Int?
+  teamOneId       String?
+  teamTwoId       String?
+  teams           TeamMatch[]
   // teamOne Team @relation("TeamOne",fields: [teamOneId], references: [id])
   // teamTwo Team @relation("TeamTwo",fields: [teamTwoId])
-  tournamentId String
-  round Int
-  tournament   Tournament  @relation(fields: [tournamentId], references: [id])
+  tournamentId    String
+  round           Int
+  tournament      Tournament  @relation(fields: [tournamentId], references: [id])
 }
 
 model Team {
