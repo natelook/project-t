@@ -8,7 +8,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(400).json({ error: true, message: 'No slug' });
   }
 
-  const tournament = await prisma.tournament.findUnique({ where: { slug } });
+  const tournament = await prisma.tournament.findUnique({
+    where: { slug },
+    select: {
+      registrants: true,
+      name: true,
+      startDate: true,
+      createdBy: true,
+      id: true,
+      slug: true,
+      format: true,
+    },
+  });
 
   return res.status(200).json(tournament);
 };

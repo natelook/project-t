@@ -2,10 +2,14 @@ import React, { FC, ReactNode, useEffect } from 'react';
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 const Noop: FC<{ children: ReactNode }> = ({ children }) => (
   <React.Fragment key="noop">{children}</React.Fragment>
 );
+
+const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const Layout = (Component as any).Layout || Noop;
@@ -27,10 +31,13 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 
   return (
     <SessionProvider session={session}>
-      {/* eslint-disable react/jsx-props-no-spreading */}
-      <Layout pageProps={pageProps}>
-        <Component {...pageProps} />
-      </Layout>
+      <QueryClientProvider client={queryClient}>
+        {/* eslint-disable react/jsx-props-no-spreading */}
+        <Layout pageProps={pageProps}>
+          <Component {...pageProps} />
+        </Layout>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </SessionProvider>
   );
 }

@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import {
   BriefcaseIcon,
   CalendarIcon,
@@ -17,15 +17,20 @@ import Link from 'next/link';
 interface TournamentHeadingProps {
   name: string;
   date: Date;
+  isAdmin?: boolean;
+  totalRegistrants: number;
+  startTournament: () => void;
   register: () => void;
 }
 
 export default function TournamentHeading({
   name,
   date,
+  isAdmin,
+  totalRegistrants,
+  startTournament,
   register,
 }: TournamentHeadingProps) {
-  const admin = true;
   return (
     <div className="lg:flex lg:items-center lg:justify-between">
       <div className="flex-1 min-w-0">
@@ -41,7 +46,7 @@ export default function TournamentHeading({
               className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
               aria-hidden="true"
             />
-            0/32 Teams
+            {totalRegistrants}/32 Teams
           </div>
           <div className="mt-2 flex items-center text-sm text-gray-500">
             <LocationMarkerIcon
@@ -60,19 +65,34 @@ export default function TournamentHeading({
         </div>
       </div>
       <div className="mt-5 flex lg:mt-0 lg:ml-4">
-        {admin && (
-          <span className="hidden sm:block">
-            <button
-              type="button"
-              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              <CogIcon
-                className="-ml-1 mr-2 h-5 w-5 text-gray-500"
-                aria-hidden="true"
-              />
-              Settings
-            </button>
-          </span>
+        {isAdmin && (
+          <React.Fragment>
+            <span className="hidden sm:block">
+              <button
+                type="button"
+                onClick={startTournament}
+                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <CogIcon
+                  className="-ml-1 mr-2 h-5 w-5 text-gray-500"
+                  aria-hidden="true"
+                />
+                Start Tournament
+              </button>
+            </span>
+            <span className="hidden sm:block">
+              <button
+                type="button"
+                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <CogIcon
+                  className="-ml-1 mr-2 h-5 w-5 text-gray-500"
+                  aria-hidden="true"
+                />
+                Settings
+              </button>
+            </span>
+          </React.Fragment>
         )}
 
         <span className="hidden sm:block ml-3">
@@ -154,3 +174,7 @@ export default function TournamentHeading({
     </div>
   );
 }
+
+TournamentHeading.defaultProps = {
+  isAdmin: false,
+};

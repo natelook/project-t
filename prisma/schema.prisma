@@ -38,18 +38,18 @@ model Session {
 }
 
 model User {
-  id               String             @id @default(cuid())
+  id               String       @id @default(cuid())
   name             String?
-  email            String?            @unique
+  email            String?      @unique
   emailVerified    DateTime?
   image            String?
   accounts         Account[]
   sessions         Session[]
   tournaments      Tournament[]
   // registrations    Player[]
-  teamOnTournament TeamOnTournament[]
-  teams            Team[]             @relation("Players")
-  ownedTeams       Team[]             @relation("Owned")
+  teamOnTournament Registrant[]
+  teams            Team[]       @relation("Players")
+  ownedTeams       Team[]       @relation("Owned")
 }
 
 model VerificationToken {
@@ -61,44 +61,62 @@ model VerificationToken {
 }
 
 model Tournament {
-  id          String             @id @unique @default(cuid())
+  id          String       @id @unique @default(cuid())
   name        String
-  slug        String             @default(uuid()) @unique
+  slug        String       @unique @default(uuid())
   createdBy   String
-  creator     User               @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-  startDate   DateTime 
-  createdAt   DateTime           @default(now())
-  registrants TeamOnTournament[]
+  creator     User         @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  startDate   DateTime
+  createdAt   DateTime     @default(now())
+  registrants Registrant[]
   format      String
+  matches     Match[]
+}
+
+model Match {
+  id           String      @id @unique @default(cuid())
+  matchIdentifier Int @default(autoincrement())
+  nextMatch Int?
+  teamOneId    String?
+  teamTwoId    String?
+  teams        TeamMatch[]
+  // teamOne Team @relation("TeamOne",fields: [teamOneId], references: [id])
+  // teamTwo Team @relation("TeamTwo",fields: [teamTwoId])
+  tournamentId String
+  round Int
+  tournament   Tournament  @relation(fields: [tournamentId], references: [id])
 }
 
 model Team {
-  id          String             @id @unique @default(cuid())
+  id          String       @id @unique @default(cuid())
   name        String
   ownerUserId String
-  owner       User               @relation(fields: [ownerUserId], references: [id], name: "Owned")
-  players     User[]             @relation("Players")
-  tournaments TeamOnTournament[]
+  owner       User         @relation(fields: [ownerUserId], references: [id], name: "Owned")
+  players     User[]       @relation("Players")
+  tournaments Registrant[]
+  matches     TeamMatch[]
 }
 
-model TeamOnTournament {
+model TeamMatch {
+  // id String @id @unique @default(cuid())
+  tournamentId String
+  teamId       String
+  matchId      String
+  match        Match  @relation(fields: [matchId], references: [id])
+  team         Team   @relation(fields: [teamId], references: [id])
+
+  @@id([tournamentId, teamId, matchId])
+}
+
+model Registrant {
   tournamentId String
   tournament   Tournament @relation(fields: [tournamentId], references: [id])
   teamId       String
   team         Team       @relation(fields: [teamId], references: [id])
-  registeredBy User       @relation(fields: [user_id], references: [id])
+  registeredBy User       @relation(fields: [userId], references: [id])
   registeredAt DateTime   @default(now())
+  players      String[]
+  userId       String
 
-  user_id String
   @@id([tournamentId, teamId])
 }
-
-// model Player {
-//   id      String   @id
-//   user_id String
-//   team_id String
-//   active  Boolean?
-//   coach   Boolean?
-//   team    Team     @relation(fields: [team_id], references: [id])
-//   user    User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-// }
