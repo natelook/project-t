@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply min-h-screen;
+    @apply min-h-screen bg-white dark:bg-[#121212];
   }
 
   article a {
@@ -29,5 +29,11 @@
 
   .nav-link-active {
     @apply border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium;
+  }
+}
+
+@layer utilities {
+  .bg-white {
+    @apply dark:bg-[#121212] dark:text-white;
   }
 }

@@ -131,6 +131,44 @@ export default function Nav() {
                             <div>
                               <button
                                 type="button"
+                                onClick={() => {
+                                  const theme = localStorage.getItem('theme');
+
+                                  if (!theme) {
+                                    localStorage.setItem('theme', 'dark');
+                                    document.documentElement.classList.add(
+                                      'dark',
+                                    );
+                                  }
+                                  if (theme === 'dark') {
+                                    localStorage.setItem('theme', 'light');
+                                    document.documentElement.classList.remove(
+                                      'dark',
+                                    );
+                                  }
+
+                                  if (theme === 'light') {
+                                    localStorage.setItem('theme', 'dark');
+                                    document.documentElement.classList.add(
+                                      'dark',
+                                    );
+                                  }
+                                }}
+                                className={classNames(
+                                  active ? 'bg-gray-100' : '',
+                                  'block px-4 py-2 text-sm text-gray-700 w-full text-left',
+                                )}
+                              >
+                                Toggle Darkmode
+                              </button>
+                            </div>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <div>
+                              <button
+                                type="button"
                                 onClick={() => signOut()}
                                 className={classNames(
                                   active ? 'bg-gray-100' : '',

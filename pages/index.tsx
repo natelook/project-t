@@ -5,7 +5,7 @@ import Layout from '@components/ui/Layout';
 
 export default function Home() {
   return (
-    <div>
+    <div className="">
       <p>Hello</p>
       <Link href="/teams">
         <a>Teams</a>
