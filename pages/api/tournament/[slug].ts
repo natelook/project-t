@@ -9,7 +9,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const tournament = await prisma.tournament.findUnique({ where: { slug } });
-  console.log(tournament);
 
   return res.status(200).json(tournament);
 };

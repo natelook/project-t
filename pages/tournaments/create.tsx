@@ -7,24 +7,19 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { GetServerSidePropsContext } from 'next';
 import { getSession, useSession } from 'next-auth/react';
-import { Session } from 'next-auth';
 import { useRouter } from 'next/router';
 import { Tournament } from '@prisma/client';
-
-interface CreateTournamentProps {
-  session: Session;
-}
 
 const convertTitleToSlug = (title: string) => {
   const slug = title.replace(/\s+/g, '-').toLowerCase();
   return slug;
 };
 
-export default function CreateTournament({}: CreateTournamentProps) {
+export default function CreateTournament() {
   const [name, setName] = useState('');
   const [startDate, setStartDate] = useState(new Date());
   const [slug, setSlug] = useState('');
-  const [format, setFormat] = useState('Single Elimination');
+  const [format] = useState('Single Elimination');
   const [error, setError] = useState<string | null>();
   const { data: session } = useSession();
   const router = useRouter();
@@ -114,7 +109,6 @@ export default function CreateTournament({}: CreateTournamentProps) {
 
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {
   const session = await getSession({ req });
-  console.log({ session });
   return { props: { session, test: 'hello' } };
 }
 

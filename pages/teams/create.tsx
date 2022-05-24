@@ -31,7 +31,6 @@ export default function CreateTeam() {
       >
         <div>
           <Input
-            id="team-name"
             type="text"
             name="name"
             value={teamName}
@@ -43,6 +42,7 @@ export default function CreateTeam() {
           Create
         </button>
       </form>
+      {error && <span>{error}</span>}
     </div>
   );
 }
