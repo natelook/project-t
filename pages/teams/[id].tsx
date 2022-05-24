@@ -37,11 +37,21 @@ export default function TeamPage({ team }: TeamPageProps) {
     if (!playerResults) return;
     const request = await fetch('/api/team/add-player', {
       method: 'POST',
-      body: JSON.stringify({ teamId: team.id, playerId: playerResults.id }),
+      body: JSON.stringify({
+        teamId: team.id,
+        playerId: playerResults.id,
+        owner: team.ownerUserId,
+      }),
     });
-    if (request.status !== 200) setError('Something went wrong.');
+    if (request.status === 401) {
+      setError('Only the owner can add players');
+      return;
+    }
+    if (request.status !== 200) {
+      setError('Something went wrong.');
+    }
   };
-  console.log({ team });
+
   return (
     <div className="container max-w-2xl mt-24">
       <h1 className="text-4xl">{team.name}</h1>
@@ -83,7 +93,6 @@ export default function TeamPage({ team }: TeamPageProps) {
           <form onSubmit={searchPlayer}>
             <div className="flex">
               <Input
-                id="playerLookup"
                 label="Look up user"
                 // @ts-ignore
                 onChange={(value: string) => setPlayerName(value)}
@@ -127,7 +136,7 @@ export default function TeamPage({ team }: TeamPageProps) {
         </div>
       </div>
 
-      {error && <span className="text-red-600">Error: {error}</span>}
+      {error && <span className="text-red-600">{error}</span>}
     </div>
   );
 }
