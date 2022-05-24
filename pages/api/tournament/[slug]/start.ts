@@ -1,9 +1,11 @@
 import prisma from '@lib/prisma';
+import { Match } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req });
+
   if (!session) {
     return res.status(401);
   }
@@ -17,6 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     where: { id: id as string },
     include: { registrants: true },
   });
+
   if (!tournament) {
     return res.status(404);
   }

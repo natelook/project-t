@@ -8,6 +8,7 @@ import {
   CogIcon,
   LinkIcon,
   LocationMarkerIcon,
+  PencilAltIcon,
 } from '@heroicons/react/solid';
 import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
@@ -67,20 +68,20 @@ export default function TournamentHeading({
       <div className="mt-5 flex lg:mt-0 lg:ml-4">
         {isAdmin && (
           <React.Fragment>
-            <span className="hidden sm:block">
+            <span className="block">
               <button
                 type="button"
                 onClick={startTournament}
                 className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                <CogIcon
+                <CheckIcon
                   className="-ml-1 mr-2 h-5 w-5 text-gray-500"
                   aria-hidden="true"
                 />
                 Start Tournament
               </button>
             </span>
-            <span className="hidden sm:block">
+            <span className="ml-3 block">
               <button
                 type="button"
                 className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -95,7 +96,7 @@ export default function TournamentHeading({
           </React.Fragment>
         )}
 
-        <span className="hidden sm:block ml-3">
+        <span className="block ml-3">
           <button
             type="button"
             className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -114,8 +115,11 @@ export default function TournamentHeading({
             onClick={register}
             className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            <CheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-            Register
+            <PencilAltIcon
+              className="-ml-1 mr-2 h-5 w-5 text-sm"
+              aria-hidden="true"
+            />
+            Sign Up
           </button>
         </span>
 
