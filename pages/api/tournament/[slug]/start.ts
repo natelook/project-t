@@ -20,7 +20,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     include: { registrants: true },
   });
 
-  if (!tournament) {
+  if (!tournament || !tournament?.id) {
     return res.status(404);
   }
 
@@ -28,12 +28,78 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(401);
   }
 
-  // const totalRegistrants = tournament.registrants.length;
-  const totalRegistrants = 8;
-
-  const createMatches = new Array(totalRegistrants).map((i: number) => {
-    console.log(i);
+  let matchedTeams: string[] | null;
+  const matches: any[] = [];
+  const totalRegistrants = tournament.registrants.length;
+  let match = 1;
+  tournament.registrants.forEach((registrant) => {
+    if (!matchedTeams) {
+      matchedTeams = [registrant.teamId];
+      return;
+    }
+    if (matchedTeams.length === 1) {
+      matchedTeams.push(registrant.teamId);
+    }
+    if (matchedTeams.length === 2) {
+      const matchObject = {
+        matchIdentifier: match,
+        nextMatch: 1,
+        teamOneId: matchedTeams[0],
+        teamTwoId: matchedTeams[1],
+        round: 1,
+        tournamentId: tournament.id,
+      };
+      match++;
+      matches.push(matchObject);
+      matchedTeams = null;
+    }
   });
 
-  return res.status(200).json({ message: 'Tournament Started' });
+  function createEmptyMatches(totalTeams: number) {
+    const remainingMatches = totalTeams / 2 - 1; // 15
+    const previousRoundTotalMatches = totalTeams / 2; // 16
+    let roundSize = previousRoundTotalMatches / 2; // 8
+    let totalMatches = previousRoundTotalMatches;
+    let round = 2;
+
+    const emptyMatches: {
+      matchIdentifier: number;
+      round: number;
+      tournamentId: string;
+    }[] = [];
+
+    function createEmptyMatch(matchId: number) {
+      if (tournament) {
+        if (Array.isArray(emptyMatches)) {
+          emptyMatches.push({
+            matchIdentifier: matchId,
+            round: round,
+            tournamentId: tournament.id,
+          });
+        }
+      } else {
+        console.log('no tournament');
+      }
+    }
+    let teamsAddedCurrentRound = 1;
+    for (let i = 1; i < remainingMatches; i++) {
+      let newMatch = totalMatches + 1;
+      if (teamsAddedCurrentRound === roundSize) {
+        round = round + 1;
+        roundSize = roundSize / 2;
+        teamsAddedCurrentRound = 0;
+      }
+
+      createEmptyMatch(newMatch);
+      totalMatches++;
+      teamsAddedCurrentRound++;
+    }
+    return emptyMatches;
+  }
+  const emptyMatches = createEmptyMatches(totalRegistrants);
+  const allMatches = matches.concat(emptyMatches);
+
+  const addMatches = await prisma.match.createMany({ data: allMatches });
+
+  return res.status(200).json({ message: 'Tournament Started', addMatches });
 };
