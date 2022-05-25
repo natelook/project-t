@@ -11,10 +11,13 @@
     "update-db": "npx prisma generate && npx prisma db push"
   },
   "dependencies": {
+    "@google-cloud/storage": "^6.0.0",
     "@headlessui/react": "^1.6.2",
     "@heroicons/react": "^1.0.6",
     "@next-auth/prisma-adapter": "^1.0.3",
     "@prisma/client": "^3.14.0",
+    "@pulumi/gcp": "^6.24.0",
+    "@pulumi/pulumi": "^3.33.1",
     "axios": "^0.27.2",
     "classnames": "^2.3.1",
     "dayjs": "^1.11.2",

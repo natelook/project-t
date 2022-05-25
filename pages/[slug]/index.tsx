@@ -1,11 +1,12 @@
 // import Input from '@components/ui/Input';
+import AllMatches from '@components/ui/AllMatches';
 import Layout from '@components/ui/Layout';
 import Modal from '@components/ui/Modal';
 import PlayerSelect from '@components/ui/PlayerSelect';
 import TeamSelect from '@components/ui/TeamSelect';
 import TournamentHeading from '@components/ui/TournamentHeading';
 import { Dialog } from '@headlessui/react';
-import { Registrant, Team, Tournament, User } from '@prisma/client';
+import { Match, Registrant, Team, Tournament, User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
 import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
@@ -15,12 +16,13 @@ interface TeamWithPlayers extends Team {
   players: User[];
 }
 
-interface TournamentWithRegistrants extends Tournament {
+interface TournamentWithRegistrantsAndMatches extends Tournament {
   registrants: Registrant[];
+  matches: Match[];
 }
 
 interface TournamentPageProps {
-  tournament: TournamentWithRegistrants;
+  tournament: TournamentWithRegistrantsAndMatches;
   userId: string;
 }
 
@@ -39,6 +41,7 @@ export default function TournamentPage({
   const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
   const [team, setTeam] = useState<TeamWithPlayers | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [totalRounds, setTotalRounds] = useState<number[] | null>(null);
   const { data: user } = useQuery('user', () => fetchUser(userId));
   const isAdmin = userId === tournament.createdBy;
 
@@ -50,6 +53,15 @@ export default function TournamentPage({
     const team = await request.json();
     setTeam(team);
   }, [teamSelected]);
+
+  useEffect(() => {
+    if (tournament.matches.length !== 0) {
+      const rounds = tournament.matches
+        .map((item) => item.round)
+        .filter((value, index, self) => self.indexOf(value) === index);
+      setTotalRounds(rounds);
+    }
+  }, []);
 
   useEffect(() => {
     if (!teamSelected) return;
@@ -88,6 +100,7 @@ export default function TournamentPage({
         startTournament={startTournament}
         isAdmin={isAdmin}
       />
+      <AllMatches matches={tournament.matches} rounds={totalRounds} />
       {registerModalOpen && (
         <Modal
           open={registerModalOpen}

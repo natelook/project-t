@@ -18,6 +18,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       id: true,
       slug: true,
       format: true,
+      matches: {
+        select: {
+          id: true,
+          round: true,
+          matchIdentifier: true,
+          teams: true,
+          teamOneId: true,
+          teamTwoId: true,
+        },
+      },
     },
   });
 
