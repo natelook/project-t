@@ -1,4 +1,4 @@
-import Layout from '@components/ui/Layout';
+import { Layout } from '@components/common';
 import { Team, User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';

@@ -1,5 +1,5 @@
 import Input from '@components/ui/Input';
-import Layout from '@components/ui/Layout';
+import { Layout } from '@components/common';
 import { Team } from '@prisma/client';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useState } from 'react';

@@ -1,6 +1,6 @@
 import Button from '@components/ui/Button';
 import Input from '@components/ui/Input';
-import Layout from '@components/ui/Layout';
+import { Layout } from '@components/common';
 import { FormEvent, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import DatePicker from 'react-datepicker';

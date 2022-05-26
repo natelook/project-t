@@ -1,4 +1,4 @@
-import Layout from '@components/ui/Layout';
+import { Layout } from '@components/common';
 import Link from 'next/link';
 
 /* This example requires Tailwind CSS v2.0+ */

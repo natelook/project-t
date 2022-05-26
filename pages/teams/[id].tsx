@@ -1,9 +1,6 @@
-import AddPlayer from '@components/ui/AddPlayer';
-import Layout from '@components/ui/Layout';
+import { AddPlayer, TeamHeading, TeamPanel, TeamStats } from '@components/team';
+import { Layout } from '@components/common';
 import Modal from '@components/ui/Modal';
-import TeamHeading from '@components/ui/TeamHeading';
-import TeamPanel from '@components/ui/TeamPanel';
-import TeamStats from '@components/ui/TeamStats';
 import { TeamWithPlayersAndOwner } from '@lib/types';
 import { User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';

@@ -1,9 +1,11 @@
-import AllMatches from '@components/ui/AllMatches';
-import Layout from '@components/ui/Layout';
+import {
+  AllMatches,
+  PlayerSelect,
+  TeamSelect,
+  TournamentHeading,
+} from '@components/tournament';
+import { Layout } from '@components/common';
 import Modal from '@components/ui/Modal';
-import PlayerSelect from '@components/ui/PlayerSelect';
-import TeamSelect from '@components/ui/TeamSelect';
-import TournamentHeading from '@components/ui/TournamentHeading';
 import { Dialog } from '@headlessui/react';
 import { Match, Registrant, Team, Tournament, User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';

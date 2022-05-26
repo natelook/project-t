@@ -1,4 +1,4 @@
-import Layout from '@components/ui/Layout';
+import { Layout } from '@components/common';
 import { Team } from '@prisma/client';
 import Link from 'next/link';
 

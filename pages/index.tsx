@@ -1,7 +1,7 @@
 import { getSession } from 'next-auth/react';
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
-import Layout from '@components/ui/Layout';
+import { Layout } from '@components/common';
 
 export default function Home() {
   return (

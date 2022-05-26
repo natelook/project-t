@@ -1,8 +1,8 @@
 import { User } from '@prisma/client';
 import Image from 'next/image';
 import { FormEvent } from 'react';
-import Button from './Button';
-import Input from './Input';
+import Button from '../ui/Button';
+import Input from '../ui/Input';
 
 interface AddPlayerProps {
   playerName: string;
