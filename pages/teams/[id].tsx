@@ -6,6 +6,7 @@ import { User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
 import { FormEvent, useRef, useState } from 'react';
+import { useQuery } from 'react-query';
 // import { Banner } from '@components/ui';
 // import { SpeakerphoneIcon } from '@heroicons/react/solid';
 // import validateTeamOwner from '@lib/validateUser';
@@ -15,15 +16,30 @@ interface TeamWithCount extends TeamWithPlayersAndOwner {
 }
 
 interface TeamPageProps {
-  team: TeamWithCount;
+  data: TeamWithCount;
   userId?: string;
 }
 
-export default function TeamPage({ team, userId }: TeamPageProps) {
+const fetcher = async (teamId: string) => {
+  const request = await fetch(`/api/team/${teamId}`);
+  const result = await request.json();
+  return result;
+};
+
+export default function TeamPage({ data, userId }: TeamPageProps) {
   const [playerName, setPlayerName] = useState<string>('');
   const [playerResults, setPlayerResults] = useState<null | User>();
   const [error, setError] = useState<string | null>();
   const [addPlayerModalisOpen, setAddPlayerModalOpen] = useState(false);
+  console.log({ data });
+
+  const { data: team, isLoading } = useQuery<TeamWithCount>(
+    `team-${data.id}`,
+    () => fetcher(data.id),
+    {
+      initialData: data,
+    },
+  );
 
   const cancelButton = useRef(null);
 
@@ -40,7 +56,7 @@ export default function TeamPage({ team, userId }: TeamPageProps) {
   };
 
   const addPlayer = async () => {
-    if (!playerResults || !userId) return;
+    if (!playerResults || !userId || !team) return;
     // const isOwner = await validateTeamOwner(team.id, userId);
     // if (!isOwner) return;
 
@@ -60,7 +76,11 @@ export default function TeamPage({ team, userId }: TeamPageProps) {
     }
   };
 
-  const isOwner = useRef(userId === team.ownerUserId);
+  const isOwner = useRef(userId === team?.ownerUserId);
+
+  if (!team || isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className="container mt-16">
@@ -115,7 +135,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     `${process.env.NEXTAUTH_URL}/api/team/${context?.params?.id}`,
   );
   const team = await request.json();
-  return { props: { team, userId } };
+  return { props: { data: team, userId } };
 }
 
 TeamPage.Layout = Layout;
