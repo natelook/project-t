@@ -45,7 +45,7 @@ export default function TournamentPage({
   const [totalRounds, setTotalRounds] = useState<number[] | null>(null);
   const { data: user } = useQuery('user', () => fetchUser(userId));
   const isAdmin = userId === tournament.createdBy;
-
+  console.log({ user });
   const cancelButtonRef = useRef(null);
 
   const fetchTeamInfo = useCallback(async () => {
@@ -117,7 +117,7 @@ export default function TournamentPage({
           <form className="mt-4" onSubmit={registerTeam}>
             <TeamSelect
               label="Choose Team"
-              options={user.teams}
+              options={user.ownedTeams}
               selected={teamSelected}
               setSelected={(selectedTeam) => setTeamSelected(selectedTeam)}
             />
