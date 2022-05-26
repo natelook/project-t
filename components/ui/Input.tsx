@@ -23,7 +23,7 @@ export default function Input({
       {!hideLabel && (
         <label
           htmlFor={id}
-          className="block text-sm font-medium text-gray-900 capitalize"
+          className="block text-sm font-medium text-gray-900 dark:text-white capitalize"
         >
           {label}
         </label>
@@ -35,7 +35,7 @@ export default function Input({
           name={name}
           id={id}
           value={value}
-          className="input"
+          className="input dark:text-black"
           placeholder={`${label}...`}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             onChange(e.target.value)
