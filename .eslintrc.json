@@ -9,7 +9,7 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "react/jsx-fragments": [true, "element"],
+    "react/jsx-fragments": [0, "element"],
     "react/react-in-jsx-scope": "off",
     "jsx-a11y/anchor-is-valid": [
       "error",

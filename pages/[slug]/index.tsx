@@ -1,4 +1,3 @@
-// import Input from '@components/ui/Input';
 import AllMatches from '@components/ui/AllMatches';
 import Layout from '@components/ui/Layout';
 import Modal from '@components/ui/Modal';
@@ -50,8 +49,8 @@ export default function TournamentPage({
   const fetchTeamInfo = useCallback(async () => {
     if (!teamSelected) return;
     const request = await fetch(`/api/team/${teamSelected.id}`);
-    const team = await request.json();
-    setTeam(team);
+    const teamData = await request.json();
+    setTeam(teamData);
   }, [teamSelected]);
 
   useEffect(() => {
@@ -67,7 +66,7 @@ export default function TournamentPage({
     if (!teamSelected) return;
     fetchTeamInfo();
     if (error) setError(null);
-  }, [teamSelected]);
+  }, [teamSelected, error, fetchTeamInfo]);
 
   const registerTeam = async (e: FormEvent) => {
     e.preventDefault();
@@ -75,19 +74,19 @@ export default function TournamentPage({
       setError('No team selected.');
       return;
     }
-    const request = await fetch(`/api/tournament/${tournament.id}/register`, {
+
+    // TODO: Add some visual confirmation that this is complete
+    await fetch(`/api/tournament/${tournament.id}/register`, {
       method: 'POST',
       body: JSON.stringify({ teamId: team?.id }),
     });
   };
 
   const startTournament = async () => {
-    const request = await fetch(`/api/tournament/${tournament.id}/start`);
-    if (request.status !== 200) {
-      console.log('error');
-      return;
-    }
-    console.log('generatedBacked');
+    await fetch(`/api/tournament/${tournament.id}/start`);
+    // if (request.status !== 200) {
+    //   return;
+    // }
   };
 
   return (
@@ -118,7 +117,7 @@ export default function TournamentPage({
               label="Choose Team"
               options={user.teams}
               selected={teamSelected}
-              setSelected={(team) => setTeamSelected(team)}
+              setSelected={(selectedTeam) => setTeamSelected(selectedTeam)}
             />
             {teamSelected && (
               <div>

@@ -8,7 +8,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(401).json({ error: 'You must be logged in to register' });
   }
   const { user } = session;
-  const body = req.body;
+  const { body } = req;
   const { teamId, players }: { teamId: string; players: string[] } =
     JSON.parse(body);
   // This is ID for this route to make registration easier

@@ -1,5 +1,4 @@
 import prisma from '@lib/prisma';
-import { Match } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
@@ -49,7 +48,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         round: 1,
         tournamentId: tournament.id,
       };
-      match++;
+      match += 1;
       matches.push(matchObject);
       matchedTeams = null;
     }
@@ -73,26 +72,26 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         if (Array.isArray(emptyMatches)) {
           emptyMatches.push({
             matchIdentifier: matchId,
-            round: round,
+            round,
             tournamentId: tournament.id,
           });
         }
       } else {
-        console.log('no tournament');
+        // console.log('no tournament');
       }
     }
     let teamsAddedCurrentRound = 1;
-    for (let i = 1; i < remainingMatches; i++) {
-      let newMatch = totalMatches + 1;
+    for (let i = 1; i < remainingMatches; i += 1) {
+      const newMatch = totalMatches + 1;
       if (teamsAddedCurrentRound === roundSize) {
-        round = round + 1;
-        roundSize = roundSize / 2;
+        round += 1;
+        roundSize /= 2;
         teamsAddedCurrentRound = 0;
       }
 
       createEmptyMatch(newMatch);
-      totalMatches++;
-      teamsAddedCurrentRound++;
+      totalMatches += 1;
+      teamsAddedCurrentRound += 1;
     }
     return emptyMatches;
   }

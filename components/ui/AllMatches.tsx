@@ -1,5 +1,4 @@
 import { Match } from '@prisma/client';
-import { useEffect } from 'react';
 
 interface AllMatchesProps {
   matches: Match[];
@@ -7,7 +6,6 @@ interface AllMatchesProps {
 }
 
 export default function AllMatches({ matches, rounds }: AllMatchesProps) {
-  console.log({ matches });
   return (
     <div>
       {rounds &&
