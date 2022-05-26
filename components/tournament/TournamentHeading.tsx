@@ -38,27 +38,27 @@ export default function TournamentHeading({
         <span className="text-xs text-gray-500 uppercase font-bold">
           Tournament
         </span>
-        <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+        <h2 className="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:text-3xl sm:truncate">
           {name}
         </h2>
         <div className="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
-          <div className="mt-2 flex items-center text-sm text-gray-500">
+          <div className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-300">
             <BriefcaseIcon
-              className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+              className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400 dark:text-gray-200"
               aria-hidden="true"
             />
             {totalRegistrants}/32 Teams
           </div>
-          <div className="mt-2 flex items-center text-sm text-gray-500">
+          <div className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-300">
             <LocationMarkerIcon
-              className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+              className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400 dark:text-gray-200"
               aria-hidden="true"
             />
             Game
           </div>
-          <div className="mt-2 flex items-center text-sm text-gray-500">
+          <div className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-300">
             <CalendarIcon
-              className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+              className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400 dark:text-gray-200"
               aria-hidden="true"
             />
             {dayjs(date).format('MM/DD/YY h:ma')}
@@ -75,7 +75,7 @@ export default function TournamentHeading({
                 className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 <CheckIcon
-                  className="-ml-1 mr-2 h-5 w-5 text-gray-500"
+                  className="-ml-1 mr-2 h-5 w-5 text-gray-500 dark:text-gray-300"
                   aria-hidden="true"
                 />
                 Start Tournament
@@ -87,7 +87,7 @@ export default function TournamentHeading({
                 className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 <CogIcon
-                  className="-ml-1 mr-2 h-5 w-5 text-gray-500"
+                  className="-ml-1 mr-2 h-5 w-5 text-gray-500 dark:text-gray-300"
                   aria-hidden="true"
                 />
                 Settings
@@ -102,7 +102,7 @@ export default function TournamentHeading({
             className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             <LinkIcon
-              className="-ml-1 mr-2 h-5 w-5 text-gray-500"
+              className="-ml-1 mr-2 h-5 w-5 text-gray-500 dark:text-gray-300"
               aria-hidden="true"
             />
             Teams
@@ -128,7 +128,7 @@ export default function TournamentHeading({
           <Menu.Button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             More
             <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5 text-gray-500"
+              className="-mr-1 ml-2 h-5 w-5 text-gray-500 dark:text-gray-300"
               aria-hidden="true"
             />
           </Menu.Button>

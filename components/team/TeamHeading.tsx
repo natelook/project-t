@@ -20,7 +20,7 @@ export default function TeamHeading({
   return (
     <div className="md:flex md:items-center md:justify-between mb-10">
       <div className="flex-1 min-w-0">
-        <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl sm:truncate">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl sm:truncate">
           {name}
         </h2>
         {subtitle && <h3 className="text-gray-600">{subtitle}</h3>}

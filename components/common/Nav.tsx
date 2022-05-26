@@ -93,15 +93,17 @@ export default function Nav() {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Menu.Item>
                           {({ active }) => (
                             <div>
                               <Link href="/profile">
                                 <a
                                   className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700',
+                                    active
+                                      ? 'bg-gray-100 dark:bg-gray-700'
+                                      : '',
+                                    'block px-4 py-2 text-sm text-gray-700 dark:text-gray-200',
                                   )}
                                 >
                                   Your Profile
@@ -116,8 +118,10 @@ export default function Nav() {
                               <Link href="/settings">
                                 <a
                                   className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700',
+                                    active
+                                      ? 'bg-gray-100 dark:bg-gray-700'
+                                      : '',
+                                    'block px-4 py-2 text-sm text-gray-700 dark:text-gray-200',
                                   )}
                                 >
                                   Settings
@@ -155,8 +159,8 @@ export default function Nav() {
                                   }
                                 }}
                                 className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm text-gray-700 w-full text-left',
+                                  active ? 'bg-gray-100 dark:bg-gray-700' : '',
+                                  'block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left',
                                 )}
                               >
                                 Toggle Darkmode
@@ -171,8 +175,8 @@ export default function Nav() {
                                 type="button"
                                 onClick={() => signOut()}
                                 className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm text-gray-700 w-full text-left',
+                                  active ? 'bg-gray-100 dark:bg-gray-700' : '',
+                                  'block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 w-full text-left',
                                 )}
                               >
                                 Sign out
