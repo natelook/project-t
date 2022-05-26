@@ -1,5 +1,6 @@
 import React, { FC, ReactNode } from 'react';
 import Nav from './Nav';
+import Footer from './Footer';
 
 interface LayoutProps {
   children: ReactNode;
@@ -14,6 +15,7 @@ const Layout: FC<LayoutProps> = ({ children }) => (
     >
       {children}
     </div>
+    <Footer />
   </React.Fragment>
 );
 
