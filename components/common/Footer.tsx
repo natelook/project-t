@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 /* This example requires Tailwind CSS v2.0+ */
 const navigation = {
   main: [
@@ -55,7 +57,7 @@ export default function Footer() {
           ))}
         </div>
         <p className="mt-8 text-center text-base text-gray-400">
-          &copy; 2020 Project T, All rights reserved.
+          &copy; {dayjs().format('YYYY')} Project T, All rights reserved.
         </p>
       </div>
     </footer>

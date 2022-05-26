@@ -90,13 +90,9 @@ export default function CreateTournament() {
           name="format"
           label="Tournament Format"
           value={format}
-          onChange={(value: string) => console.log(value)}
+          onChange={() => {}}
         />
-        <Button
-          type="submit"
-          label="create tournament"
-          onClick={() => console.log('fix this')}
-        >
+        <Button type="submit" label="create tournament" onClick={() => {}}>
           Create
         </Button>
         {error && (

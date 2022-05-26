@@ -6,9 +6,16 @@ import { User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
 import { FormEvent, useRef, useState } from 'react';
+// import { Banner } from '@components/ui';
+// import { SpeakerphoneIcon } from '@heroicons/react/solid';
+// import validateTeamOwner from '@lib/validateUser';
+
+interface TeamWithCount extends TeamWithPlayersAndOwner {
+  _count: number;
+}
 
 interface TeamPageProps {
-  team: TeamWithPlayersAndOwner;
+  team: TeamWithCount;
   userId?: string;
 }
 
@@ -33,13 +40,15 @@ export default function TeamPage({ team, userId }: TeamPageProps) {
   };
 
   const addPlayer = async () => {
-    if (!playerResults) return;
-    const request = await fetch('/api/team/add-player', {
+    if (!playerResults || !userId) return;
+    // const isOwner = await validateTeamOwner(team.id, userId);
+    // if (!isOwner) return;
+
+    const request = await fetch('/api/team/invite-player', {
       method: 'POST',
       body: JSON.stringify({
         teamId: team.id,
         playerId: playerResults.id,
-        owner: team.ownerUserId,
       }),
     });
     if (request.status === 401) {
@@ -55,16 +64,17 @@ export default function TeamPage({ team, userId }: TeamPageProps) {
 
   return (
     <div className="container mt-16">
-      <div className="mb-10">
-        <TeamHeading
-          team={team}
-          primaryButton={() => setAddPlayerModalOpen(true)}
-          isOwner={isOwner}
-        />
-      </div>
+      <TeamHeading
+        name={team.name}
+        primaryButton={() => setAddPlayerModalOpen(true)}
+        primaryButtonText="Invite Player"
+        isOwner={isOwner.current}
+      />
+
       <TeamStats />
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-4 mt-5">
         <div>
+          <h3 className="text-3xl font-bold leading-6">Players</h3>
           <TeamPanel team={team} />
         </div>
       </div>
@@ -82,9 +92,16 @@ export default function TeamPage({ team, userId }: TeamPageProps) {
             playerName={playerName}
             playerResults={playerResults}
             setPlayerName={(value: string) => setPlayerName(value)}
+            error={error}
           />
         </Modal>
       )}
+      {/* <Banner
+        icon={<SpeakerphoneIcon />}
+        message="You have successfully invited that player"
+        actionText="View Profile"
+        actionLink="/profile"
+      /> */}
     </div>
   );
 }

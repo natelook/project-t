@@ -4,7 +4,7 @@ import Link from 'next/link';
 /* This example requires Tailwind CSS v2.0+ */
 export default function NotFound() {
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="flex flex-1 flex-col bg-white">
       <main className="flex-grow flex flex-col justify-center max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-16">
           <div className="text-center">

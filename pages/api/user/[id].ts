@@ -8,7 +8,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: id as string },
-      select: { name: true, teams: true, ownedTeams: true, tournaments: true },
+      select: {
+        id: true,
+        username: true,
+        teams: true,
+        ownedTeams: true,
+        tournaments: true,
+        teamInvitations: {
+          select: {
+            id: true,
+            team: true,
+            status: true,
+          },
+        },
+      },
     });
     return res.status(200).json(user);
   } catch (error) {

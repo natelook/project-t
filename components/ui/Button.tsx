@@ -25,6 +25,7 @@ export default function Button({
       className={classnames([
         style === 'secondary' ? 'btn-secondary' : 'btn',
         size,
+        'w-full flex justify-center h-full',
       ])}
       aria-label={label}
       type={type === 'button' ? 'button' : 'submit'}

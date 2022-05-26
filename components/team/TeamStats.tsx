@@ -9,9 +9,7 @@ const stats = [
 export default function TeamStats() {
   return (
     <div>
-      <h3 className="text-3xl leading-6 font-medium text-gray-900">
-        Team Stats
-      </h3>
+      <h3 className="text-3xl leading-6 font-bold">Team Stats</h3>
       <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
         {stats.map((item) => (
           <div

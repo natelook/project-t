@@ -97,7 +97,7 @@ export default function Nav() {
                         <Menu.Item>
                           {({ active }) => (
                             <div>
-                              <Link href={`/player/${session?.user.id}`}>
+                              <Link href="/profile">
                                 <a
                                   className={classNames(
                                     active ? 'bg-gray-100' : '',

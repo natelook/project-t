@@ -1,33 +1,54 @@
 import { Layout } from '@components/common';
-import { Team } from '@prisma/client';
-import Link from 'next/link';
+import { TeamHeading } from '@components/team';
+import TeamCard from '@components/team/card';
+import { TeamWithPlayers } from '@lib/types';
+import { useRouter } from 'next/router';
+// import { useState } from 'react';
+import { useQuery } from 'react-query';
 
-export default function TeamsPage({ teams }: { teams: Team[] }) {
+const fetcher = async (index: number) => {
+  const request = await fetch(`/api/team/all/${index}`);
+  const result = await request.json();
+  return result;
+};
+
+export default function TeamsPage({ data }: { data: TeamWithPlayers[] }) {
+  // const [index, setIndex] = useState(1);
+  const { data: teams, isLoading } = useQuery<TeamWithPlayers[]>(
+    'all-teams',
+    () => fetcher(1),
+    {
+      initialData: data,
+      keepPreviousData: true,
+    },
+  );
+
+  const router = useRouter();
   return (
     <main className="container">
-      <div className="prose">
-        <h1>Teams</h1>
-        <ul>
-          {teams.map((team) => (
-            <li key={team.id}>
-              <Link href={`/teams/${team.id}`}>
-                <a>{team.name}</a>
-              </Link>
-            </li>
+      <TeamHeading
+        name="All Teams"
+        isOwner
+        primaryButton={() => router.push('/teams/create')}
+        primaryButtonText="Create a Team"
+      />
+      {isLoading && !teams ? (
+        <p>Loading...</p>
+      ) : (
+        <ul className="grid grid-cols-4 gap-10">
+          {teams?.map((team) => (
+            <TeamCard team={team} key={team.id} />
           ))}
         </ul>
-        <Link href="/teams/create">
-          <a>Create</a>
-        </Link>
-      </div>
+      )}
     </main>
   );
 }
 
 export async function getServerSideProps() {
-  const request = await fetch(`${process.env.NEXTAUTH_URL}/api/team/all`);
+  const request = await fetch(`${process.env.NEXTAUTH_URL}/api/team/all/1`);
   const teams = await request.json();
-  return { props: { teams } };
+  return { props: { data: teams } };
 }
 
 TeamsPage.Layout = Layout;

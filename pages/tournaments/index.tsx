@@ -1,15 +1,22 @@
 import { Layout } from '@components/common';
+import { TeamHeading } from '@components/team';
 import { Tournament } from '@prisma/client';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 interface TournamentsPageProps {
   tournaments: Tournament[];
 }
 
 export default function TournamentsPage({ tournaments }: TournamentsPageProps) {
+  const router = useRouter();
   return (
-    <div className="container max-w-2xl mt-24">
-      <h1>Tournaments</h1>
+    <div className="w-full">
+      <TeamHeading
+        name="Tournaments"
+        primaryButton={() => router.push('/tournaments/create')}
+        primaryButtonText="Create tournament"
+      />
       <ul>
         {tournaments.map((tournament) => (
           <li key={tournament.id}>
@@ -19,9 +26,6 @@ export default function TournamentsPage({ tournaments }: TournamentsPageProps) {
           </li>
         ))}
       </ul>
-      <Link href="/tournaments/create">
-        <a className="btn">Create Tournament</a>
-      </Link>
     </div>
   );
 }

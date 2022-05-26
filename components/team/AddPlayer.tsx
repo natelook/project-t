@@ -1,3 +1,4 @@
+import { UserGroupIcon } from '@heroicons/react/solid';
 import { User } from '@prisma/client';
 import Image from 'next/image';
 import { FormEvent } from 'react';
@@ -7,6 +8,7 @@ import Input from '../ui/Input';
 interface AddPlayerProps {
   playerName: string;
   playerResults?: User | null;
+  error?: string | null;
   formSubmit: (e: FormEvent) => void;
   setPlayerName: (value: string) => void;
   addPlayer: () => void;
@@ -17,13 +19,23 @@ export default function AddPlayer({
   playerName,
   setPlayerName,
   playerResults,
+  error,
   addPlayer,
 }: AddPlayerProps) {
   return (
     <div>
-      <h2 className="text-2xl mt-3">Add Player</h2>
+      <div className="mb-4">
+        <div className="w-12 h-12 mx-auto">
+          <UserGroupIcon />
+        </div>
+        <h3 className="text-xl font-bold text-center">Invite Player</h3>
+        <p className="px-2 text-center text-sm">
+          Look up user by user name and invite them to be on your team. Note,
+          invitations do not expire.
+        </p>
+      </div>
       <form onSubmit={formSubmit}>
-        <div className="flex">
+        <div className="space-y-3">
           <Input
             label="Look up user"
             // @ts-ignore
@@ -32,15 +44,11 @@ export default function AddPlayer({
             name="playerLookup"
             value={playerName}
           />
-          <Button
-            label="Search Player"
-            type="submit"
-            onClick={() => console.log('fix this')}
-            size="text-sm"
-          >
+          <Button label="Search Player" type="submit" onClick={() => {}}>
             Search
           </Button>
         </div>
+        {error && <span className="text-red-500 uppercase">{error}</span>}
       </form>
       {playerResults && (
         <div>
@@ -55,7 +63,7 @@ export default function AddPlayer({
             <span className="text-xl font-bold">{playerResults.name}</span>
           </div>
           <Button label="Add Player" onClick={() => addPlayer()} size="text-sm">
-            Add Player
+            Invite Player
           </Button>
         </div>
       )}
@@ -65,4 +73,5 @@ export default function AddPlayer({
 
 AddPlayer.defaultProps = {
   playerResults: null,
+  error: null,
 };

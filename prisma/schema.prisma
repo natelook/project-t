@@ -38,9 +38,10 @@ model Session {
 }
 
 model User {
-  id               String       @id @default(cuid())
+  id               String           @id @default(cuid())
+  username String @unique @default(cuid())
   name             String?
-  email            String?      @unique
+  email            String?          @unique
   emailVerified    DateTime?
   image            String?
   accounts         Account[]
@@ -48,8 +49,9 @@ model User {
   tournaments      Tournament[]
   // registrations    Player[]
   teamOnTournament Registrant[]
-  teams            Team[]       @relation("Players")
-  ownedTeams       Team[]       @relation("Owned")
+  teams            Team[]           @relation("Players")
+  ownedTeams       Team[]           @relation("Owned")
+  teamInvitations  TeamInvitation[]
 }
 
 model VerificationToken {
@@ -89,13 +91,14 @@ model Match {
 }
 
 model Team {
-  id          String       @id @unique @default(cuid())
+  id          String           @id @unique @default(cuid())
   name        String
   ownerUserId String
-  owner       User         @relation(fields: [ownerUserId], references: [id], name: "Owned")
-  players     User[]       @relation("Players")
+  owner       User             @relation(fields: [ownerUserId], references: [id], name: "Owned")
+  players     User[]           @relation("Players")
   tournaments Registrant[]
   matches     TeamMatch[]
+  invitations TeamInvitation[]
 }
 
 model TeamMatch {
@@ -120,4 +123,19 @@ model Registrant {
   userId       String
 
   @@id([tournamentId, teamId])
+}
+
+model TeamInvitation {
+  id              String @id @unique @default(cuid())
+  teamId          String
+  team            Team   @relation(fields: [teamId], references: [id])
+  invitedPlayerId String
+  invitedPlayer   User   @relation(fields: [invitedPlayerId], references: [id])
+  status          String @default("Pending")
+}
+
+model Notification {
+  id      String @id @unique @default(cuid())
+  message String
+  link    String
 }

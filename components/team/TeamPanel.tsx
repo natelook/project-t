@@ -18,7 +18,9 @@ export default function TeamPanel({ team }: TeamPanelProps) {
             alt=""
           />
           <div className="ml-3">
-            <p className="text-sm font-medium text-gray-900">{player.name}</p>
+            <p className="text-sm font-medium text-gray-900">
+              {player.username}
+            </p>
             <p className="text-sm text-gray-500">Something else</p>
           </div>
         </li>

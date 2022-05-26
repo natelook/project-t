@@ -27,7 +27,8 @@
           "some": ["nesting", "id"]
         }
       }
-    ]
+    ],
+    "react/style-prop-object": [0]
   },
   "ignorePatterns": [
     "next.config.js",
