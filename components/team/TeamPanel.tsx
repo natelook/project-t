@@ -18,10 +18,12 @@ export default function TeamPanel({ team }: TeamPanelProps) {
             alt=""
           />
           <div className="ml-3">
-            <p className="text-sm font-medium text-gray-900">
+            <p className="text-sm font-medium text-gray-900 dark:text-white">
               {player.username}
             </p>
-            <p className="text-sm text-gray-500">Something else</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Something else
+            </p>
           </div>
         </li>
       ))}

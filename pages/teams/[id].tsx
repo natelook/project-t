@@ -83,7 +83,7 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
   }
 
   return (
-    <div className="container mt-16">
+    <div className="container">
       <TeamHeading
         name={team.name}
         primaryButton={() => setAddPlayerModalOpen(true)}

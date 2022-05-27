@@ -23,7 +23,7 @@ export default function TeamSelect({
     <Listbox value={selected} onChange={setSelected}>
       {({ open }) => (
         <>
-          <Listbox.Label className="block text-sm font-medium text-gray-700">
+          <Listbox.Label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             {label}
           </Listbox.Label>
           <div className="mt-1 relative">
@@ -38,7 +38,9 @@ export default function TeamSelect({
                       height="15px"
                       width="15px"
                     />
-                    <span className="ml-3 block truncate">{selected.name}</span>
+                    <span className="ml-3 block truncate dark:text-white">
+                      {selected.name}
+                    </span>
                   </React.Fragment>
                 ) : (
                   <span className="ml-3 block truncate">Select a team</span>
@@ -84,7 +86,7 @@ export default function TeamSelect({
                           <span
                             className={classNames(
                               isSelected ? 'font-semibold' : 'font-normal',
-                              'ml-3 block truncate',
+                              'ml-3 block truncate dark:text-white',
                             )}
                           >
                             {team.name}

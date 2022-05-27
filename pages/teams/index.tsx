@@ -22,7 +22,6 @@ export default function TeamsPage({ data }: { data: TeamWithPlayers[] }) {
       keepPreviousData: true,
     },
   );
-  console.log(teams);
 
   const router = useRouter();
   return (
@@ -38,7 +37,13 @@ export default function TeamsPage({ data }: { data: TeamWithPlayers[] }) {
       ) : (
         <ul className="grid grid-cols-4 gap-10">
           {teams?.map((team) => (
-            <TeamCard team={team} key={team.id} />
+            <TeamCard
+              title={team.name}
+              name="Team"
+              slug={`/teams/${team.id}`}
+              subtitle={`Total Players ${team.players.length}`}
+              key={team.id}
+            />
           ))}
         </ul>
       )}

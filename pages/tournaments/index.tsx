@@ -1,11 +1,12 @@
 import { Layout } from '@components/common';
 import { TeamHeading } from '@components/team';
-import { Tournament } from '@prisma/client';
-import Link from 'next/link';
+import TeamCard from '@components/team/card';
+import { TournamentWithRegistrants } from '@lib/types';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 
 interface TournamentsPageProps {
-  tournaments: Tournament[];
+  tournaments: TournamentWithRegistrants[];
 }
 
 export default function TournamentsPage({ tournaments }: TournamentsPageProps) {
@@ -18,13 +19,20 @@ export default function TournamentsPage({ tournaments }: TournamentsPageProps) {
         primaryButtonText="Create tournament"
         isOwner
       />
-      <ul>
+      <ul className="grid grid-cols-3 gap-10">
         {tournaments.map((tournament) => (
-          <li key={tournament.id}>
-            <Link href={`/${tournament.slug}`}>
-              <a>{tournament.name}</a>
-            </Link>
-          </li>
+          <TeamCard
+            title={tournament.name}
+            name="Tournament"
+            slug={`/${tournament.slug}`}
+            key={tournament.id}
+            subtitle={
+              <div>
+                <p>{dayjs(tournament.startDate).format('MM/DD/YY h:ma')}</p>
+                <p>Registrants {tournament.registrants.length}</p>
+              </div>
+            }
+          />
         ))}
       </ul>
     </div>

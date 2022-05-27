@@ -110,7 +110,7 @@ export default function TournamentPage({
         >
           <Dialog.Title
             as="h3"
-            className="text-lg leading-6 font-medium text-gray-900"
+            className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-300"
           >
             Register Team
           </Dialog.Title>

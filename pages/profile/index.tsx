@@ -75,7 +75,7 @@ export default function Profile({ data }: ProfileProps) {
   return (
     <div>
       <TeamHeading
-        name="Profile"
+        name="Your Profile"
         subtitle={user.username}
         isOwner
         primaryButtonText="Change Username"

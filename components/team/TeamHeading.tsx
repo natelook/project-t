@@ -23,7 +23,9 @@ export default function TeamHeading({
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl sm:truncate">
           {name}
         </h2>
-        {subtitle && <h3 className="text-gray-600">{subtitle}</h3>}
+        {subtitle && (
+          <h3 className="text-gray-600 dark:text-gray-400">{subtitle}</h3>
+        )}
       </div>
       {isOwner && (
         <div className="mt-4 flex md:mt-0 md:ml-4">
