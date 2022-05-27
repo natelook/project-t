@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { GetServerSidePropsContext } from 'next';
-import { getSession, useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { Tournament } from '@prisma/client';
 
@@ -25,7 +25,6 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
   const [slug, setSlug] = useState('');
   const [format] = useState('Single Elimination');
   const [error, setError] = useState<string | null>();
-  // const { data: session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
