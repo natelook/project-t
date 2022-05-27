@@ -28,7 +28,9 @@
         }
       }
     ],
-    "react/style-prop-object": [0]
+    "react/style-prop-object": [0],
+    "indent": "off",
+    "@typescript-eslint/indent": [0]
   },
   "ignorePatterns": [
     "next.config.js",

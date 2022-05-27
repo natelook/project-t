@@ -18,7 +18,7 @@ export default function TeamInvitations({
       0 ? (
         <React.Fragment>
           <div className="flow-root mt-6">
-            <ul className="-my-5 divide-y divide-gray-200">
+            <ul className="-my-5 divide-y divide-gray-200 dark:divide-gray-600">
               {invitation
                 .filter((invite) => invite.status === 'Pending')
                 .map((invite) => (
@@ -33,10 +33,10 @@ export default function TeamInvitations({
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                           {invite.team.name}
                         </p>
-                        <p className="text-sm text-gray-500 truncate">
+                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
                           {invite.team.players?.length || 0} Players
                         </p>
                       </div>
@@ -67,9 +67,9 @@ export default function TeamInvitations({
             </a>
           </div>
         </React.Fragment>
-        ) : (
-        <p className='mt-3 p-2 text-gray-500'>No invitations</p>
-        )}
+      ) : (
+        <p className="mt-3 p-2 text-gray-500">No invitations</p>
+      )}
     </div>
   );
 }

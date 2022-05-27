@@ -1,21 +1,21 @@
 import { Layout } from '@components/common';
+import TeamStackedList from '@components/common/TeamStackedList';
 import { TeamHeading } from '@components/team';
 import { Button, Input, Modal } from '@components/ui';
 import TeamInvitations from '@components/ui/TeamInvitations';
 import { BadgeCheckIcon } from '@heroicons/react/solid';
-import { TeamInvitationWithTeam } from '@lib/types';
-import { Registrant, Team, Tournament, User } from '@prisma/client';
+import { TeamInvitationWithTeam, TeamWithPlayersAndOwner } from '@lib/types';
+import { Registrant, Tournament, User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
-import Link from 'next/link';
 import { FormEvent, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 
 interface UserProfile extends User {
   tournaments: Tournament[];
   teamOnTournament: Registrant[];
-  teams: Team[];
-  ownedTeams: Team[];
+  teams: TeamWithPlayersAndOwner[];
+  ownedTeams: TeamWithPlayersAndOwner[];
   teamInvitations: TeamInvitationWithTeam[];
 }
 
@@ -82,16 +82,12 @@ export default function Profile({ data }: ProfileProps) {
         primaryButton={() => setModalOpen(true)}
       />
 
-      <div className="grid lg:grid-cols-3">
+      <div className="grid lg:grid-cols-3 gap-10">
         <div>
           <h3 className="text-2xl font-bold">Owned Teams</h3>
           {user?.ownedTeams && (
             <div>
-              {user?.ownedTeams.map((team) => (
-                <Link href={`/teams/${team.id}`} key={team.id}>
-                  <a>{team.name}</a>
-                </Link>
-              ))}
+              <TeamStackedList team={user.ownedTeams} />
             </div>
           )}
         </div>
@@ -99,11 +95,7 @@ export default function Profile({ data }: ProfileProps) {
           <h3 className="text-2xl font-bold">Teams</h3>
           {user?.teams && (
             <div>
-              {user?.teams.map((team) => (
-                <Link href={`/teams/${team.id}`} key={team.id}>
-                  <a>{team.name}</a>
-                </Link>
-              ))}
+              <TeamStackedList team={user.teams} />
             </div>
           )}
         </div>
