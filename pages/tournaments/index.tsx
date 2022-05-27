@@ -16,6 +16,7 @@ export default function TournamentsPage({ tournaments }: TournamentsPageProps) {
         name="Tournaments"
         primaryButton={() => router.push('/tournaments/create')}
         primaryButtonText="Create tournament"
+        isOwner
       />
       <ul>
         {tournaments.map((tournament) => (

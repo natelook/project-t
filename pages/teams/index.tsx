@@ -22,6 +22,7 @@ export default function TeamsPage({ data }: { data: TeamWithPlayers[] }) {
       keepPreviousData: true,
     },
   );
+  console.log(teams);
 
   const router = useRouter();
   return (
