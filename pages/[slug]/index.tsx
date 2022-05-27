@@ -45,7 +45,6 @@ export default function TournamentPage({
   const [totalRounds, setTotalRounds] = useState<number[] | null>(null);
   const { data: user } = useQuery('user', () => fetchUser(userId));
   const isAdmin = userId === tournament.createdBy;
-  console.log({ user });
   const cancelButtonRef = useRef(null);
 
   const fetchTeamInfo = useCallback(async () => {
@@ -100,6 +99,7 @@ export default function TournamentPage({
         register={() => setRegisterModalOpen(true)}
         startTournament={startTournament}
         isAdmin={isAdmin}
+        slug={`/${tournament.slug}/teams`}
       />
       <AllMatches matches={tournament.matches} rounds={totalRounds} />
       {registerModalOpen && (

@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 
 interface TeamCardProps {
   title: string;
-  subtitle: string | ReactNode;
+  subtitle?: string | ReactNode;
   slug: string;
   name: 'Team' | 'Player' | 'Tournament';
 }
@@ -27,9 +27,11 @@ export default function TeamCard({
           <h3 className="text-gray-900 dark:text-white text-lg font-bold">
             {title}
           </h3>
-          <span className="font-bold text-xs uppercase text-gray-400 dark:text-gray-300">
-            {subtitle}
-          </span>
+          {subtitle && (
+            <span className="font-bold text-xs uppercase text-gray-400 dark:text-gray-300">
+              {subtitle}
+            </span>
+          )}
         </div>
       </div>
       <div>
@@ -47,3 +49,7 @@ export default function TeamCard({
     </li>
   );
 }
+
+TeamCard.defaultProps = {
+  subtitle: null,
+};

@@ -78,7 +78,7 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
         </div>
         <div>
           <label
-            className="block text-sm font-medium text-gray-900 capitalize"
+            className="block text-sm font-medium text-gray-900 dark:text-white capitalize"
             htmlFor="startDate"
           >
             Start Date
@@ -91,7 +91,7 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
             dateFormat="M/d/y HH:mma"
             timeFormat="HH:mm"
             timeIntervals={15}
-            className="w-full input"
+            className="w-full input text-black"
           />
         </div>
         <Input

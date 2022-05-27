@@ -1,4 +1,10 @@
-import { Team, TeamInvitation, Tournament, User } from '@prisma/client';
+import {
+  Registrant,
+  Team,
+  TeamInvitation,
+  Tournament,
+  User,
+} from '@prisma/client';
 
 export interface TeamWithPlayersAndOwner extends Team {
   players: User[];
@@ -17,6 +23,10 @@ export interface UserWithTeamInvitations extends User {
   teamInvitations?: TeamInvitationWithTeam[];
 }
 
+export interface RegistrantWithTeamInfo extends Registrant {
+  team: Team;
+}
+
 export interface TournamentWithRegistrants extends Tournament {
-  registrants: User[];
+  registrants: RegistrantWithTeamInfo[];
 }
