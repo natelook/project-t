@@ -15,13 +15,17 @@ const convertTitleToSlug = (title: string) => {
   return slug;
 };
 
-export default function CreateTournament() {
+interface CreateTournamentProps {
+  userId: string;
+}
+
+export default function CreateTournament({ userId }: CreateTournamentProps) {
   const [name, setName] = useState('');
   const [startDate, setStartDate] = useState(new Date());
   const [slug, setSlug] = useState('');
   const [format] = useState('Single Elimination');
   const [error, setError] = useState<string | null>();
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -30,6 +34,10 @@ export default function CreateTournament() {
 
   const create = async (e: FormEvent) => {
     e.preventDefault();
+    if (!userId) {
+      setError('You must be signed in.');
+      return;
+    }
 
     const request = await fetch('/api/tournament/create', {
       method: 'POST',
@@ -37,8 +45,9 @@ export default function CreateTournament() {
         name,
         format,
         startDate: dayjs(startDate).toISOString(),
-        createdBy: session?.user.id,
+        createdBy: userId,
         slug,
+        game: 'VALORANT',
       }),
     });
     const createdTournament: Tournament = await request.json();
@@ -105,7 +114,10 @@ export default function CreateTournament() {
 
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {
   const session = await getSession({ req });
-  return { props: { session, test: 'hello' } };
+  if (!session) {
+    return { notFound: true };
+  }
+  return { props: { session, userId: session.user.id } };
 }
 
 CreateTournament.Layout = Layout;
