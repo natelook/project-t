@@ -1,4 +1,5 @@
 import { UserGroupIcon } from '@heroicons/react/solid';
+import randomNoun from '@lib/random-noun';
 import { User } from '@prisma/client';
 import Image from 'next/image';
 import { FormEvent } from 'react';
@@ -54,7 +55,7 @@ export default function AddPlayer({
         <div>
           <div className="flex space-x-3 py-5 mt-10">
             <Image
-              src={playerResults.image || '/default-profile-pic.svg'}
+              src={playerResults.image || randomNoun()}
               height="30px"
               width="30px"
               alt={`${playerResults.name}'s profile picture`}

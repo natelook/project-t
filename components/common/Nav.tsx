@@ -6,6 +6,7 @@ import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
+import randomNoun from '@lib/random-noun';
 
 const navItems = [
   { name: 'Home', slug: '/' },
@@ -75,9 +76,7 @@ export default function Nav() {
                         <span className="sr-only">Open user menu</span>
                         <Image
                           className="h-8 w-8 rounded-full"
-                          src={
-                            session?.user.image || '/default-profile-pic.svg'
-                          }
+                          src={randomNoun()}
                           height="30px"
                           width="30px"
                           alt="Your profile picture"

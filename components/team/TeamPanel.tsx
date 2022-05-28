@@ -1,3 +1,4 @@
+import randomNoun from '@lib/random-noun';
 import { TeamWithPlayersAndOwner } from '@lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -16,7 +17,7 @@ export default function TeamPanel({ team }: TeamPanelProps) {
               <a className="py-4 flex">
                 <Image
                   className="h-10 w-10 rounded-full"
-                  src="/default-profile-pic.svg"
+                  src={randomNoun()}
                   height="40px"
                   width="40px"
                   alt=""

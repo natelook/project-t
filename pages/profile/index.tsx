@@ -1,5 +1,6 @@
 import { Layout } from '@components/common';
 import TeamStackedList from '@components/common/TeamStackedList';
+import Playground from '@components/Playground';
 import { TeamHeading } from '@components/team';
 import { Button, Input, Modal } from '@components/ui';
 import TeamInvitations from '@components/ui/TeamInvitations';
@@ -110,6 +111,9 @@ export default function Profile({ data }: ProfileProps) {
               }
             />
           )}
+        </div>
+        <div className="col-span-2">
+          <Playground />
         </div>
       </div>
       {modalOpen && (
