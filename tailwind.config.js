@@ -9,6 +9,10 @@ module.exports = {
       center: true,
     },
     extend: {
+      fontFamily: {
+        sans: ['Roboto'],
+        nouns: ['Londrina Solid'],
+      },
       height: {
         '90vh': '90vh',
       },
