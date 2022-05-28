@@ -29,7 +29,7 @@ export default function Banner({
           <div className="flex items-center justify-between flex-wrap">
             <div className="w-0 flex-1 flex items-center">
               {icon && (
-                <span className="flex p-2 rounded-lg bg-indigo-800">
+                <span className="flex p-2 rounded-lg bg-sky-800">
                   <div className="h-6 w-6 text-white" aria-hidden="true">
                     {icon}
                   </div>
@@ -43,7 +43,7 @@ export default function Banner({
             {actionText && actionLink && (
               <div className="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
                 <Link href={actionLink}>
-                  <a className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-white hover:bg-indigo-50">
+                  <a className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-sky-600 bg-white hover:bg-sky-50">
                     {actionText}
                   </a>
                 </Link>
@@ -52,7 +52,7 @@ export default function Banner({
             <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
               <button
                 type="button"
-                className="-mr-1 flex p-2 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white"
+                className="-mr-1 flex p-2 rounded-md hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-white"
               >
                 <span className="sr-only">Dismiss</span>
                 <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
@@ -66,7 +66,7 @@ export default function Banner({
 }
 
 Banner.defaultProps = {
-  color: 'indigo',
+  color: 'sky',
   actionText: null,
   actionLink: null,
 };

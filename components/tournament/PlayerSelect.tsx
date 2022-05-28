@@ -40,7 +40,7 @@ export default function PlayerSelect({
                 id={`player-${player.id}`}
                 name={`player-${player.id}`}
                 type="checkbox"
-                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 rounded"
+                className="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 dark:border-gray-600 rounded"
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   e.target.checked
                     ? addPlayer(player.id)
