@@ -18,6 +18,9 @@ import React, {
   useState,
 } from 'react';
 import { useQuery } from 'react-query';
+import { Banner } from '@components/ui';
+import { CheckIcon } from '@heroicons/react/solid';
+import { AnimatePresence } from 'framer-motion';
 
 interface TeamWithPlayers extends Team {
   players: User[];
@@ -29,7 +32,7 @@ interface TournamentWithRegistrantsAndMatches extends Tournament {
 }
 
 interface TournamentPageProps {
-  tournament: TournamentWithRegistrantsAndMatches;
+  data: TournamentWithRegistrantsAndMatches;
   userId: string;
 }
 
@@ -41,19 +44,33 @@ const fetchUser = async (userId: string) => {
   return user;
 };
 
-export default function TournamentPage({
-  tournament,
-  userId,
-}: TournamentPageProps) {
+const fetchTournament = async (slug: string) => {
+  const request = await fetch(`/api/tournament/${slug}`);
+  const tournament = await request.json();
+  return tournament;
+};
+
+export default function TournamentPage({ data, userId }: TournamentPageProps) {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
   const [teamSelected, setTeamSelected] = useState<Team | null>(null);
   const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
   const [team, setTeam] = useState<TeamWithPlayers | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [notification, setNotification] = useState(false);
+  const [registeredTeam, setRegisteredTeam] = useState<Team | null>(null);
+
   const [totalRounds, setTotalRounds] = useState<number[] | null>(null);
   const { data: user } = useQuery('user', () => fetchUser(userId));
-  const isAdmin = userId === tournament.createdBy;
+  const isAdmin = useRef(userId === data.createdBy);
   const cancelButtonRef = useRef(null);
+
+  const { data: tournament, refetch } = useQuery(
+    `tournament-${data.id}`,
+    () => fetchTournament(data.slug),
+    {
+      initialData: data,
+    },
+  );
 
   const fetchTeamInfo = useCallback(async () => {
     if (!teamSelected) return;
@@ -63,19 +80,31 @@ export default function TournamentPage({
   }, [teamSelected]);
 
   useEffect(() => {
-    if (tournament.matches.length !== 0) {
-      const rounds = tournament.matches
+    if (data.matches.length !== 0) {
+      const rounds = data.matches
         .map((item) => item.round)
         .filter((value, index, self) => self.indexOf(value) === index);
       setTotalRounds(rounds);
     }
-  }, [tournament.matches]);
+  }, [data.matches]);
 
   useEffect(() => {
     if (!teamSelected) return;
     fetchTeamInfo();
     if (error) setError(null);
   }, [teamSelected, error, fetchTeamInfo]);
+
+  useEffect(() => {
+    if (registeredTeam) {
+      setNotification(true);
+
+      setTimeout(() => {
+        setNotification(false);
+      }, 5000);
+    }
+
+    return () => clearTimeout();
+  }, [registeredTeam]);
 
   const registerTeam = async (e: FormEvent) => {
     e.preventDefault();
@@ -84,11 +113,23 @@ export default function TournamentPage({
       return;
     }
 
-    // TODO: Add some visual confirmation that this is complete
-    await fetch(`/api/tournament/${tournament.id}/register`, {
+    const request = await fetch(`/api/tournament/${tournament.id}/register`, {
       method: 'POST',
       body: JSON.stringify({ teamId: team?.id }),
     });
+    if (request.status !== 200) {
+      console.log(request.status);
+      setError('Something went wrong registering your team.');
+      return;
+    }
+
+    const response = await request.json();
+    refetch();
+    setRegisteredTeam(response.team);
+    setRegisterModalOpen(false);
+    setTeam(null);
+    setTeamSelected(null);
+    setSelectedPlayers([]);
   };
 
   const startTournament = async () => {
@@ -106,7 +147,7 @@ export default function TournamentPage({
         totalRegistrants={tournament.registrants.length}
         register={() => setRegisterModalOpen(true)}
         startTournament={startTournament}
-        isAdmin={isAdmin}
+        isAdmin={isAdmin.current}
         isSignedIn={userId !== null}
         slug={tournament.slug}
       />
@@ -189,6 +230,14 @@ export default function TournamentPage({
           )}
         </Modal>
       )}
+      <AnimatePresence>
+        {notification && registeredTeam && (
+          <Banner
+            message={`Successfully registered ${registeredTeam.name}`}
+            icon={<CheckIcon />}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -205,7 +254,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
   const userId = session?.user.id;
 
-  return { props: { tournament, userId: userId || null } };
+  return { props: { data: tournament, userId: userId || null } };
 }
 
 TournamentPage.Layout = Layout;

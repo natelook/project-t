@@ -13,6 +13,7 @@ interface AddPlayerProps {
   formSubmit: (e: FormEvent) => void;
   setPlayerName: (value: string) => void;
   addPlayer: () => void;
+  cancelSearch: () => void;
 }
 
 export default function AddPlayer({
@@ -22,6 +23,7 @@ export default function AddPlayer({
   playerResults,
   error,
   addPlayer,
+  cancelSearch,
 }: AddPlayerProps) {
   return (
     <div>
@@ -35,39 +37,45 @@ export default function AddPlayer({
           invitations do not expire.
         </p>
       </div>
-      <form onSubmit={formSubmit}>
-        <div className="space-y-3">
-          <Input
-            label="Look up user"
-            // @ts-ignore
-            onChange={(value: string) => setPlayerName(value)}
-            hideLabel
-            name="playerLookup"
-            value={playerName}
-          />
-          <Button label="Search Player" type="submit" onClick={() => {}}>
-            Search
-          </Button>
-        </div>
-        {error && <span className="text-red-500 uppercase">{error}</span>}
-      </form>
-      {playerResults && (
-        <div>
-          <div className="flex space-x-3 py-5 mt-10">
+      {!playerResults ? (
+        <form onSubmit={formSubmit}>
+          <div className="space-y-3">
+            <Input
+              label="Look up user"
+              // @ts-ignore
+              onChange={(value: string) => setPlayerName(value)}
+              hideLabel
+              name="playerLookup"
+              value={playerName}
+            />
+            <Button label="Search Player" type="submit" onClick={() => {}}>
+              Search
+            </Button>
+          </div>
+          {error && <span className="text-red-500 uppercase">{error}</span>}
+        </form>
+      ) : (
+        <div className="py-3">
+          <div className="flex w-full justify-center items-center space-x-3">
             <Image
               src={
                 playerResults.pfp ? pfp(playerResults.pfp) : '/default-pfp.png'
               }
-              height="30px"
-              width="30px"
+              height="40px"
+              width="40px"
               alt={`${playerResults.name}'s profile picture`}
               className="rounded-full"
             />
             <span className="text-xl font-bold">{playerResults.name}</span>
           </div>
-          <Button label="Add Player" onClick={() => addPlayer()} size="text-sm">
-            Invite Player
-          </Button>
+          <div className="grid grid-cols-2 gap-x-5 mt-3">
+            <Button label="Add Player" style="secondary" onClick={cancelSearch}>
+              Search Again
+            </Button>
+            <Button label="Add Player" onClick={() => addPlayer()}>
+              Invite Player
+            </Button>
+          </div>
         </div>
       )}
     </div>

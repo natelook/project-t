@@ -7,7 +7,10 @@ import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
 import { FormEvent, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
-// import { Banner } from '@components/ui';
+import { AnimatePresence } from 'framer-motion';
+import { Banner } from '@components/ui';
+import { CheckIcon } from '@heroicons/react/outline';
+import useNotification from '@lib/hooks/useNotification';
 // import { SpeakerphoneIcon } from '@heroicons/react/solid';
 // import validateTeamOwner from '@lib/validateUser';
 
@@ -31,7 +34,7 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
   const [playerResults, setPlayerResults] = useState<null | User>();
   const [error, setError] = useState<string | null>();
   const [addPlayerModalisOpen, setAddPlayerModalOpen] = useState(false);
-  console.log({ data });
+  const { isActive, message, triggerNotification } = useNotification();
 
   const { data: team, isLoading } = useQuery<TeamWithCount>(
     `team-${data.id}`,
@@ -74,6 +77,14 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
     if (request.status !== 200) {
       setError('Something went wrong.');
     }
+    const invite = await request.json();
+
+    triggerNotification(
+      `You invited ${invite.invitedPlayer.username} to ${team.name}`,
+    );
+    setAddPlayerModalOpen(false);
+    setPlayerName('');
+    setPlayerResults(null);
   };
 
   const isOwner = useRef(userId === team?.ownerUserId);
@@ -113,15 +124,15 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
             playerResults={playerResults}
             setPlayerName={(value: string) => setPlayerName(value)}
             error={error}
+            cancelSearch={() => setPlayerResults(null)}
           />
         </Modal>
       )}
-      {/* <Banner
-        icon={<SpeakerphoneIcon />}
-        message="You have successfully invited that player"
-        actionText="View Profile"
-        actionLink="/profile"
-      /> */}
+      <AnimatePresence>
+        {isActive && message && (
+          <Banner message={message} icon={<CheckIcon />} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -27,7 +27,7 @@ async function main() {
   const fakeTeams = seedData.teams.map((team, i) => {
     const index = (i + 1) * 5;
     const fiveUsers = users.slice(index, index + 5);
-    const userIds = fiveUsers.map((user) => ({ id: user.id }));
+    const userIds = fiveUsers.map((user: any) => ({ id: user.id }));
     fakeTeamPlayers.push(userIds);
     return {
       ...team,
@@ -59,8 +59,8 @@ async function main() {
   });
 
   const thirtyTwoTeams = teams.slice(0, 32);
-  const fakeRegistrations = thirtyTwoTeams.map((team) => {
-    const playerIds = team.players.map((player) => player.id);
+  const fakeRegistrations = thirtyTwoTeams.map((team: any) => {
+    const playerIds = team.players.map((player: any) => player.id);
     return {
       tournamentId: tournaments[0].id,
       teamId: team.id,

@@ -2,6 +2,7 @@
 import { XIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 interface BannerProps {
   message: string;
@@ -19,7 +20,12 @@ export default function Banner({
   actionLink,
 }: BannerProps) {
   return (
-    <div className="fixed bottom-0 inset-x-0 pb-2 sm:pb-5">
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      exit={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="fixed bottom-0 inset-x-0 pb-2 sm:pb-5"
+    >
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div
           className={classNames('p-2 rounded-lg shadow-lg sm:p-3', [
@@ -61,7 +67,7 @@ export default function Banner({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

@@ -24,6 +24,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const register = await prisma.registrant.create({
     data: { userId: user.id, teamId, tournamentId, players },
+    select: { team: true },
   });
   return res.status(200).json(register);
 };

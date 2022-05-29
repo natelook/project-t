@@ -24,6 +24,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const request = await prisma.teamInvitation.create({
     data: { teamId, invitedPlayerId: playerId },
+    select: { invitedPlayer: true },
   });
   return res.status(200).json(request);
 };
