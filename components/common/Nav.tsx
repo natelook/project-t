@@ -82,7 +82,7 @@ export default function Nav() {
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
 
-                  <Menu as="div" className="ml-3 relative">
+                  <Menu as="div" className="ml-3 relative z-20">
                     <div>
                       <Menu.Button className="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
                         <span className="sr-only">Open user menu</span>
