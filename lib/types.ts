@@ -24,7 +24,7 @@ export interface UserWithTeamInvitations extends User {
 }
 
 export interface RegistrantWithTeamInfo extends Registrant {
-  team: Team;
+  team: TeamWithPlayers;
 }
 
 export interface TournamentWithRegistrants extends Tournament {

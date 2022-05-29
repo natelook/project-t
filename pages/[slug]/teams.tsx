@@ -25,6 +25,7 @@ export default function TournamentTeamListing({
             name="Team"
             slug={`/teams/${registrant.team.id}`}
             key={registrant.team.id}
+            players={registrant.team.players}
           />
         ))}
       </ul>

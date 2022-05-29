@@ -16,7 +16,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           teamId: true,
           team: {
             select: {
+              id: true,
               name: true,
+              players: true,
             },
           },
         },
