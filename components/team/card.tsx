@@ -41,8 +41,8 @@ export default function TeamCard({
                   >
                     <Image
                       src={player.pfp ? pfp(player?.pfp) : '/default-pfp.png'}
-                      height="100px"
-                      width="100px"
+                      height="40px"
+                      width="40px"
                       alt={`${player.username}'s `}
                       layout="responsive"
                     />

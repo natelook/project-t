@@ -14,6 +14,7 @@ import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 
 interface TournamentHeadingProps {
   name: string;
@@ -21,6 +22,7 @@ interface TournamentHeadingProps {
   slug: string;
   isAdmin?: boolean;
   totalRegistrants: number;
+  isSignedIn: boolean;
   startTournament: () => void;
   register: () => void;
 }
@@ -31,6 +33,7 @@ export default function TournamentHeading({
   slug,
   isAdmin,
   totalRegistrants,
+  isSignedIn,
   startTournament,
   register,
 }: TournamentHeadingProps) {
@@ -99,7 +102,7 @@ export default function TournamentHeading({
         )}
 
         <span className="block ml-3">
-          <Link href={slug}>
+          <Link href={`/${slug}/teams`}>
             <a className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
               <LinkIcon
                 className="-ml-1 mr-2 h-5 w-5 text-gray-500 dark:text-gray-300"
@@ -109,18 +112,30 @@ export default function TournamentHeading({
             </a>
           </Link>
         </span>
-
         <span className="sm:ml-3">
           <button
             type="button"
-            onClick={register}
+            onClick={
+              isSignedIn
+                ? register
+                : () =>
+                    signIn(undefined, {
+                      callbackUrl: `${process.env.NEXTAUTH_URL}/${slug}`,
+                    })
+            }
             className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
           >
-            <PencilAltIcon
-              className="-ml-1 mr-2 h-5 w-5 text-sm"
-              aria-hidden="true"
-            />
-            Sign Up
+            {isSignedIn ? (
+              <React.Fragment>
+                <PencilAltIcon
+                  className="-ml-1 mr-2 h-5 w-5 text-sm"
+                  aria-hidden="true"
+                />
+                Sign Up
+              </React.Fragment>
+            ) : (
+              'Sign In to Register'
+            )}
           </button>
         </span>
 

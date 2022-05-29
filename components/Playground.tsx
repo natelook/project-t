@@ -1,6 +1,5 @@
 import { ImageData } from '@nouns/assets';
 import { useState } from 'react';
-import Image from 'next/image';
 import randomNumber from '@lib/random-number';
 import makeNoun from '@lib/make-noun';
 import Select from './ui/Select';
@@ -92,23 +91,23 @@ export default function Playground({ userId }: PlaygroundProps) {
           className="relative flex items-center col-span-3 h-[400px] w-[400px]"
         >
           <div className="absolute top-0" style={{ zIndex: 8 }}>
-            <Image
+            <img
               src={`/noun/glasses/${ImageData.images.glasses[glasses].filename}.png`}
               height="400px"
               width="400px"
               alt=""
             />
           </div>
-          <div className="absolute top-0" style={{ zIndex: 7 }}>
-            <Image
+          <div className="absolute top-0" style={{ zIndex: 6 }}>
+            <img
               src={`/noun/accessories/${ImageData.images.accessories[accessory].filename}.png`}
               height="400px"
               width="400px"
               alt=""
             />
           </div>
-          <div className="absolute top-0" style={{ zIndex: 6 }}>
-            <Image
+          <div className="absolute top-0" style={{ zIndex: 7 }}>
+            <img
               src={`/noun/heads/${ImageData.images.heads[head].filename}.png`}
               height="400px"
               width="400px"
@@ -116,7 +115,7 @@ export default function Playground({ userId }: PlaygroundProps) {
             />
           </div>
           <div className="absolute top-0" style={{ zIndex: 5 }}>
-            <Image
+            <img
               src={`/noun/bodies/${ImageData.images.bodies[body].filename}.png`}
               height="400px"
               width="400px"

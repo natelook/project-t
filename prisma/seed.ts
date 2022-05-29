@@ -1,10 +1,15 @@
 /* eslint-disable */
+import randomNoun from '../lib/random-noun';
 import prisma from '../lib/prisma';
 import seedData from './seed-data.json';
 
 async function main() {
   // Create users
-  const createdUsers = await prisma.user.createMany({ data: seedData.users });
+  const fakeUsers = seedData.users.map((user) => ({
+    ...user,
+    pfp: randomNoun(true),
+  }));
+  const createdUsers = await prisma.user.createMany({ data: fakeUsers });
   const users = await prisma.user.findMany({ take: 1000, skip: 1000 });
   const fakeTournaments = seedData.tournaments.map((tournament, i: number) => {
     return {

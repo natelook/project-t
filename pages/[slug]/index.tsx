@@ -10,7 +10,13 @@ import { Dialog } from '@headlessui/react';
 import { Match, Registrant, Team, Tournament, User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
-import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useQuery } from 'react-query';
 
 interface TeamWithPlayers extends Team {
@@ -28,6 +34,8 @@ interface TournamentPageProps {
 }
 
 const fetchUser = async (userId: string) => {
+  if (!userId) return null;
+
   const request = await fetch(`/api/user/${userId}`);
   const user = await request.json();
   return user;
@@ -61,7 +69,7 @@ export default function TournamentPage({
         .filter((value, index, self) => self.indexOf(value) === index);
       setTotalRounds(rounds);
     }
-  }, []);
+  }, [tournament.matches]);
 
   useEffect(() => {
     if (!teamSelected) return;
@@ -99,7 +107,8 @@ export default function TournamentPage({
         register={() => setRegisterModalOpen(true)}
         startTournament={startTournament}
         isAdmin={isAdmin}
-        slug={`/${tournament.slug}/teams`}
+        isSignedIn={userId !== null}
+        slug={tournament.slug}
       />
       <AllMatches matches={tournament.matches} rounds={totalRounds} />
       {registerModalOpen && (
@@ -108,70 +117,76 @@ export default function TournamentPage({
           setOpen={(isOpen: boolean) => setRegisterModalOpen(isOpen)}
           initialFocus={cancelButtonRef}
         >
-          <Dialog.Title
-            as="h3"
-            className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-300"
-          >
-            Register Team
-          </Dialog.Title>
-          <form className="mt-4" onSubmit={registerTeam}>
-            <TeamSelect
-              label="Choose Team"
-              options={user.ownedTeams}
-              selected={teamSelected}
-              setSelected={(selectedTeam) => setTeamSelected(selectedTeam)}
-            />
-            {teamSelected && (
-              <div>
-                {!team ? (
-                  <span>Loading...</span>
-                ) : (
-                  <PlayerSelect
-                    players={team.players}
-                    requiredPlayers={1}
-                    selected={selectedPlayers.length}
-                    addPlayer={(playerId) => {
-                      const updatePlayers = [...selectedPlayers, playerId];
-                      setSelectedPlayers(updatePlayers);
-                    }}
-                    removePlayer={(playerId) => {
-                      const updatePlayers = selectedPlayers.filter(
-                        (id) => playerId !== id,
-                      );
-                      setSelectedPlayers(updatePlayers);
-                    }}
-                  />
+          {user?.ownedTeams.length > 0 ? (
+            <React.Fragment>
+              <Dialog.Title
+                as="h3"
+                className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-300"
+              >
+                Register Team
+              </Dialog.Title>
+              <form className="mt-4" onSubmit={registerTeam}>
+                <TeamSelect
+                  label="Choose Team"
+                  options={user.ownedTeams}
+                  selected={teamSelected}
+                  setSelected={(selectedTeam) => setTeamSelected(selectedTeam)}
+                />
+                {teamSelected && (
+                  <div>
+                    {!team ? (
+                      <span>Loading...</span>
+                    ) : (
+                      <PlayerSelect
+                        players={team.players}
+                        requiredPlayers={1}
+                        selected={selectedPlayers.length}
+                        addPlayer={(playerId) => {
+                          const updatePlayers = [...selectedPlayers, playerId];
+                          setSelectedPlayers(updatePlayers);
+                        }}
+                        removePlayer={(playerId) => {
+                          const updatePlayers = selectedPlayers.filter(
+                            (id) => playerId !== id,
+                          );
+                          setSelectedPlayers(updatePlayers);
+                        }}
+                      />
+                    )}
+                  </div>
                 )}
-              </div>
-            )}
 
-            {error && (
-              <span className="text-red-600 text-uppercase text-sm">
-                {error}
-              </span>
-            )}
-            <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-              <button
-                type="submit"
-                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-sky-600 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 sm:col-start-2 sm:text-sm"
-              >
-                Register
-              </button>
-              <button
-                type="button"
-                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                onClick={() => {
-                  setRegisterModalOpen(false);
-                  setTeam(null);
-                  setTeamSelected(null);
-                  setSelectedPlayers([]);
-                }}
-                ref={cancelButtonRef}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+                {error && (
+                  <span className="text-red-600 text-uppercase text-sm">
+                    {error}
+                  </span>
+                )}
+                <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                  <button
+                    type="submit"
+                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-sky-600 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 sm:col-start-2 sm:text-sm"
+                  >
+                    Register
+                  </button>
+                  <button
+                    type="button"
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                    onClick={() => {
+                      setRegisterModalOpen(false);
+                      setTeam(null);
+                      setTeamSelected(null);
+                      setSelectedPlayers([]);
+                    }}
+                    ref={cancelButtonRef}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </React.Fragment>
+          ) : (
+            <p>You are not signed in.</p>
+          )}
         </Modal>
       )}
     </div>
@@ -190,7 +205,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
   const userId = session?.user.id;
 
-  return { props: { tournament, userId } };
+  return { props: { tournament, userId: userId || null } };
 }
 
 TournamentPage.Layout = Layout;
