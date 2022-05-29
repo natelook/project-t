@@ -30,7 +30,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         teamInvitations: {
           select: {
             id: true,
-            team: true,
+            team: {
+              select: {
+                name: true,
+                id: true,
+                players: true,
+              },
+            },
             status: true,
           },
         },

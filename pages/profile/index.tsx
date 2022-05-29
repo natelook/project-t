@@ -103,17 +103,19 @@ export default function Profile({ data }: ProfileProps) {
         <div>
           <h3 className="text-2xl font-bold">Invitations</h3>
 
-          {user.teamInvitations.length > 0 && (
+          {user.teamInvitations.length >= 0 ? (
             <TeamInvitations
               invitation={user.teamInvitations}
               response={(answer: 'accept' | 'decline', inviteId: string) =>
                 inviteResponse(answer, inviteId)
               }
             />
+          ) : (
+            <p className="mt-3 p-2 text-gray-500">No Invitations</p>
           )}
         </div>
         <div className="col-span-2">
-          <Playground />
+          <Playground userId={data.id} />
         </div>
       </div>
       {modalOpen && (
@@ -154,6 +156,7 @@ export default function Profile({ data }: ProfileProps) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
+  console.log({ session, sessiontest: session?.user });
   if (!session) {
     return { notFound: true };
   }

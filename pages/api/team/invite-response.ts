@@ -15,7 +15,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (!answer || !inviteId) {
     return res.status(403).json({ error: 'Something went wrong' });
   }
-  console.log(answer, inviteId);
   // const invite = await prisma.teamInvitation.findUnique({
   //   where: { id: inviteId },
   // });
@@ -25,7 +24,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // }
 
   if (answer === 'decline') {
-    console.log('declined');
     await prisma.teamInvitation.update({
       where: { id: inviteId },
       data: { status: 'Declined' },

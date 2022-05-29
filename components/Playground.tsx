@@ -2,6 +2,7 @@ import { ImageData } from '@nouns/assets';
 import { useState } from 'react';
 import Image from 'next/image';
 import randomNumber from '@lib/random-number';
+import makeNoun from '@lib/make-noun';
 import Select from './ui/Select';
 import { Button } from './ui';
 
@@ -12,11 +13,32 @@ function cleanName(name: string) {
   return caps.join(' ');
 }
 
-export default function Playground() {
+interface PlaygroundProps {
+  userId: string;
+}
+
+export default function Playground({ userId }: PlaygroundProps) {
   const [head, setHead] = useState(randomNumber(233));
   const [body, setBody] = useState(randomNumber(29));
   const [accessory, setAccessory] = useState(randomNumber(136));
   const [glasses, setGlasses] = useState(randomNumber(20));
+
+  const setNounAsPfp = async () => {
+    const seed = {
+      background: 0,
+      body,
+      accessory,
+      head,
+      glasses,
+    };
+    const pfp = await makeNoun(seed);
+    const request = await fetch(`/api/user/${userId}/update-pfp`, {
+      method: 'POST',
+      body: JSON.stringify({ pfp }),
+    });
+    const updatePfpRes = await request.json();
+    console.log({ updatePfpRes });
+  };
 
   return (
     <div>
@@ -60,7 +82,7 @@ export default function Playground() {
             onChange={(value) => setGlasses(parseInt(value, 10))}
           />
           <div>
-            <Button label="new-noun" onClick={() => {}}>
+            <Button label="new-noun" onClick={setNounAsPfp}>
               Set As New Noun
             </Button>
           </div>
