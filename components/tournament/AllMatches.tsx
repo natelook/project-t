@@ -1,4 +1,5 @@
 import { MatchWithTeam } from '@lib/types';
+import classNames from 'classnames';
 import Link from 'next/link';
 
 interface AllMatchesProps {
@@ -7,9 +8,19 @@ interface AllMatchesProps {
   slug: string;
 }
 
-function Team({ name, score }: { name?: string | null; score?: number }) {
+interface TeamProps {
+  name?: string | null;
+  score?: number;
+  winner?: boolean;
+}
+
+function Team({ name, score, winner }: TeamProps) {
   return (
-    <div className="flex justify-between py-1 px-2">
+    <div
+      className={classNames('flex justify-between py-1 px-2', {
+        'bg-green-200 bg-opacity-40': winner,
+      })}
+    >
       <span>{name}</span>
       <span>{score}</span>
     </div>
@@ -19,6 +30,7 @@ function Team({ name, score }: { name?: string | null; score?: number }) {
 Team.defaultProps = {
   name: '',
   score: 0,
+  winner: false,
 };
 
 function BracketMatch({ match, slug }: { match: MatchWithTeam; slug: string }) {
@@ -28,9 +40,21 @@ function BracketMatch({ match, slug }: { match: MatchWithTeam; slug: string }) {
         <a>
           <div className="border rounded w-52 relative">
             <div>
-              <Team name={match.teamOne?.name} score={match.teamOneScore} />
+              <Team
+                name={match.teamOne?.name}
+                score={match.teamOneScore}
+                winner={
+                  match.winner !== null && match.winner === match.teamOneId
+                }
+              />
               <div className="border-b w-full" />
-              <Team name={match.teamTwo?.name} score={match.teamTwoScore} />
+              <Team
+                name={match.teamTwo?.name}
+                score={match.teamTwoScore}
+                winner={
+                  match.winner !== null && match.winner === match.teamTwoId
+                }
+              />
             </div>
           </div>
         </a>
@@ -53,7 +77,7 @@ export default function AllMatches({ matches, rounds, slug }: AllMatchesProps) {
             <h4 className="mb-2 font-bold">Round {round}</h4>
             <div
               key={`round-${round}`}
-              className="flex flex-col justify-evenly"
+              className="flex flex-col justify-around h-full"
             >
               {matches
                 .filter((match) => match.round === round)

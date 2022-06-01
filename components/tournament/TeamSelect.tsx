@@ -5,7 +5,6 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import Image from 'next/image';
 import classNames from 'classnames';
 import { Team } from '@prisma/client';
-import randomNoun from '@lib/random-noun';
 
 interface SelectProps {
   label: string;
@@ -33,7 +32,7 @@ export default function TeamSelect({
                 {selected ? (
                   <React.Fragment>
                     <Image
-                      src={randomNoun()}
+                      src="/default-pfp.png"
                       alt=""
                       className="flex-shrink-0 h-6 w-6 rounded-full"
                       height="15px"
@@ -78,7 +77,7 @@ export default function TeamSelect({
                       <>
                         <div className="flex items-center">
                           <Image
-                            src={randomNoun()}
+                            src="/default-pfp.png"
                             alt=""
                             className="flex-shrink-0 h-6 w-6 rounded-full"
                             height="15px"

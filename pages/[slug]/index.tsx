@@ -140,12 +140,16 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
     refetch();
   };
 
+  console.log({ tournament });
+
   return (
     <div>
       <TournamentHeading
         name={tournament.name}
         date={tournament.startDate}
         totalRegistrants={tournament.registrants.length}
+        maxRegistrants={tournament.maxRegistrants}
+        game={tournament.game}
         register={() => setRegisterModalOpen(true)}
         startTournament={startTournament}
         isAdmin={isAdmin.current}

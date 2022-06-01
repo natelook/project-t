@@ -1,4 +1,6 @@
+import pfp from '@lib/pfp';
 import { User } from '@prisma/client';
+import Image from 'next/image';
 import { ChangeEvent } from 'react';
 
 interface PlayerSelectProps {
@@ -30,9 +32,16 @@ export default function PlayerSelect({
             <div className="min-w-0 flex-1 text-sm">
               <label
                 htmlFor={`player-${player.id}`}
-                className="font-medium text-gray-700 dark:text-gray-300 select-none"
+                className="font-medium text-gray-700 dark:text-gray-300 select-none flex space-x-3"
               >
-                {player.name}
+                <Image
+                  src={player.pfp ? pfp(player.pfp) : 'default-pfp.png'}
+                  height="20px"
+                  width="20px"
+                  className="rounded-full"
+                  alt={`${player.name}'s pfp`}
+                />
+                <span>{player.username}</span>
               </label>
             </div>
             <div className="ml-3 flex items-center h-5">

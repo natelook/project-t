@@ -2,8 +2,8 @@ import { ChangeEvent } from 'react';
 
 interface InputProps {
   name: string;
-  value: string | number;
-  onChange: (value: string | number) => void;
+  value: string;
+  onChange: (value: string) => void;
   label: string;
   type?: string;
   hideLabel?: boolean;
@@ -21,10 +21,7 @@ export default function Input({
   return (
     <div className="w-full">
       {!hideLabel && (
-        <label
-          htmlFor={id}
-          className="block text-sm font-medium text-gray-900 dark:text-white capitalize"
-        >
+        <label htmlFor={id} className="label">
           {label}
         </label>
       )}

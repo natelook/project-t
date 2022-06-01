@@ -29,7 +29,10 @@ export default function TournamentsPage({ tournaments }: TournamentsPageProps) {
             subtitle={
               <div>
                 <p>{dayjs(tournament.startDate).format('MM/DD/YY h:ma')}</p>
-                <p>Registrants {tournament.registrants.length}</p>
+                <p>
+                  Registrants {tournament.registrants.length}/
+                  {tournament.maxRegistrants}
+                </p>
               </div>
             }
           />

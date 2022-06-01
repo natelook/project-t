@@ -1,4 +1,3 @@
-import randomNoun from '@lib/random-noun';
 import { TeamWithPlayersAndOwner } from '@lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -17,7 +16,7 @@ export default function TeamStackedList({ team }: TeamPanelProps) {
               <a className="py-4 flex">
                 <Image
                   className="h-10 w-10 rounded-full"
-                  src={randomNoun()}
+                  src="/default-pfp.png"
                   height="40px"
                   width="40px"
                   alt=""

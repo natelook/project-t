@@ -23,6 +23,8 @@ interface TournamentHeadingProps {
   isAdmin?: boolean;
   totalRegistrants: number;
   isSignedIn: boolean;
+  maxRegistrants: number;
+  game: string;
   startTournament: () => void;
   register: () => void;
 }
@@ -34,6 +36,8 @@ export default function TournamentHeading({
   isAdmin,
   totalRegistrants,
   isSignedIn,
+  maxRegistrants,
+  game,
   startTournament,
   register,
 }: TournamentHeadingProps) {
@@ -52,21 +56,21 @@ export default function TournamentHeading({
               className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400 dark:text-gray-200"
               aria-hidden="true"
             />
-            {totalRegistrants}/32 Teams
+            {totalRegistrants}/{maxRegistrants} Teams
           </div>
           <div className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-300">
             <LocationMarkerIcon
               className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400 dark:text-gray-200"
               aria-hidden="true"
             />
-            Game
+            {game}
           </div>
           <div className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-300">
             <CalendarIcon
               className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400 dark:text-gray-200"
               aria-hidden="true"
             />
-            {dayjs(date).format('MM/DD/YY h:ma')}
+            {dayjs(date).format('MM/DD/YY h:mma')}
           </div>
         </div>
       </div>

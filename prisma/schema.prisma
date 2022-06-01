@@ -74,6 +74,8 @@ model Tournament {
   registrants Registrant[]
   format      String
   matches     Match[]
+  mainStream String?
+  maxRegistrants Int @default(32)
 }
 
 model Match {

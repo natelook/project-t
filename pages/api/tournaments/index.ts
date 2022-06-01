@@ -3,12 +3,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const tournaments = await prisma.tournament.findMany({
-    select: {
-      name: true,
-      id: true,
+    include: {
       registrants: true,
-      slug: true,
-      startDate: true,
     },
   });
   return res.status(200).json(tournaments);

@@ -1,5 +1,4 @@
 import { CheckIcon, XIcon } from '@heroicons/react/solid';
-import randomNoun from '@lib/random-noun';
 import { TeamInvitationWithTeam } from '@lib/types';
 import Image from 'next/image';
 import React from 'react';
@@ -28,7 +27,7 @@ export default function TeamInvitations({
                       <div className="flex-shrink-0">
                         <Image
                           className="h-8 w-8 rounded-full"
-                          src={randomNoun()}
+                          src="/default-pfp.png"
                           height="32px"
                           width="32px"
                         />

@@ -33,7 +33,11 @@ export default async function CreateTeam(
 
   try {
     const data = await prisma.team.create({
-      data: { name: teamName, ownerUserId: session.user.id },
+      data: {
+        name: teamName,
+        ownerUserId: session.user.id,
+        players: { connect: { id: session.user.id } },
+      },
     });
     return res.status(200).json({ data });
   } catch (error: any) {
