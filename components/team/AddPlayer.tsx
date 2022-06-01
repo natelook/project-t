@@ -1,10 +1,9 @@
+import { ModalHeading, Input, Button } from '@components/ui';
 import { UserGroupIcon } from '@heroicons/react/solid';
 import pfp from '@lib/pfp';
 import { User } from '@prisma/client';
 import Image from 'next/image';
 import { FormEvent } from 'react';
-import Button from '../ui/Button';
-import Input from '../ui/Input';
 
 interface AddPlayerProps {
   playerName: string;
@@ -27,16 +26,12 @@ export default function AddPlayer({
 }: AddPlayerProps) {
   return (
     <div>
-      <div className="mb-4">
-        <div className="w-12 h-12 mx-auto">
-          <UserGroupIcon />
-        </div>
-        <h3 className="text-xl font-bold text-center">Invite Player</h3>
-        <p className="px-2 text-center text-sm">
-          Look up user by user name and invite them to be on your team. Note,
-          invitations do not expire.
-        </p>
-      </div>
+      <ModalHeading
+        icon={<UserGroupIcon />}
+        title="Invite Player"
+        subtext="Look up user by user name and invite them to be on your team. Note,
+          invitations do not expire."
+      />
       {!playerResults ? (
         <form onSubmit={formSubmit}>
           <div className="space-y-3">

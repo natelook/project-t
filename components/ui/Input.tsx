@@ -2,8 +2,8 @@ import { ChangeEvent } from 'react';
 
 interface InputProps {
   name: string;
-  value: string;
-  onChange: (value: string) => void;
+  value: string | number;
+  onChange: (value: string | number) => void;
   label: string;
   type?: string;
   hideLabel?: boolean;

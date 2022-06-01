@@ -28,9 +28,9 @@ function BracketMatch({ match, slug }: { match: MatchWithTeam; slug: string }) {
         <a>
           <div className="border rounded w-52 relative">
             <div>
-              <Team name={match.teamOne?.name} />
+              <Team name={match.teamOne?.name} score={match.teamOneScore} />
               <div className="border-b w-full" />
-              <Team name={match.teamTwo?.name} />
+              <Team name={match.teamTwo?.name} score={match.teamTwoScore} />
             </div>
           </div>
         </a>

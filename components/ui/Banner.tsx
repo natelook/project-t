@@ -28,14 +28,20 @@ export default function Banner({
     >
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div
-          className={classNames('p-2 rounded-lg shadow-lg sm:p-3', [
-            `bg-${color}-600`,
-          ])}
+          className={classNames('p-2 rounded-lg shadow-lg sm:p-3', {
+            'bg-sky-600': color === 'sky',
+            'bg-red-500': color === 'red',
+          })}
         >
           <div className="flex items-center justify-between flex-wrap">
             <div className="w-0 flex-1 flex items-center">
               {icon && (
-                <span className="flex p-2 rounded-lg bg-sky-800">
+                <span
+                  className={classNames('flex p-2 rounded-lg', {
+                    'bg-sky-800': color === 'sky',
+                    'bg-red-800': color === 'red',
+                  })}
+                >
                   <div className="h-6 w-6 text-white" aria-hidden="true">
                     {icon}
                   </div>
@@ -58,7 +64,13 @@ export default function Banner({
             <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
               <button
                 type="button"
-                className="-mr-1 flex p-2 rounded-md hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-white"
+                className={classNames(
+                  '-mr-1 flex p-2 rounded-md  focus:outline-none focus:ring-2 focus:ring-white',
+                  {
+                    'hover:bg-sky-500': color === 'sky',
+                    'hover:bg-red-600': color === 'red',
+                  },
+                )}
               >
                 <span className="sr-only">Dismiss</span>
                 <XIcon className="h-6 w-6 text-white" aria-hidden="true" />

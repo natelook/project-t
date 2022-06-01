@@ -83,6 +83,7 @@ model Match {
   teamTwoId    String?
   teamOneScore Int @default(0)
   teamTwoScore Int @default(0)
+  winningScore Int @default(1)
   winner String?
   teamOne      Team?      @relation("TeamOne", fields: [teamOneId], references: [id])
   teamTwo      Team?      @relation("TeamTwo", fields: [teamTwoId], references: [id])

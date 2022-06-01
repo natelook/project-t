@@ -10,34 +10,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const tournament = await prisma.tournament.findUnique({
     where: { slug },
-    select: {
-      registrants: {
-        select: {
-          teamId: true,
-          team: {
-            select: {
-              id: true,
-              name: true,
-              players: true,
-            },
-          },
-        },
-      },
-      name: true,
-      startDate: true,
-      createdBy: true,
-      id: true,
-      slug: true,
-      format: true,
+
+    include: {
+      registrants: true,
       matches: {
-        select: {
-          matchId: true,
-          round: true,
-          teamOneId: true,
-          teamTwoId: true,
-          teamOne: true,
-          teamTwo: true,
-        },
+        include: { teamOne: true, teamTwo: true, tournament: true },
+        orderBy: { matchId: 'asc' },
       },
     },
   });

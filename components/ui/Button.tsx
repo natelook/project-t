@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MutableRefObject } from 'react';
 import classnames from 'classnames';
 
 interface ButtonProps {
@@ -8,6 +8,7 @@ interface ButtonProps {
   children: React.ReactNode;
   icon?: JSX.Element;
   size?: 'text-xs' | 'text-sm' | 'text-base' | 'text-lg' | 'text-xl';
+  ref?: MutableRefObject<HTMLButtonElement | null>;
   onClick: () => void;
 }
 
@@ -18,6 +19,7 @@ export default function Button({
   children,
   icon,
   size,
+  ref,
   onClick,
 }: ButtonProps) {
   return (
@@ -30,6 +32,7 @@ export default function Button({
       aria-label={label}
       type={type === 'button' ? 'button' : 'submit'}
       onClick={() => onClick()}
+      ref={ref}
     >
       <span>{children}</span>
       {icon && (
@@ -46,4 +49,5 @@ Button.defaultProps = {
   style: 'primary',
   size: 'text-base',
   icon: undefined,
+  ref: null,
 };
