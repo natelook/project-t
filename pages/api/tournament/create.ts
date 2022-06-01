@@ -11,10 +11,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     slug,
     game,
     maxRegistrants,
-    stream,
+    mainStream,
   } = body;
-
-  console.log(maxRegistrants);
 
   const tournament = await prisma.tournament.create({
     data: {
@@ -25,7 +23,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       slug,
       game,
       maxRegistrants,
-      stream,
+      mainStream,
     },
   });
 
