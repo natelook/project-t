@@ -4,7 +4,7 @@ import { Dialog, Transition } from '@headlessui/react';
 interface ModalProps {
   children: ReactNode;
   open: boolean;
-  initialFocus: MutableRefObject<HTMLElement | null>;
+  initialFocus?: MutableRefObject<HTMLElement | null>;
   setOpen: (isOpen: boolean) => void;
 }
 
@@ -55,3 +55,7 @@ export default function Modal({
     </Transition.Root>
   );
 }
+
+Modal.defaultProps = {
+  initialFocus: undefined,
+};

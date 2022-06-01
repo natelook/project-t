@@ -49,7 +49,6 @@ async function main() {
         where: { id: teamsWithIdsAndPlayers[i].id },
         data: { players: { connect: player } },
       });
-      console.log(addedPlayer);
     }
     i++;
   }

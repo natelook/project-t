@@ -16,6 +16,12 @@ module.exports = {
       height: {
         '90vh': '90vh',
       },
+      colors: {
+        'nouns-bg': '#d5d7e1',
+      },
+      gridTemplateColumns: {
+        match: '1fr 50px 1fr',
+      },
     },
   },
   plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms')],

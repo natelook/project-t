@@ -31,12 +31,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       format: true,
       matches: {
         select: {
-          id: true,
+          matchId: true,
           round: true,
-          matchIdentifier: true,
-          teams: true,
           teamOneId: true,
           teamTwoId: true,
+          teamOne: true,
+          teamTwo: true,
         },
       },
     },

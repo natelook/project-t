@@ -118,7 +118,6 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
       body: JSON.stringify({ teamId: team?.id }),
     });
     if (request.status !== 200) {
-      console.log(request.status);
       setError('Something went wrong registering your team.');
       return;
     }
@@ -133,10 +132,12 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
   };
 
   const startTournament = async () => {
-    await fetch(`/api/tournament/${tournament.id}/start`);
-    // if (request.status !== 200) {
-    //   return;
-    // }
+    const request = await fetch(`/api/tournament/${tournament.id}/start`);
+    if (request.status !== 200) {
+      setError('Something went wrong');
+      return;
+    }
+    refetch();
   };
 
   return (
@@ -151,7 +152,13 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
         isSignedIn={userId !== null}
         slug={tournament.slug}
       />
-      <AllMatches matches={tournament.matches} rounds={totalRounds} />
+      <div className="mt-10">
+        <AllMatches
+          matches={tournament.matches}
+          rounds={totalRounds}
+          slug={tournament.slug}
+        />
+      </div>
       {registerModalOpen && (
         <Modal
           open={registerModalOpen}

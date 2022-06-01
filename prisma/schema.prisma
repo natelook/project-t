@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["dataProxy"]
 }
 
@@ -49,7 +49,6 @@ model User {
   accounts         Account[]
   sessions         Session[]
   tournaments      Tournament[]
-  // registrations    Player[]
   teamOnTournament Registrant[]
   teams            Team[]           @relation("Players")
   ownedTeams       Team[]           @relation("Owned")
@@ -79,39 +78,33 @@ model Tournament {
 }
 
 model Match {
-  id              String      @id @unique @default(cuid())
-  matchIdentifier Int         @default(autoincrement())
-  nextMatch       Int?
-  teamOneId       String?
-  teamTwoId       String?
-  teams           TeamMatch[]
-  // teamOne Team @relation("TeamOne",fields: [teamOneId], references: [id])
-  // teamTwo Team @relation("TeamTwo",fields: [teamTwoId])
-  tournamentId    String
-  round           Int
-  tournament      Tournament  @relation(fields: [tournamentId], references: [id])
+  matchId      Int
+  nextMatch    Int
+  teamOneId    String?
+  teamTwoId    String?
+  teamOneScore Int @default(0)
+  teamTwoScore Int @default(0)
+  winner String?
+  teamOne      Team?      @relation("TeamOne", fields: [teamOneId], references: [id])
+  teamTwo      Team?      @relation("TeamTwo", fields: [teamTwoId], references: [id])
+  tournamentId String
+  round        Int
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+
+  @@id([tournamentId, matchId])
 }
 
 model Team {
-  id          String           @id @unique @default(cuid())
-  name        String
-  ownerUserId String
-  owner       User             @relation(fields: [ownerUserId], references: [id], name: "Owned")
-  players     User[]           @relation("Players")
-  tournaments Registrant[]
-  matches     TeamMatch[]
-  invitations TeamInvitation[]
-}
-
-model TeamMatch {
-  // id String @id @unique @default(cuid())
-  tournamentId String
-  teamId       String
-  matchId      String
-  match        Match  @relation(fields: [matchId], references: [id])
-  team         Team   @relation(fields: [teamId], references: [id])
-
-  @@id([tournamentId, teamId, matchId])
+  id             String           @id @unique @default(cuid())
+  name           String
+  ownerUserId    String
+  owner          User             @relation(fields: [ownerUserId], references: [id], name: "Owned")
+  players        User[]           @relation("Players")
+  tournaments    Registrant[]
+  // matches     TeamMatch[]
+  invitations    TeamInvitation[]
+  teamOneMatches Match[]          @relation("TeamOne")
+  teamTwoMatches Match[]          @relation("TeamTwo")
 }
 
 model Registrant {

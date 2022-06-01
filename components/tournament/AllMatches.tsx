@@ -1,39 +1,64 @@
-import { Match } from '@prisma/client';
+import { MatchWithTeam } from '@lib/types';
+import Link from 'next/link';
 
 interface AllMatchesProps {
-  matches: Match[];
+  matches: MatchWithTeam[];
   rounds: number[] | null;
+  slug: string;
 }
 
-export default function AllMatches({ matches, rounds }: AllMatchesProps) {
+function Team({ name, score }: { name?: string | null; score?: number }) {
   return (
-    <div>
+    <div className="flex justify-between py-1 px-2">
+      <span>{name}</span>
+      <span>{score}</span>
+    </div>
+  );
+}
+
+Team.defaultProps = {
+  name: '',
+  score: 0,
+};
+
+function BracketMatch({ match, slug }: { match: MatchWithTeam; slug: string }) {
+  return (
+    <div key={match.matchId}>
+      <Link href={`/${slug}/${match.matchId}`}>
+        <a>
+          <div className="border rounded w-52 relative">
+            <div>
+              <Team name={match.teamOne?.name} />
+              <div className="border-b w-full" />
+              <Team name={match.teamTwo?.name} />
+            </div>
+          </div>
+        </a>
+      </Link>
+      <div className="-mt-1.5 text-right">
+        <span className="uppercase text-gray-400 font-bold text-xs">
+          Match {match.matchId}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+export default function AllMatches({ matches, rounds, slug }: AllMatchesProps) {
+  return (
+    <div className="flex space-x-5">
       {rounds &&
         rounds.map((round) => (
-          <div key={`round-${round}`}>
-            <h3 className="text-xl font-bold my-4">Round {round}</h3>
-            <div className="grid grid-cols-2 gap-4">
+          <div>
+            <h4 className="mb-2 font-bold">Round {round}</h4>
+            <div
+              key={`round-${round}`}
+              className="flex flex-col justify-evenly"
+            >
               {matches
                 .filter((match) => match.round === round)
                 .map((match) => (
-                  <div
-                    key={match.id}
-                    className="border rounded p-3 flex justify-center items-center"
-                  >
-                    <div>
-                      <p>{match.id}</p>
-                      <div className="display grid grid-cols-2 ">
-                        <div className="flex flex-col">
-                          <span>Team 1</span>
-                          <span>{match.teamOneId}</span>
-                        </div>
-                        <div className="flex flex-col">
-                          <span>Team 2</span>
-                          <span>{match.teamTwoId}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <BracketMatch key={match.matchId} match={match} slug={slug} />
                 ))}
             </div>
           </div>

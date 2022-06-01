@@ -1,4 +1,5 @@
 import {
+  Match,
   Registrant,
   Team,
   TeamInvitation,
@@ -29,4 +30,15 @@ export interface RegistrantWithTeamInfo extends Registrant {
 
 export interface TournamentWithRegistrants extends Tournament {
   registrants: RegistrantWithTeamInfo[];
+}
+
+export interface MatchWithTeam extends Match {
+  teamOne: Team;
+  teamTwo: Team;
+}
+
+export interface MatchWithTeamsAndTournament extends Match {
+  teamOne: TeamWithPlayersAndOwner;
+  teamTwo: TeamWithPlayersAndOwner;
+  tournament: Tournament;
 }

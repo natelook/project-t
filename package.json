@@ -5,9 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build",
+    "vercel-build": "DATABASE_URL=\"$MIGRATE_DATABASE_URL\" prisma generate && prisma migrate deploy && next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "nothing test -- testing",
+    "migrate-local": "DATABASE_URL=\"$MIGRATE_DATABASE_URL\" prisma migrate dev",
+    "reset-local": "DATABASE_URL=\"$MIGRATE_DATABASE_URL\" prisma migrate dev reset",
     "update-db": "npx prisma generate && npx prisma db push"
   },
   "dependencies": {
