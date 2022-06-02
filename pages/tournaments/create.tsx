@@ -163,7 +163,7 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
                 <div className="col-span-3">
                   <Select
                     id={`round-format-${i}`}
-                    onChange={(v) => console.log(v)}
+                    onChange={() => {}}
                     defaultValue="32"
                     options={[
                       { name: 'Best of 1', value: 'BO1' },

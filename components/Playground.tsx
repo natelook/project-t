@@ -1,5 +1,5 @@
 import { ImageData } from '@nouns/assets';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import randomNumber from '@lib/random-number';
 import Image from 'next/image';
 import makeNoun from '@lib/make-noun';
