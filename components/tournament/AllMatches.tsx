@@ -69,12 +69,27 @@ function BracketMatch({ match, slug }: { match: MatchWithTeam; slug: string }) {
 }
 
 export default function AllMatches({ matches, rounds, slug }: AllMatchesProps) {
+  const roundName = (roundNumber: number, roundArray: number[]) => {
+    if (roundArray.length === roundNumber) {
+      return 'Final Match';
+    }
+
+    if (roundArray.length - 1 === roundNumber) {
+      return 'Semi-Finals';
+    }
+
+    if (roundArray.length - 2 === roundNumber) {
+      return 'Quarter-Finals';
+    }
+
+    return `Round ${roundNumber}`;
+  };
   return (
     <div className="flex space-x-5">
       {rounds &&
         rounds.map((round) => (
           <div>
-            <h4 className="mb-2 font-bold">Round {round}</h4>
+            <h4 className="mb-2 font-bold">{roundName(round, rounds)}</h4>
             <div
               key={`round-${round}`}
               className="flex flex-col justify-around h-full space-y-5"
