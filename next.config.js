@@ -6,6 +6,7 @@ const nextConfig = {
   },
   env: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    SUPERADMIN: process.env.SUPERADMIN,
   },
 };
 

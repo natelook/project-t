@@ -21,6 +21,7 @@ import { useQuery } from 'react-query';
 import { Banner } from '@components/ui';
 import { CheckIcon } from '@heroicons/react/solid';
 import { AnimatePresence } from 'framer-motion';
+import SuperAdminTournament from '@components/admin/SuperAdminTournament';
 
 interface TeamWithPlayers extends Team {
   players: User[];
@@ -247,6 +248,7 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
           />
         )}
       </AnimatePresence>
+      {process.env.SUPERADMIN === userId && <SuperAdminTournament />}
     </div>
   );
 }
