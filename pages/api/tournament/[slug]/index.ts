@@ -12,7 +12,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     where: { slug },
 
     include: {
-      registrants: true,
+      registrants: {
+        include: {
+          team: {
+            include: {
+              players: true,
+            },
+          },
+        },
+      },
       matches: {
         include: { teamOne: true, teamTwo: true, tournament: true },
         orderBy: { matchId: 'asc' },
