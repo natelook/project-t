@@ -2,9 +2,9 @@ import { Layout } from '@components/common';
 import TeamStackedList from '@components/common/TeamStackedList';
 import Playground from '@components/Playground';
 import { TeamHeading } from '@components/team';
-import { Button, Input, Modal } from '@components/ui';
+import { Button, Input, Modal, ModalHeading } from '@components/ui';
 import TeamInvitations from '@components/ui/TeamInvitations';
-import { BadgeCheckIcon } from '@heroicons/react/solid';
+import { BadgeCheckIcon, CogIcon } from '@heroicons/react/solid';
 import { TeamInvitationWithTeam, TeamWithPlayersAndOwner } from '@lib/types';
 import { Registrant, Tournament, User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
@@ -33,6 +33,7 @@ const fetcher = async (userId: string) => {
 export default function Profile({ data }: ProfileProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [newUsername, setNewUsername] = useState('');
+  const [playgroundOpen, setPlaygroundOpen] = useState(false);
 
   const {
     data: user,
@@ -79,6 +80,8 @@ export default function Profile({ data }: ProfileProps) {
         name="Your Profile"
         subtitle={user.username}
         isOwner
+        secondaryButton={() => setPlaygroundOpen(true)}
+        secondaryButtonText="Update PFP"
         primaryButtonText="Change Username"
         primaryButton={() => setModalOpen(true)}
       />
@@ -114,9 +117,21 @@ export default function Profile({ data }: ProfileProps) {
             <p className="mt-3 p-2 text-gray-500">No Invitations</p>
           )}
         </div>
-        <div className="col-span-2">
-          <Playground userId={data.id} />
-        </div>
+        {playgroundOpen && (
+          <Modal
+            open={playgroundOpen}
+            setOpen={() => setPlaygroundOpen(true)}
+            width="sm:max-w-2xl"
+          >
+            <ModalHeading title="Generate Noun" icon={<CogIcon />} subtext="" />
+            <div className="mx-auto">
+              <Playground
+                userId={data.id}
+                close={() => setPlaygroundOpen(false)}
+              />
+            </div>
+          </Modal>
+        )}
       </div>
       {modalOpen && (
         <Modal
@@ -156,7 +171,6 @@ export default function Profile({ data }: ProfileProps) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
-  console.log({ session, sessiontest: session?.user });
   if (!session) {
     return { notFound: true };
   }

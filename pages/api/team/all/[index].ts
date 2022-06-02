@@ -2,9 +2,6 @@ import prisma from '@lib/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { index } = req.query;
-  console.log(index);
-
   const teams = await prisma.team.findMany({
     take: 20,
     // skip: 20 * parseInt(index as string, 10),

@@ -123,7 +123,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const add = await prisma.match.createMany({
       data: allMatches,
     });
-    console.log(add);
     return res.status(200).json({ message: 'Tournament Started', add });
   } catch (error) {
     return res

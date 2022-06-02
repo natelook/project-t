@@ -1,10 +1,12 @@
 import { Fragment, MutableRefObject, ReactNode } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import classNames from 'classnames';
 
 interface ModalProps {
   children: ReactNode;
   open: boolean;
   initialFocus?: MutableRefObject<HTMLElement | null>;
+  width?: string;
   setOpen: (isOpen: boolean) => void;
 }
 
@@ -12,6 +14,7 @@ export default function Modal({
   children,
   open,
   initialFocus,
+  width,
   setOpen,
 }: ModalProps) {
   return (
@@ -45,7 +48,12 @@ export default function Modal({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full sm:p-6">
+              <Dialog.Panel
+                className={classNames(
+                  'relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:w-full sm:p-6',
+                  [width],
+                )}
+              >
                 <div>{children}</div>
               </Dialog.Panel>
             </Transition.Child>
@@ -58,4 +66,5 @@ export default function Modal({
 
 Modal.defaultProps = {
   initialFocus: undefined,
+  width: 'sm:max-w-lg',
 };

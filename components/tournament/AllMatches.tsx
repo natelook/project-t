@@ -77,7 +77,7 @@ export default function AllMatches({ matches, rounds, slug }: AllMatchesProps) {
             <h4 className="mb-2 font-bold">Round {round}</h4>
             <div
               key={`round-${round}`}
-              className="flex flex-col justify-around h-full"
+              className="flex flex-col justify-around h-full space-y-5"
             >
               {matches
                 .filter((match) => match.round === round)

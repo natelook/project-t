@@ -1,6 +1,7 @@
 import { ImageData } from '@nouns/assets';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import randomNumber from '@lib/random-number';
+import Image from 'next/image';
 import makeNoun from '@lib/make-noun';
 import Select from './ui/Select';
 import { Button } from './ui';
@@ -14,13 +15,15 @@ function cleanName(name: string) {
 
 interface PlaygroundProps {
   userId: string;
+  close: () => void;
 }
 
-export default function Playground({ userId }: PlaygroundProps) {
+export default function Playground({ userId, close }: PlaygroundProps) {
   const [head, setHead] = useState(randomNumber(233));
   const [body, setBody] = useState(randomNumber(29));
   const [accessory, setAccessory] = useState(randomNumber(136));
   const [glasses, setGlasses] = useState(randomNumber(20));
+  const [error, setError] = useState<string | null>();
 
   const setNounAsPfp = async () => {
     const seed = {
@@ -36,14 +39,16 @@ export default function Playground({ userId }: PlaygroundProps) {
       body: JSON.stringify({ pfp }),
     });
     const updatePfpRes = await request.json();
-    console.log({ updatePfpRes });
+    if (updatePfpRes.error) {
+      setError(updatePfpRes.error);
+    }
+    close();
   };
 
   return (
-    <div>
-      <h3 className="text-3xl font-bold mb-5">Generate Noun</h3>
-      <div className="flex space-x-10">
-        <div className="space-y-3 col-span-1">
+    <div className="w-full">
+      <div className="grid grid-cols-2 gap-x-10">
+        <div className="space-y-3">
           <Select
             options={ImageData.images.bodies.map(({ filename }, i) => ({
               name: cleanName(filename),
@@ -80,50 +85,54 @@ export default function Playground({ userId }: PlaygroundProps) {
             id="glasess"
             onChange={(value) => setGlasses(parseInt(value, 10))}
           />
-          <div>
-            <Button label="new-noun" onClick={setNounAsPfp}>
-              Set As New Noun
-            </Button>
-          </div>
         </div>
         <div
           style={{ backgroundColor: `#${ImageData.bgcolors[0]}` }}
-          className="relative flex items-center col-span-3 h-[400px] w-[400px]"
+          className="relative flex items-center justify-center"
         >
-          <div className="absolute top-0" style={{ zIndex: 8 }}>
-            <img
+          <div className="absolute bottom-0" style={{ zIndex: 8 }}>
+            <Image
               src={`/noun/glasses/${ImageData.images.glasses[glasses].filename}.png`}
-              height="400px"
-              width="400px"
+              height="275px"
+              width="275px"
               alt=""
             />
           </div>
-          <div className="absolute top-0" style={{ zIndex: 6 }}>
-            <img
+          <div className="absolute bottom-0" style={{ zIndex: 6 }}>
+            <Image
               src={`/noun/accessories/${ImageData.images.accessories[accessory].filename}.png`}
-              height="400px"
-              width="400px"
+              height="275px"
+              width="275px"
               alt=""
             />
           </div>
-          <div className="absolute top-0" style={{ zIndex: 7 }}>
-            <img
+          <div className="absolute bottom-0" style={{ zIndex: 7 }}>
+            <Image
               src={`/noun/heads/${ImageData.images.heads[head].filename}.png`}
-              height="400px"
-              width="400px"
+              height="275px"
+              width="275px"
               alt=""
             />
           </div>
-          <div className="absolute top-0" style={{ zIndex: 5 }}>
-            <img
+          <div className="absolute bottom-0" style={{ zIndex: 5 }}>
+            <Image
               src={`/noun/bodies/${ImageData.images.bodies[body].filename}.png`}
-              height="400px"
-              width="400px"
+              height="275px"
+              width="275px"
               alt=""
             />
           </div>
         </div>
       </div>
+      <div className="flex space-x-10 mt-5">
+        <Button label="canel" onClick={close} style="secondary">
+          Cancel
+        </Button>
+        <Button label="new-noun" onClick={setNounAsPfp}>
+          Set as PFP
+        </Button>
+      </div>
+      {error && <span className="text-red-500">{error}</span>}
     </div>
   );
 }

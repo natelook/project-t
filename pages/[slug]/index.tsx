@@ -140,8 +140,6 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
     refetch();
   };
 
-  console.log({ tournament });
-
   return (
     <div>
       <TournamentHeading

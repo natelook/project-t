@@ -31,8 +31,6 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
   const [error, setError] = useState<string | null>();
   const router = useRouter();
 
-  console.log({ maxRounds });
-
   const calculateTotalRounds = useCallback((totalPlayers: string) => {
     const players = parseInt(totalPlayers, 10);
     let roundMatches = players / 2;
