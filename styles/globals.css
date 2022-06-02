@@ -40,6 +40,10 @@
   .yes-no-button {
     @apply h-8 w-8 inline-flex items-center shadow-sm p-1 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50;
   }
+
+  .card {
+    @apply px-4 py-5 bg-white drop-shadow-md rounded-lg overflow-hidden border border-gray-100 sm:p-6;
+  }
 }
 
 @layer utilities {

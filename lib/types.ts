@@ -42,3 +42,7 @@ export interface MatchWithTeamsAndTournament extends Match {
   teamTwo: TeamWithPlayersAndOwner;
   tournament: Tournament;
 }
+
+export interface RegistrantWithTournamentInfo extends Registrant {
+  tournament: Tournament;
+}

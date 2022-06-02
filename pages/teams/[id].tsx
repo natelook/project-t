@@ -1,8 +1,12 @@
-import { AddPlayer, TeamHeading, TeamPanel, TeamStats } from '@components/team';
+import { AddPlayer, TeamHeading, TeamStats } from '@components/team';
 import { Layout } from '@components/common';
 import Modal from '@components/ui/Modal';
-import { TeamWithPlayersAndOwner } from '@lib/types';
-import { User } from '@prisma/client';
+import {
+  MatchWithTeamsAndTournament,
+  RegistrantWithTournamentInfo,
+  TeamWithPlayersAndOwner,
+} from '@lib/types';
+import { Team, User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
 import { FormEvent, useRef, useState } from 'react';
@@ -11,11 +15,23 @@ import { AnimatePresence } from 'framer-motion';
 import { Banner } from '@components/ui';
 import { CheckIcon } from '@heroicons/react/outline';
 import useNotification from '@lib/hooks/useNotification';
+import classNames from 'classnames';
+import dayjs from 'dayjs';
+import TeamPlayers from '@components/team/TeamPlayers';
+import { ImageData } from '@nouns/assets';
 // import { SpeakerphoneIcon } from '@heroicons/react/solid';
 // import validateTeamOwner from '@lib/validateUser';
 
+interface MatchesRenamedForTeam extends MatchWithTeamsAndTournament {
+  teamScore: number;
+  oppenentScore: number;
+  opponent: Team;
+}
+
 interface TeamWithCount extends TeamWithPlayersAndOwner {
   _count: number;
+  matches: MatchesRenamedForTeam[];
+  tournaments: RegistrantWithTournamentInfo[];
 }
 
 interface TeamPageProps {
@@ -93,6 +109,15 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
     return <p>Loading...</p>;
   }
 
+  const getWinRate = () => {
+    const percentage =
+      (team.matches.filter((match) => match.winner === team.id).length /
+        team.matches.length) *
+      100;
+
+    return `${Math.floor(percentage)}%`;
+  };
+
   return (
     <div className="container">
       <TeamHeading
@@ -102,11 +127,95 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
         isOwner={isOwner.current}
       />
 
-      <TeamStats />
-      <div className="grid grid-cols-4 mt-5">
-        <div>
-          <h3 className="text-3xl font-bold leading-6">Players</h3>
-          <TeamPanel team={team} />
+      <div className="grid grid-cols-4 gap-8 mt-5">
+        <div className="col-span-4">
+          <TeamPlayers
+            players={team.players}
+            teamBackground={ImageData.bgcolors[0]}
+          />
+        </div>
+        <TeamStats
+          stats={[
+            {
+              name: 'Matches',
+              stat: `${
+                team.matches.filter((match) => match.winner !== null).length
+              }`,
+            },
+            {
+              name: 'Win Rate',
+              stat: team.matches.length >= 1 ? getWinRate() : 'No matches',
+            },
+            {
+              name: 'Tournament Wins',
+              stat: `${
+                team.tournaments.filter(
+                  (tournament) => tournament.tournament.winner === team.id,
+                ).length
+              }`,
+            },
+          ]}
+        />
+        <div className="col-span-3">
+          <h3 className="text-3xl font-bold leading-6 mb-5">Recent Matches</h3>
+          <div className="space-y-8">
+            {team.matches.map((match) => (
+              <div key={match.matchId} className="card grid grid-cols-2">
+                <div className="flex flex-col flex-0 justify-between">
+                  <h4 className="font-bold text-lg">{match.tournament.name}</h4>
+                  <span className="text-gray-400 text-sm">
+                    {dayjs(match.tournament.startDate).format('MM/DD/YY')}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-3 place-items-center justify-center">
+                  <div
+                    className={classNames('flex justify-end w-full', {
+                      'text-gray-300': match.teamScore < match.oppenentScore,
+                      'text-black font-bold':
+                        match.teamScore > match.oppenentScore,
+                    })}
+                  >
+                    <span>{team.name}</span>
+                  </div>
+                  <div>
+                    <span className="text-lg flex items-center">
+                      <span
+                        className={classNames('flex justify-end w-full', {
+                          'text-gray-300':
+                            match.teamScore < match.oppenentScore,
+                          'text-black font-bold':
+                            match.teamScore > match.oppenentScore,
+                        })}
+                      >
+                        {match.teamScore}
+                      </span>
+                      <span className="mx-1"> : </span>
+                      <span
+                        className={classNames('flex justify-end w-full', {
+                          'text-gray-400':
+                            match.teamScore > match.oppenentScore,
+                          'text-black font-bold':
+                            match.teamScore < match.oppenentScore,
+                        })}
+                      >
+                        {match.oppenentScore}
+                      </span>
+                    </span>
+                  </div>
+                  <div
+                    className={classNames('flex justify-start w-full', {
+                      'text-gray-300': match.teamScore > match.oppenentScore,
+                      'text-black font-bold':
+                        match.teamScore < match.oppenentScore,
+                    })}
+                  >
+                    {match.opponent?.name || 'Pending'}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

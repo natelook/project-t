@@ -22,6 +22,10 @@ module.exports = {
       gridTemplateColumns: {
         match: '1fr 50px 1fr',
       },
+      // backgroundImage: {
+      //   confetti:
+      //     "url('/colorful-confetti-falling-illustration-isolated-on-transparent-background-event-and-anniversary-celebration-blue-red-yellow-tinsel-falling-carnival-elements-simple-colorful-confetti-falling-vector2.png')",
+      // },
     },
   },
   plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms')],

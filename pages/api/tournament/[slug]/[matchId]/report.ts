@@ -97,6 +97,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     data: reportedMatchData,
   });
 
+  if (matchId === '0' && winner) {
+    await prisma.tournament.update({
+      where: { id: tournamentId },
+      data: { winner },
+    });
+    return res.status(200).json({ reportMatch, winner });
+  }
+
   if (winner) {
     const nextMatchArgs = {
       tournamentId_matchId: {
