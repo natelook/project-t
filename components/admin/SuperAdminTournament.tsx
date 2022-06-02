@@ -3,7 +3,7 @@ export default function SuperAdminTournament() {
     await fetch('/api/admin/register-teams', {
       method: 'POST',
       body: JSON.stringify({
-        tournamentId: 'cl3sf0wpo20127up2xznuqdec',
+        tournamentId: 'cl3ws0not02796o0h7yw152ul',
         numberOfTeams: 40,
       }),
     });

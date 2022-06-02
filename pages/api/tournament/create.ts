@@ -12,6 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     game,
     maxRegistrants,
     mainStream,
+    roundWinConditions,
   } = body;
 
   const tournament = await prisma.tournament.create({
@@ -24,6 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       game,
       maxRegistrants,
       mainStream,
+      roundWinConditions,
     },
   });
 

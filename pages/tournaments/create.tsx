@@ -10,6 +10,7 @@ import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { Tournament } from '@prisma/client';
 import { Select } from '@components/ui';
+import countTotalRounds from '@lib/count-total-rounds';
 
 const convertTitleToSlug = (title: string) => {
   const slug = title.replace(/\s+/g, '-').toLowerCase();
@@ -25,30 +26,26 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
   const [startDate, setStartDate] = useState(new Date());
   const [slug, setSlug] = useState('');
   const [format, setFormat] = useState('Single Elimination');
-  const [maxPlayers, setMaxPlayers] = useState('');
-  const [maxRounds, setMaxRounds] = useState<number | null>();
+  const [maxPlayers, setMaxPlayers] = useState(32);
+  const [roundWinConditions, setRoundWinConditions] = useState<
+    number[] | null
+  >();
   const [stream, setStream] = useState('');
   const [error, setError] = useState<string | null>();
   const router = useRouter();
 
-  const calculateTotalRounds = useCallback((totalPlayers: string) => {
-    const players = parseInt(totalPlayers, 10);
-    let roundMatches = players / 2;
-    let totalRounds = 1;
-    const addRound = () => {
-      if (roundMatches % 2 === 0) {
-        roundMatches /= 2;
-        totalRounds += 1;
-        addRound();
-      }
-    };
-    addRound();
-
-    return totalRounds;
-  }, []);
+  const calculateTotalRounds = useCallback(
+    (players: string) => countTotalRounds(players),
+    [],
+  );
 
   useEffect(() => {
-    setMaxRounds(calculateTotalRounds(maxPlayers));
+    const totalRounds = calculateTotalRounds(`${maxPlayers}`);
+    const winConditions = [];
+    for (let i = 0; i < totalRounds; i += 1) {
+      winConditions.push(1);
+    }
+    setRoundWinConditions(winConditions);
   }, [maxPlayers, calculateTotalRounds]);
 
   useEffect(() => {
@@ -71,8 +68,9 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
         createdBy: userId,
         slug,
         game: 'VALORANT',
-        maxRegistrants: parseInt(maxPlayers, 10),
+        maxRegistrants: maxPlayers,
         mainStream: stream,
+        roundWinConditions,
       }),
     });
     const createdTournament: Tournament = await request.json();
@@ -135,7 +133,7 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
         <Select
           id="max-players"
           label="Max Players"
-          onChange={(value) => setMaxPlayers(value)}
+          onChange={(value) => setMaxPlayers(parseInt(value, 10))}
           defaultValue="32"
           options={[
             { name: '8' },
@@ -146,14 +144,15 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
             { name: '256' },
           ]}
         />
-        {maxRounds && maxRounds >= 2 && (
+        {roundWinConditions && roundWinConditions.length >= 2 && (
           <React.Fragment>
             <label className="label" htmlFor="round-format-0">
               Round Matches
             </label>
 
-            {Array.from(Array(maxRounds), (_, i) => (
-              <div className="grid grid-cols-4 gap-x-10">
+            {roundWinConditions.map((_, i) => (
+              /* eslint-disable-next-line */
+              <div className="grid grid-cols-4 gap-x-10" key={i}>
                 <label
                   htmlFor={`round-format-${i}`}
                   className="flex items-center col-span-1"
@@ -163,14 +162,18 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
                 <div className="col-span-3">
                   <Select
                     id={`round-format-${i}`}
-                    onChange={() => {}}
+                    onChange={(value) => {
+                      const current = roundWinConditions;
+                      current[i] = parseInt(value, 10);
+                      setRoundWinConditions(current);
+                    }}
                     defaultValue="32"
                     options={[
-                      { name: 'Best of 1', value: 'BO1' },
-                      { name: 'Best of 3', value: 'BO3' },
-                      { name: 'Best of 5', value: 'BO5' },
-                      { name: 'Best of 7', value: 'BO7' },
-                      { name: 'Best of 9', value: 'BO9' },
+                      { name: 'Best of 1', value: '1' },
+                      { name: 'Best of 3', value: '2' },
+                      { name: 'Best of 5', value: '3' },
+                      { name: 'Best of 7', value: '4' },
+                      { name: 'Best of 9', value: '5' },
                     ]}
                   />
                 </div>

@@ -34,6 +34,8 @@ Team.defaultProps = {
 };
 
 function BracketMatch({ match, slug }: { match: MatchWithTeam; slug: string }) {
+  const matchFormat = (score: number) => `Best of ${score + score - 1}`;
+
   return (
     <div key={match.matchId}>
       <Link href={`/${slug}/${match.matchId}`}>
@@ -61,7 +63,7 @@ function BracketMatch({ match, slug }: { match: MatchWithTeam; slug: string }) {
       </Link>
       <div className="-mt-1.5 text-right">
         <span className="uppercase text-gray-400 font-bold text-xs">
-          Match {match.matchId}
+          Match {match.matchId} | {matchFormat(match.winningScore)}
         </span>
       </div>
     </div>

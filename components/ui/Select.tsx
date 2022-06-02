@@ -35,8 +35,8 @@ export default function Select({
       >
         {options.map((option) => (
           <option
-            key={option.value ? option.value : option.name}
-            value={option.value}
+            key={option.name}
+            value={option.value ? option.value : option.name}
           >
             {option.name}
           </option>

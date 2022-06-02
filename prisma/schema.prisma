@@ -76,6 +76,7 @@ model Tournament {
   matches     Match[]
   mainStream String?
   maxRegistrants Int @default(32)
+  roundWinConditions Int[]
 }
 
 model Match {

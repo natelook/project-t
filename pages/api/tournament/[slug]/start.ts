@@ -1,3 +1,4 @@
+import countTotalRounds from '@lib/count-total-rounds';
 import prisma from '@lib/prisma';
 import { Match } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -18,9 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const tournament = await prisma.tournament.findUnique({
     where: { id: id as string },
     include: {
-      registrants: {
-        select: { teamId: true },
-      },
+      registrants: true,
     },
   });
 
@@ -50,8 +49,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   let matchId = 1; // matchIdentifier
   let nextMatch = bracketSize / 2 + 1; // Starting next match
   let matchCreated = 0; // Keeps track of how many matches were created, once there is two this resets to 0
-  // let firstRoundBye: { matchId: number; teamOneId: string } | null;
   const firstRoundMatches = bracketSize / 2;
+  let winConditions = tournament.roundWinConditions;
+  const totalRounds = countTotalRounds(`${bracketSize}`);
+
+  // Remove rounds that are not needed
+  if (winConditions.length !== totalRounds) {
+    const roundsToRemove = winConditions.length - totalRounds;
+    winConditions = winConditions.filter((_, i) => i >= roundsToRemove);
+  }
 
   const firstRound: Match[] = [];
 
@@ -66,15 +72,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       teamOneScore: 0,
       teamTwoScore: 0,
       teamTwoId: null,
-      winningScore: 1,
+      winningScore: winConditions[0],
       winner: null,
     };
 
-    let matchInfo = match;
-
     if (i < firstRoundMatches) {
-      matchInfo = { ...matchInfo, teamOneId: registrant.teamId };
-      firstRound.push(matchInfo);
+      firstRound.push({ ...match, teamOneId: registrant.teamId });
 
       if (matchCreated === 2) {
         nextMatch += 1;
@@ -85,6 +88,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       if (i === firstRoundMatches) matchId = 1;
       firstRound[matchId - 1].teamTwoId = registrant.teamId;
       matchId += 1;
+      matchCreated = 0;
     }
   });
 
@@ -116,44 +120,44 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       nextMatch: number;
       teamOneId?: string | null;
       teamTwoId?: string | null;
+      winningScore: number;
     }[] = [];
 
     function createEmptyMatch(mID: number) {
       if (!tournament) return;
 
-      if (Array.isArray(emptyMatches)) {
-        const emptyMatch = {
-          matchId: mID,
-          round,
-          tournamentId: tournament.id,
-          nextMatch,
-        };
+      const emptyMatch = {
+        matchId: mID,
+        round,
+        tournamentId: tournament.id,
+        nextMatch,
+        winningScore: winConditions[round - 1],
+      };
 
-        if (firstRoundByes.length !== 0) {
-          const advancedTeam: { teamId: string }[] = firstRoundByes.filter(
-            ({ matchId: byeMatchId }) => byeMatchId === mID,
-          );
+      if (firstRoundByes.length !== 0) {
+        const advancedTeam: { teamId: string }[] = firstRoundByes.filter(
+          ({ matchId: byeMatchId }) => byeMatchId === mID,
+        );
 
-          if (advancedTeam.length === 2) {
-            emptyMatches.push({
-              ...emptyMatch,
-              teamOneId: advancedTeam[0].teamId,
-              teamTwoId: advancedTeam[1].teamId,
-            });
-            return;
-          }
-
-          if (advancedTeam.length >= 1) {
-            emptyMatches.push({
-              ...emptyMatch,
-              teamOneId: advancedTeam[0].teamId,
-            });
-            return;
-          }
+        if (advancedTeam.length === 2) {
+          emptyMatches.push({
+            ...emptyMatch,
+            teamOneId: advancedTeam[0].teamId,
+            teamTwoId: advancedTeam[1].teamId,
+          });
+          return;
         }
 
-        emptyMatches.push(emptyMatch);
+        if (advancedTeam.length >= 1) {
+          emptyMatches.push({
+            ...emptyMatch,
+            teamOneId: advancedTeam[0].teamId,
+          });
+          return;
+        }
       }
+
+      emptyMatches.push(emptyMatch);
     }
 
     let teamsAddedCurrentRound = 1;
@@ -169,7 +173,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         roundSize /= 2;
         teamsAddedCurrentRound = 0;
       }
-
       matchCreated += 1;
       if (matchCreated === 2) {
         nextMatch += 1;
@@ -185,6 +188,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const emptyMatches = createEmptyMatches(bracketSize);
   // @ts-ignore
   const allMatches = firstRoundWithByes.concat(emptyMatches);
+  // console.log(allMatches);
 
   await prisma.tournament.update({
     where: { id: tournament.id },
