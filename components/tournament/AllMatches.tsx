@@ -87,11 +87,13 @@ export default function AllMatches({ matches, rounds, slug }: AllMatchesProps) {
     return `Round ${roundNumber}`;
   };
   return (
-    <div className="flex space-x-5">
+    <div className="flex space-x-10 overflow-x-scroll">
       {rounds &&
         rounds.map((round) => (
           <div>
-            <h4 className="mb-2 font-bold">{roundName(round, rounds)}</h4>
+            <h4 className="mb-2 font-bold uppercase tracking-wide text-gray-800">
+              {roundName(round, rounds)}
+            </h4>
             <div
               key={`round-${round}`}
               className="flex flex-col justify-around h-full space-y-5"

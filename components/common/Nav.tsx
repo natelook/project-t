@@ -38,21 +38,20 @@ export default function Nav() {
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  {/* <div>
-                    <div className="-mb-3">
-                      <Image
-                        src="/glasses.png"
-                        alt="Glasses"
-                        width="35px"
-                        height="13px"
-                      />
-                    </div>
-                    <span className="text-xl font-bold font-nouns tracking-wide">
-                      Tournaments.wtf
-                    </span>
-                  </div> */}
+                  <div>
+                    <Link href="/">
+                      <a>
+                        <Image
+                          src="/logo.png"
+                          alt="Logo"
+                          width="130px"
+                          height="60px"
+                        />
+                      </a>
+                    </Link>
+                  </div>
                 </div>
-                <div className="hidden sm:flex sm:space-x-8">
+                <div className="hidden sm:flex sm:space-x-8 items-center ml-10">
                   {/* Current: "border-sky-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
                   {navItems.map((item) => (
                     <Link href={item.slug} key={item.name}>
@@ -87,14 +86,14 @@ export default function Nav() {
                       <Menu.Button className="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
                         <span className="sr-only">Open user menu</span>
                         <Image
-                          className="h-8 w-8 rounded-full"
+                          className="h-12 w-12 rounded-full"
                           src={
                             session.user.pfp
                               ? pfp(session.user.pfp)
                               : '/default-pfp.png'
                           }
-                          height="30px"
-                          width="30px"
+                          height="45px"
+                          width="45px"
                           alt="Your profile picture"
                         />
                       </Menu.Button>

@@ -25,7 +25,7 @@ export default function TeamCard({
   const [hovered, setHovered] = useState<number | null>();
   const [playerName, setPlayerName] = useState('');
   return (
-    <li className="col-span-1 flex flex-col text-center bg-white dark:bg-gray-700 rounded-lg shadow divide-y divide-gray-200 dark:divide-gray-800">
+    <li className="col-span-1 flex flex-col text-center bg-white dark:bg-zinc-800 shadow-md dark:shadow-zinc-600 rounded-lg divide-y divide-gray-200 dark:divide-gray-800">
       <div className="flex flex-col pb-4">
         <div className="relative w-full h-32 overflow-hidden rounded-tl rounded-tr border-gray-200">
           {!players ? (

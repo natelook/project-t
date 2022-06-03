@@ -42,7 +42,7 @@
   }
 
   .card {
-    @apply px-4 py-5 bg-white drop-shadow-md rounded-lg overflow-hidden border border-gray-100 sm:p-6;
+    @apply px-4 py-5 bg-white shadow rounded-lg overflow-hidden border border-gray-100 dark:border-zinc-700 dark:shadow-zinc-700 sm:p-6;
   }
 }
 
