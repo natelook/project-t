@@ -11,13 +11,19 @@ export default function Home() {
   return (
     <div className="flex items-center justify-center h-full">
       <div>
-        <div className="-mb-3">
-          <Image src="/glasses.png" alt="Glasses" width="100px" height="38px" />
+        <div>
+          <Image
+            src="/logo.png"
+            alt="Glasses"
+            width="450px"
+            height="184px"
+            priority
+          />
         </div>
-        <h1 className="text-6xl uppercase font-nouns tracking-wide">
+        <h1 className="text-6xl uppercase font-nouns tracking-wider text-center">
           Tournaments.wtf
         </h1>
-        <div className="flex space-x-5 w-full mt-5">
+        <div className="flex space-x-5 w-full">
           <div className="flex-1">
             <Button
               label="Create Team"

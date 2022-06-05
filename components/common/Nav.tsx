@@ -7,11 +7,11 @@ import Link from 'next/link';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
 import pfp from '@lib/pfp';
+import MoreMenu from './MoreMenu';
 
 const navItems = [
-  { name: 'Home', slug: '/' },
-  { name: 'Teams', slug: '/teams' },
   { name: 'Tournaments', slug: '/tournaments' },
+  // { name: 'Leagues', slug: '/leagues' },
 ];
 
 export default function Nav() {
@@ -36,22 +36,24 @@ export default function Nav() {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+              <div className="flex-1 flex justify-center sm:items-center sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  <div>
+                  <div className="w-24 h-full">
                     <Link href="/">
-                      <a>
+                      <a className="block">
                         <Image
                           src="/logo.png"
                           alt="Logo"
-                          width="130px"
-                          height="60px"
+                          width="97.5px"
+                          height="45px"
+                          layout="responsive"
+                          priority
                         />
                       </a>
                     </Link>
                   </div>
                 </div>
-                <div className="hidden sm:flex sm:space-x-8 items-center ml-10">
+                <div className="hidden sm:flex sm:space-x-5 items-center ml-5">
                   {/* Current: "border-sky-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
                   {navItems.map((item) => (
                     <Link href={item.slug} key={item.name}>
@@ -69,6 +71,8 @@ export default function Nav() {
                       </a>
                     </Link>
                   ))}
+
+                  <MoreMenu />
                 </div>
               </div>
               {session ? (
