@@ -1,10 +1,11 @@
 import dayjs from 'dayjs';
+import Link from 'next/link';
 
 /* This example requires Tailwind CSS v2.0+ */
 const navigation = {
   main: [
     { name: 'About', href: '#' },
-    { name: 'Press', href: '#' },
+    { name: 'Press', href: '/press' },
     { name: 'Accessibility', href: '#' },
     { name: 'Partners', href: '#' },
   ],
@@ -35,12 +36,11 @@ export default function Footer() {
         >
           {navigation.main.map((item) => (
             <div key={item.name} className="px-5 py-2">
-              <a
-                href={item.href}
-                className="text-base text-gray-500 hover:text-gray-900"
-              >
-                {item.name}
-              </a>
+              <Link href={item.href}>
+                <a className="text-base text-gray-500 hover:text-gray-900">
+                  {item.name}
+                </a>
+              </Link>
             </div>
           ))}
         </nav>

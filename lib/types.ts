@@ -46,3 +46,12 @@ export interface MatchWithTeamsAndTournament extends Match {
 export interface RegistrantWithTournamentInfo extends Registrant {
   tournament: Tournament;
 }
+
+export interface PostProps {
+  id: string;
+  title: string;
+  slug: string;
+  // @ts-ignore
+  body: TypedObject;
+  createdAt: Date;
+}

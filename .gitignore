@@ -34,3 +34,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# sanity-studio until this is configured to deploy on same domain
+/studio
