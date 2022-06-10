@@ -62,7 +62,7 @@ function BracketMatch({ match, slug }: { match: MatchWithTeam; slug: string }) {
         </a>
       </Link>
       <div className="-mt-1.5 text-right">
-        <span className="uppercase text-gray-400 font-bold text-xs">
+        <span className="uppercase text-gray-400 text-xs">
           Match {match.matchId} | {matchFormat(match.winningScore)}
         </span>
       </div>

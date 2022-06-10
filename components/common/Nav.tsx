@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
+import { Button } from '@components/ui';
 import Link from 'next/link';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
@@ -207,14 +208,10 @@ export default function Nav() {
                   </Menu>
                 </div>
               ) : (
-                <div className="flex items-center">
-                  <button
-                    type="button"
-                    className="btn"
-                    onClick={() => signIn()}
-                  >
-                    Sign In
-                  </button>
+                <div className="flex items-center py-3 space-x-5">
+                  <Button type="button" label="Login" onClick={() => signIn()}>
+                    Login
+                  </Button>
                 </div>
               )}
             </div>
