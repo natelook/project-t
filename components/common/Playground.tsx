@@ -1,7 +1,7 @@
 import { ImageData } from '@nouns/assets';
 import Image from 'next/image';
-import Select from './ui/Select';
-import usePlayground from '../lib/hooks/usePlayground';
+import Select from '../ui/Select';
+import usePlayground from '../../lib/hooks/usePlayground';
 
 function cleanName(name: string) {
   const split = name.split('-');

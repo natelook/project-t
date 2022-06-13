@@ -1,6 +1,6 @@
 import { Layout } from '@components/common';
 import TeamStackedList from '@components/common/TeamStackedList';
-import Playground from '@components/Playground';
+import Playground from '@components/common/Playground';
 import { TeamHeading } from '@components/team';
 import { Button, Input, Modal, ModalHeading } from '@components/ui';
 import TeamInvitations from '@components/ui/TeamInvitations';

@@ -1,5 +1,5 @@
 import { Layout } from '@components/common';
-import Playground from '@components/Playground';
+import Playground from '@components/common/Playground';
 import { Button, Input, Modal, ModalHeading } from '@components/ui';
 import { UserIcon } from '@heroicons/react/solid';
 import usePlayground from '@lib/hooks/usePlayground';
