@@ -8,6 +8,10 @@
   body {
     @apply min-h-screen bg-white dark:bg-[#121212];
   }
+  body,
+  html {
+    @apply h-full w-full;
+  }
 
   article a {
     @apply text-sky-600 font-bold;

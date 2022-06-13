@@ -28,26 +28,8 @@ export default NextAuth({
       return Promise.resolve(session);
     },
   },
-  // events: {
-  //   createUser: async ({ user }) => {
-  //     const base64 = await makeNoun();
-  //     if (!base64) return;
-  //     await prisma.user.update({
-  //       where: { id: user.id },
-  //       data: { pfp: base64 },
-  //     });
-  //   },
-  //   signIn: async ({ user }) => {
-  //     const u = await prisma.user.findUnique({ where: { id: user.id } });
-  //     if (u?.pfp) return;
-  //     const base64 = await makeNoun();
-  //     console.log({ base64 });
-  //     if (!base64) return;
-  //     await prisma.user.update({
-  //       where: { id: user.id },
-  //       data: { pfp: base64 },
-  //     });
-  //   },
-  // },
   adapter: PrismaAdapter(prisma),
+  pages: {
+    newUser: '/settings',
+  },
 });
