@@ -127,7 +127,6 @@ export default function Profile({ data }: ProfileProps) {
             <div className="mx-auto">
               <Playground
                 userId={data.id}
-                close={() => setPlaygroundOpen(false)}
               />
             </div>
           </Modal>
