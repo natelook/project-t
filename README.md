@@ -22,7 +22,7 @@ First step in the road map is to get a working version of the tournament creator
 
 ## Pipeline
 
-- New Landing Page
+- --New Landing Page--
 - First Tournament Testing
 - Leagues (Only leagues ran by T.WTF initially)
 - Match Chat
