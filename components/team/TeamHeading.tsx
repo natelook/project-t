@@ -4,7 +4,7 @@ import React from 'react';
 
 interface TeamHeadingProps {
   name: string;
-  subtitle?: string;
+  subtitle?: string | null;
   isOwner?: boolean;
   secondaryButtonText?: string;
   primaryButtonText?: string;

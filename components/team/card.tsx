@@ -23,7 +23,7 @@ export default function TeamCard({
   players,
 }: TeamCardProps) {
   const [hovered, setHovered] = useState<number | null>();
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState<string | null>('');
   return (
     <li className="col-span-1 flex flex-col text-center bg-white dark:bg-zinc-800 shadow-md dark:shadow-zinc-600 rounded-lg divide-y divide-gray-200 dark:divide-gray-800">
       <div className="flex flex-col pb-4">
