@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -52,6 +52,7 @@ model User {
   teams            Team[]           @relation("Players")
   ownedTeams       Team[]           @relation("Owned")
   teamInvitations  TeamInvitation[]
+  Notification     Notification[]
 }
 
 model VerificationToken {
@@ -63,21 +64,21 @@ model VerificationToken {
 }
 
 model Tournament {
-  id          String       @id @unique @default(cuid())
-  name        String
-  slug        String       @unique @default(uuid())
-  createdBy   String
-  game        String
-  creator     User         @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-  startDate   DateTime
-  createdAt   DateTime     @default(now())
-  registrants Registrant[]
-  format      String
-  matches     Match[]
-  mainStream String?
-  maxRegistrants Int @default(32)
+  id                 String       @id @unique @default(cuid())
+  name               String
+  slug               String       @unique @default(uuid())
+  createdBy          String
+  game               String
+  creator            User         @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  startDate          DateTime
+  createdAt          DateTime     @default(now())
+  registrants        Registrant[]
+  format             String
+  matches            Match[]
+  mainStream         String?
+  maxRegistrants     Int          @default(32)
   roundWinConditions Int[]
-  winner String?
+  winner             String?
 }
 
 model Match {
@@ -85,10 +86,10 @@ model Match {
   nextMatch    Int
   teamOneId    String?
   teamTwoId    String?
-  teamOneScore Int @default(0)
-  teamTwoScore Int @default(0)
-  winningScore Int @default(1)
-  winner String?
+  teamOneScore Int        @default(0)
+  teamTwoScore Int        @default(0)
+  winningScore Int        @default(1)
+  winner       String?
   teamOne      Team?      @relation("TeamOne", fields: [teamOneId], references: [id])
   teamTwo      Team?      @relation("TeamTwo", fields: [teamTwoId], references: [id])
   tournamentId String
@@ -137,4 +138,7 @@ model Notification {
   id      String @id @unique @default(cuid())
   message String
   link    String
+  userId  String
+  user    User   @relation(fields: [userId], references: [id])
+  createdAt DateTime   @default(now())
 }

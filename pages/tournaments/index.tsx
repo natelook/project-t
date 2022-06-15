@@ -1,8 +1,7 @@
 import { Layout } from '@components/common';
 import { TeamHeading } from '@components/team';
-import TeamCard from '@components/team/card';
+import TournamentCard from '@components/tournament/TournamentCard';
 import { TournamentWithRegistrants } from '@lib/types';
-import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 
 interface TournamentsPageProps {
@@ -19,22 +18,13 @@ export default function TournamentsPage({ tournaments }: TournamentsPageProps) {
         primaryButtonText="Create tournament"
         isOwner
       />
-      <ul className="grid grid-cols-3 gap-10">
+      <ul className="grid grid-cols-2 gap-10">
         {tournaments.map((tournament) => (
-          <TeamCard
-            title={tournament.name}
-            name="Tournament"
-            slug={`/${tournament.slug}`}
-            key={tournament.id}
-            subtitle={
-              <div>
-                <p>{dayjs(tournament.startDate).format('MM/DD/YY h:ma')}</p>
-                <p>
-                  Registrants {tournament.registrants.length}/
-                  {tournament.maxRegistrants}
-                </p>
-              </div>
-            }
+          <TournamentCard
+            name={tournament.name}
+            maxPlayers={tournament.maxRegistrants}
+            totalPlayers={tournament.registrants.length}
+            slug={`/tournaments/${tournament.slug}`}
           />
         ))}
       </ul>

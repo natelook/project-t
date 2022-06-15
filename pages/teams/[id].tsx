@@ -83,6 +83,7 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
       method: 'POST',
       body: JSON.stringify({
         teamId: team.id,
+        teamName: team.name,
         playerId: playerResults.id,
       }),
     });
@@ -139,17 +140,17 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
             {
               name: 'Matches',
               stat: `${
-                team.matches.filter((match) => match.winner !== null).length
+                team.matches?.filter((match) => match.winner !== null).length
               }`,
             },
             {
               name: 'Win Rate',
-              stat: team.matches.length >= 1 ? getWinRate() : 'No matches',
+              stat: team.matches?.length >= 1 ? getWinRate() : 'No matches',
             },
             {
               name: 'Tournament Wins',
               stat: `${
-                team.tournaments.filter(
+                team.tournaments?.filter(
                   (tournament) => tournament.tournament.winner === team.id,
                 ).length
               }`,
@@ -159,7 +160,7 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
         <div className="col-span-3">
           <h3 className="text-3xl font-bold leading-6 mb-5">Recent Matches</h3>
           <div className="space-y-8">
-            {team.matches.map((match) => (
+            {team.matches?.map((match) => (
               <div key={match.matchId} className="card grid grid-cols-2">
                 <div className="flex flex-col flex-0 justify-between">
                   <h4 className="font-bold text-lg">{match.tournament.name}</h4>

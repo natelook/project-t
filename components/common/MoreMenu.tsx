@@ -19,12 +19,12 @@ const links = [
 export default function MoreMenu() {
   return (
     <Popover className="relative">
-      {({ open }) => (
+      {({ open }: any) => (
         <>
           <Popover.Button
             className={classNames(
-              open ? 'text-gray-900' : 'text-gray-500',
-              'group bg-white rounded-md flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ',
+              open ? 'text-gray-200' : 'text-gray-500',
+              'group rounded-md flex items-center text-base font-medium hover:text-gray-200 focus:outline-none ',
             )}
           >
             <div className="h-5 w-5 flex">
@@ -44,17 +44,17 @@ export default function MoreMenu() {
           >
             <Popover.Panel className="absolute z-10 left-1/2 transform -translate-x-1/2 mt-3 px-2 w-60 sm:px-0">
               <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                <div className="relative grid gap-6 bg-white sm:p-4 sm:gap-8">
+                <div className="relative grid gap-6 bg-gray-800 sm:p-4 sm:gap-8">
                   {links.map((item) => (
                     <a
                       key={item.name}
                       href={item.href}
-                      className="-m-3 p-3 block rounded-md hover:bg-gray-50 transition ease-in-out duration-150"
+                      className="-m-3 p-3 block rounded-md hover:bg-gray-700 transition ease-in-out duration-150"
                     >
-                      <p className="text-base font-medium text-gray-900">
+                      <p className="text-base font-medium text-gray-100">
                         {item.name}
                       </p>
-                      <p className="text-sm font-medium text-gray-400">
+                      <p className="text-sm font-medium text-gray-500">
                         {item.description}
                       </p>
                     </a>
