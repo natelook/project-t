@@ -27,8 +27,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     select: { invitedPlayer: true },
   });
 
-  const createNotification = await prisma.notification.create({
-    data: { message: `You have been invited to join ${teamName}. Click to resond.`, link: '/profile', userId: playerId },
-  })
+  await prisma.notification.create({
+    data: {
+      message: `You have been invited to join ${teamName}. Click to resond.`,
+      link: '/profile',
+      userId: playerId,
+    },
+  });
   return res.status(200).json(request);
 };
