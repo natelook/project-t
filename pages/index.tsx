@@ -58,7 +58,7 @@ export default function Home({ tournaments }: HomeProps) {
                 label="Tournament Link"
                 onClick={() => router.push('/tournaments')}
               >
-                Tournaments
+                All Tournaments
               </Button>
             </div>
           </div>
