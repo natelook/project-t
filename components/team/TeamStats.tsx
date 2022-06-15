@@ -13,7 +13,7 @@ export default function TeamStats({ stats }: StatProps) {
             <dt className="text-sm font-medium text-gray-500 dark:text-gray-300 truncate">
               {item.name}
             </dt>
-            <dd className="mt-1 text-3xl font-semibold text-gray-900 dark:text-white">
+            <dd className="mt-1 text-3xl font-semibold text-white">
               {item.stat}
             </dd>
           </div>

@@ -16,13 +16,7 @@ import { AnimatePresence } from 'framer-motion';
 import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, {
-  ChangeEvent,
-  FormEvent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 
 interface MatchPageProps {
@@ -64,33 +58,25 @@ interface ScoreInputProps {
 }
 
 const ScoreInput = ({ name, score, updateScore }: ScoreInputProps) => (
-  <div>
+  <div className="mb-3">
     <label
       htmlFor="team-two-score"
-      className="text-2xl text-center w-full block"
+      className="text-2xl text-center w-full block mb-3"
     >
       {name}&apos;s Score
     </label>
-    <div className="flex space-x-3">
+    <div className="flex justify-evenly space-x-3">
       <button
         type="button"
-        className="block w-10 text-gray-500"
+        className="block w-6 text-gray-500"
         onClick={() => updateScore(score - 1)}
       >
         <MinusCircleIcon />
       </button>
-      <input
-        type="number"
-        name="team-two-score"
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          updateScore(parseInt(e.target.value, 10))
-        }
-        value={score}
-        className="input"
-      />
+      <span className="text-2xl">{score}</span>
       <button
         type="button"
-        className="block w-10 text-gray-500"
+        className="block w-6 text-gray-500"
         onClick={() => updateScore(score + 1)}
       >
         <PlusCircleIcon />
@@ -154,7 +140,7 @@ export default function MatchPage({ matchData }: MatchPageProps) {
 
   const cancelRef = useRef(null);
 
-  const report = () => {};
+  // const report = () => {};
   return (
     <React.Fragment>
       <div>
@@ -165,7 +151,7 @@ export default function MatchPage({ matchData }: MatchPageProps) {
           name={`${match.tournament.name} - Match ${match.matchId}`}
           primaryButton={() => setScoreModal(true)}
           primaryButtonText="Submit Score"
-          secondaryButton={report}
+          secondaryButton={() => {}}
           secondaryButtonText="Report a Problem"
           isOwner
         />
@@ -189,7 +175,6 @@ export default function MatchPage({ matchData }: MatchPageProps) {
             icon={<LightningBoltIcon />}
             subtext="Report the final score for this match. If you have a dispute please contact an admin."
           />
-          <h2 className="text-2xl mb-4 font-bold">Report Score</h2>
           <form onSubmit={submitScore}>
             <div className="grid grid-cols-2 gap-x-10 gap-y-3 place-content-center">
               <ScoreInput

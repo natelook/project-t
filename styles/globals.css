@@ -42,11 +42,11 @@
   }
 
   .yes-no-button {
-    @apply h-8 w-8 inline-flex items-center shadow-sm p-1 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50;
+    @apply h-8 w-8 inline-flex items-center shadow-sm p-1 text-sm leading-5 font-medium rounded-full text-gray-700 bg-gray-700 hover:bg-gray-600 transition duration-100;
   }
 
   .card {
-    @apply px-4 py-5 bg-white shadow rounded-lg overflow-hidden border border-gray-100 dark:border-zinc-700 dark:shadow-zinc-700 sm:p-6;
+    @apply px-4 py-5 bg-gray-700 shadow rounded-lg overflow-hidden sm:p-6;
   }
 }
 

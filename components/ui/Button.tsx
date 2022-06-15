@@ -9,7 +9,7 @@ interface ButtonProps {
   icon?: JSX.Element;
   size?: 'text-xs' | 'text-sm' | 'text-base' | 'text-lg' | 'text-xl';
   ref?: MutableRefObject<HTMLButtonElement | null>;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export default function Button({
@@ -31,10 +31,10 @@ export default function Button({
       ])}
       aria-label={label}
       type={type === 'button' ? 'button' : 'submit'}
-      onClick={() => onClick()}
+      onClick={onClick}
       ref={ref}
     >
-      <span>{children}</span>
+      <span className="whitespace-nowrap">{children}</span>
       {icon && (
         <span className="ml-2 -mr-1 h-5 w-5" aria-hidden="true">
           {icon}
@@ -50,4 +50,5 @@ Button.defaultProps = {
   size: 'text-base',
   icon: undefined,
   ref: null,
+  onClick: undefined,
 };

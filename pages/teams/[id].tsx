@@ -15,10 +15,9 @@ import { AnimatePresence } from 'framer-motion';
 import { Banner } from '@components/ui';
 import { CheckIcon } from '@heroicons/react/outline';
 import useNotification from '@lib/hooks/useNotification';
-import classNames from 'classnames';
-import dayjs from 'dayjs';
 import TeamPlayers from '@components/team/TeamPlayers';
 import { ImageData } from '@nouns/assets';
+import MatchCard from '@components/team/MatchCard';
 // import { SpeakerphoneIcon } from '@heroicons/react/solid';
 // import validateTeamOwner from '@lib/validateUser';
 
@@ -161,60 +160,14 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
           <h3 className="text-3xl font-bold leading-6 mb-5">Recent Matches</h3>
           <div className="space-y-8">
             {team.matches?.map((match) => (
-              <div key={match.matchId} className="card grid grid-cols-2">
-                <div className="flex flex-col flex-0 justify-between">
-                  <h4 className="font-bold text-lg">{match.tournament.name}</h4>
-                  <span className="text-gray-400 text-sm">
-                    {dayjs(match.tournament.startDate).format('MM/DD/YY')}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-3 place-items-center justify-center">
-                  <div
-                    className={classNames('flex justify-end w-full', {
-                      'text-gray-300': match.teamScore < match.oppenentScore,
-                      'text-black font-bold':
-                        match.teamScore > match.oppenentScore,
-                    })}
-                  >
-                    <span>{team.name}</span>
-                  </div>
-                  <div>
-                    <span className="text-lg flex items-center">
-                      <span
-                        className={classNames('flex justify-end w-full', {
-                          'text-gray-300':
-                            match.teamScore < match.oppenentScore,
-                          'text-black font-bold':
-                            match.teamScore > match.oppenentScore,
-                        })}
-                      >
-                        {match.teamScore}
-                      </span>
-                      <span className="mx-1"> : </span>
-                      <span
-                        className={classNames('flex justify-end w-full', {
-                          'text-gray-400':
-                            match.teamScore > match.oppenentScore,
-                          'text-black font-bold':
-                            match.teamScore < match.oppenentScore,
-                        })}
-                      >
-                        {match.oppenentScore}
-                      </span>
-                    </span>
-                  </div>
-                  <div
-                    className={classNames('flex justify-start w-full', {
-                      'text-gray-300': match.teamScore > match.oppenentScore,
-                      'text-black font-bold':
-                        match.teamScore < match.oppenentScore,
-                    })}
-                  >
-                    {match.opponent?.name || 'Pending'}
-                  </div>
-                </div>
-              </div>
+              <MatchCard
+                tournamentName={match.tournament.name}
+                date={match.tournament.startDate}
+                teamName={team.name}
+                teamScore={match.teamScore}
+                opponentName={match.opponent?.name}
+                opponentScore={match.oppenentScore}
+              />
             ))}
           </div>
         </div>

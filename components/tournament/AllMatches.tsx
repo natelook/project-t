@@ -1,7 +1,9 @@
+import { CollectionIcon } from '@heroicons/react/outline';
 import { CheckIcon } from '@heroicons/react/solid';
 import { MatchWithTeam } from '@lib/types';
 import classNames from 'classnames';
 import Link from 'next/link';
+import { useState } from 'react';
 
 interface AllMatchesProps {
   matches: MatchWithTeam[];
@@ -94,6 +96,8 @@ function BracketMatch({ match, slug }: { match: MatchWithTeam; slug: string }) {
 }
 
 export default function AllMatches({ matches, rounds, slug }: AllMatchesProps) {
+  const [isCollapsed, setCollapsed] = useState(false);
+
   const roundName = (roundNumber: number, roundArray: number[]) => {
     if (roundArray.length === roundNumber) {
       return 'Final Match';
@@ -110,25 +114,46 @@ export default function AllMatches({ matches, rounds, slug }: AllMatchesProps) {
     return `Round ${roundNumber}`;
   };
   return (
-    <div className="flex space-x-10 overflow-x-scroll">
-      {rounds &&
-        rounds.map((round) => (
-          <div>
-            <h4 className="mb-2 font-bold uppercase tracking-wide text-gray-300">
-              {roundName(round, rounds)}
-            </h4>
-            <div
-              key={`round-${round}`}
-              className="flex flex-col justify-around h-full space-y-5"
-            >
-              {matches
-                .filter((match) => match.round === round)
-                .map((match) => (
-                  <BracketMatch key={match.matchId} match={match} slug={slug} />
-                ))}
+    <div>
+      <div className="flex justify-start w-full mb-3">
+        <button
+          type="button"
+          onClick={() => setCollapsed(!isCollapsed)}
+          className="text-gray-500"
+        >
+          <span className="flex items-center space-x-1">
+            <CollectionIcon className="w-5 h-5" />
+            <span>{!isCollapsed ? 'Collapse' : 'Uncollapse'} Matches</span>
+          </span>
+        </button>
+      </div>
+      <div className="flex space-x-16 overflow-scroll">
+        {rounds &&
+          rounds.map((round) => (
+            <div>
+              <h4 className="mb-2 font-bold uppercase tracking-wide text-gray-300">
+                {roundName(round, rounds)}
+              </h4>
+              <div
+                key={`round-${round}`}
+                className={classNames('flex flex-col h-full space-y-5', {
+                  'justify-start': isCollapsed,
+                  'justify-around': !isCollapsed,
+                })}
+              >
+                {matches
+                  .filter((match) => match.round === round)
+                  .map((match) => (
+                    <BracketMatch
+                      key={match.matchId}
+                      match={match}
+                      slug={slug}
+                    />
+                  ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+      </div>
     </div>
   );
 }
