@@ -24,7 +24,7 @@ export default function TournamentsPage({ tournaments }: TournamentsPageProps) {
             name={tournament.name}
             maxPlayers={tournament.maxRegistrants}
             totalPlayers={tournament.registrants.length}
-            slug={`/tournaments/${tournament.slug}`}
+            slug={tournament.slug}
           />
         ))}
       </ul>

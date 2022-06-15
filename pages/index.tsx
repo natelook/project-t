@@ -94,7 +94,7 @@ export default function Home({ tournaments }: HomeProps) {
               <TournamentCard
                 name={tournament.name}
                 totalPlayers={tournament.registrants.length}
-                slug={`/tournaments/${tournament.slug}`}
+                slug={tournament.slug}
                 maxPlayers={tournament.maxRegistrants}
               />
             ))}
