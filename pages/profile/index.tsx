@@ -78,7 +78,7 @@ export default function Profile({ data }: ProfileProps) {
     <div>
       <TeamHeading
         name="Your Profile"
-        subtitle={user.username}
+        subtitle={user.username || undefined}
         isOwner
         secondaryButton={() => setPlaygroundOpen(true)}
         secondaryButtonText="Update PFP"
@@ -125,10 +125,7 @@ export default function Profile({ data }: ProfileProps) {
           >
             <ModalHeading title="Generate Noun" icon={<CogIcon />} subtext="" />
             <div className="mx-auto">
-              <Playground
-                userId={data.id}
-                close={() => setPlaygroundOpen(false)}
-              />
+              <Playground userId={data.id} />
             </div>
           </Modal>
         )}

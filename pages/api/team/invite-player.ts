@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/react';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const body = JSON.parse(req.body);
-  const { teamId, playerId } = body;
+  const { teamId, teamName, playerId } = body;
 
   const session = await getSession({ req });
   if (!session) {
@@ -25,6 +25,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const request = await prisma.teamInvitation.create({
     data: { teamId, invitedPlayerId: playerId },
     select: { invitedPlayer: true },
+  });
+
+  await prisma.notification.create({
+    data: {
+      message: `You have been invited to join ${teamName}. Click to resond.`,
+      link: '/profile',
+      userId: playerId,
+    },
   });
   return res.status(200).json(request);
 };

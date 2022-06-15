@@ -1,3 +1,4 @@
+import { Button } from '@components/ui';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import React from 'react';
@@ -67,33 +68,27 @@ export default function TeamHeading({
       )}
       <div className="md:flex md:items-center md:justify-between mb-10">
         <div className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl sm:truncate">
+          <h2 className="text-2xl font-bold text-white sm:text-3xl sm:truncate">
             {name}
           </h2>
-          {subtitle && (
-            <h3 className="text-gray-600 dark:text-gray-400">{subtitle}</h3>
-          )}
+          {subtitle && <h3 className="text-gray-400">{subtitle}</h3>}
         </div>
         {isOwner && (
-          <div className="mt-4 flex md:mt-0 md:ml-4">
+          <div className="mt-4 flex md:mt-0 md:ml-4 w-auto space-x-4">
             {secondaryButtonText && (
-              <button
-                type="button"
+              <Button
                 onClick={secondaryButton}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+                label={secondaryButtonText}
+                style="secondary"
               >
                 {secondaryButtonText}
-              </button>
+              </Button>
             )}
 
             {primaryButtonText && (
-              <button
-                type="button"
-                onClick={primaryButton}
-                className="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
-              >
-                {primaryButtonText}
-              </button>
+              <Button label={primaryButtonText} onClick={primaryButton}>
+                <span>{primaryButtonText}</span>
+              </Button>
             )}
           </div>
         )}

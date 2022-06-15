@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply min-h-screen bg-white dark:bg-[#121212];
+    @apply min-h-screen bg-dark-bg text-white dark:bg-[#121212];
   }
   body,
   html {
@@ -14,15 +14,15 @@
   }
 
   article a {
-    @apply text-sky-600 font-bold;
+    @apply text-primary font-bold;
   }
 
   .btn {
-    @apply inline-flex items-center px-4 py-2 border border-transparent  font-medium rounded-md shadow-sm text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500;
+    @apply inline-flex items-center px-4 py-2 border border-transparent  font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary-lighter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-opaque;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center px-4 py-2 border border-transparent font-medium rounded-md text-sky-700 bg-sky-100 hover:bg-sky-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500;
+    @apply inline-flex items-center px-4 py-2 border border-transparent font-medium rounded-md text-primary-lighter bg-gray-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
   }
 
   .input {
@@ -34,19 +34,19 @@
   }
 
   .nav-link {
-    @apply border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 text-lg font-medium;
+    @apply border-transparent text-gray-500  hover:text-gray-200 inline-flex items-center px-1 text-lg font-medium;
   }
 
   .nav-link-active {
-    @apply border-sky-500 text-gray-900 dark:text-gray-300 inline-flex items-center px-1 text-lg font-medium;
+    @apply border-sky-500 text-gray-200 inline-flex items-center px-1 text-lg font-medium;
   }
 
   .yes-no-button {
-    @apply h-8 w-8 inline-flex items-center shadow-sm p-1 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50;
+    @apply h-8 w-8 inline-flex items-center shadow-sm p-1 text-sm leading-5 font-medium rounded-full text-gray-700 bg-gray-700 hover:bg-gray-600 transition duration-100;
   }
 
   .card {
-    @apply px-4 py-5 bg-white shadow rounded-lg overflow-hidden border border-gray-100 dark:border-zinc-700 dark:shadow-zinc-700 sm:p-6;
+    @apply px-4 py-5 bg-gray-700 shadow rounded-lg overflow-hidden sm:p-6;
   }
 }
 

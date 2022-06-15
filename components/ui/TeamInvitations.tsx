@@ -18,7 +18,7 @@ export default function TeamInvitations({
       0 ? (
         <React.Fragment>
           <div className="flow-root mt-6">
-            <ul className="-my-5 divide-y divide-gray-200 dark:divide-gray-600">
+            <ul className="-my-5 divide-y divide-gray-600">
               {invitation
                 .filter((invite) => invite.status === 'Pending')
                 .map((invite) => (
@@ -33,10 +33,10 @@ export default function TeamInvitations({
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                        <p className="font-medium text-white truncate">
                           {invite.team.name}
                         </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                        <p className="text-sm text-gray-400 truncate">
                           {invite.team.players?.length || 0} Players
                         </p>
                       </div>
@@ -44,14 +44,14 @@ export default function TeamInvitations({
                         <button
                           type="button"
                           onClick={() => response('decline', invite.id)}
-                          className="yes-no-button text-red-500 border-red-500"
+                          className="yes-no-button text-danger"
                         >
                           <XIcon />
                         </button>
                         <button
                           type="button"
                           onClick={() => response('accept', invite.id)}
-                          className="yes-no-button text-green-500 border-green-500"
+                          className="yes-no-button text-success"
                         >
                           <CheckIcon />
                         </button>
@@ -62,9 +62,7 @@ export default function TeamInvitations({
             </ul>
           </div>
           <div className="mt-6">
-            <a className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-              View all
-            </a>
+            <a className="btn w-full flex justify-center">View all</a>
           </div>
         </React.Fragment>
       ) : (

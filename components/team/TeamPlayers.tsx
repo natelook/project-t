@@ -17,7 +17,7 @@ export default function TeamPlayers({
       className="pt-10 flex justify-center rounded"
     >
       <div className="flex justify-between items-end w-full max-w-3xl">
-        {players.map((player) => (
+        {players?.map((player) => (
           <div className="w-36 h-36" key={player.id}>
             <Image
               src={player.pfp ? pfp(player.pfp) : '/default-pfp.png'}

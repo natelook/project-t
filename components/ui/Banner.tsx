@@ -29,8 +29,8 @@ export default function Banner({
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div
           className={classNames('p-2 rounded-lg shadow-lg sm:p-3', {
-            'bg-sky-600': color === 'sky',
-            'bg-red-500': color === 'red',
+            'bg-primary': color === 'sky',
+            'bg-danger': color === 'red',
           })}
         >
           <div className="flex items-center justify-between flex-wrap">
@@ -38,8 +38,8 @@ export default function Banner({
               {icon && (
                 <span
                   className={classNames('flex p-2 rounded-lg', {
-                    'bg-sky-800': color === 'sky',
-                    'bg-red-800': color === 'red',
+                    'bg-primary-lighter': color === 'sky',
+                    'bg-danger': color === 'red',
                   })}
                 >
                   <div className="h-6 w-6 text-white" aria-hidden="true">

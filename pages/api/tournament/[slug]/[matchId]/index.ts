@@ -37,5 +37,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     },
   });
 
+  if (!match) {
+    return res.status(404).json({ error: 'Match Not Found' });
+  }
+
   return res.status(200).json(match?.matches[0]);
 };
