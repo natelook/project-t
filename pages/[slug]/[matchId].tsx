@@ -229,6 +229,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const request = await fetch(
     `${process.env.NEXTAUTH_URL}/api/tournament/${context.params?.slug}/${context.params?.matchId}`,
   );
+  if (request.status !== 200) {
+    return { notFound: true };
+  }
   const matchData = await request.json();
+
   return { props: { matchData } };
 }
