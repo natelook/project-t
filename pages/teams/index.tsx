@@ -42,7 +42,6 @@ export default function TeamsPage({ data }: { data: TeamWithPlayers[] }) {
               title={team.name}
               name="Team"
               slug={`/teams/${team.id}`}
-              subtitle={`Players ${team.players.length}`}
               players={team.players}
               logo={team.logo}
             />

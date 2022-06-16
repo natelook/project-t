@@ -90,7 +90,7 @@ export default function Profile({ data }: ProfileProps) {
 
       <div className="grid lg:grid-cols-3 gap-10">
         <div>
-          <h3 className="text-2xl font-bold">Owned Teams</h3>
+          <h3 className="text-2xl font-bold mb-2">Owned Teams</h3>
           {user?.ownedTeams && (
             <div>
               <TeamStackedList team={user.ownedTeams} />
@@ -98,7 +98,7 @@ export default function Profile({ data }: ProfileProps) {
           )}
         </div>
         <div>
-          <h3 className="text-2xl font-bold">Teams</h3>
+          <h3 className="text-2xl font-bold mb-2">Teams</h3>
           {user?.teams && (
             <div>
               <TeamStackedList team={user.teams} />
@@ -106,7 +106,7 @@ export default function Profile({ data }: ProfileProps) {
           )}
         </div>
         <div>
-          <h3 className="text-2xl font-bold">Invitations</h3>
+          <h3 className="text-2xl font-bold mb-2">Invitations</h3>
 
           {user.teamInvitations.length >= 0 ? (
             <TeamInvitations

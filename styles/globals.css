@@ -46,7 +46,7 @@
   }
 
   .card {
-    @apply px-4 py-5 bg-gray-700 shadow rounded-lg overflow-hidden sm:p-6;
+    @apply bg-gray-800 p-5 rounded-lg shadow shadow-gray-700 flex items-center space-x-3 transform hover:scale-105 transition-all duration-100;
   }
 }
 

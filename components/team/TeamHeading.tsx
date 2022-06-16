@@ -1,5 +1,5 @@
 import { Button } from '@components/ui';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
+import { ChevronLeftIcon } from '@heroicons/react/solid';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -46,21 +46,23 @@ export default function TeamHeading({
             </Link>
           </nav>
           <nav className="hidden sm:flex" aria-label="Breadcrumb">
-            <ol className="flex items-center">
+            <ol className="flex items-center space-x-1">
               {breadcrumb.map((link, i) => (
                 <li key={link.slug}>
-                  <div className="flex">
+                  <div className="flex items-center">
                     <Link href={link.slug}>
-                      <a className="text-sm font-medium text-gray-400 hover:text-gray-200">
+                      <a className="text-sm text-gray-500 hover:text-gray-200 uppercase font-bold flex space-x-1 items-center">
                         {link.name}
                       </a>
                     </Link>
-                    {breadcrumb.length >= 1 ||
+                    {breadcrumb.length <= 1 ||
                       (breadcrumb[i + i] && (
-                        <ChevronRightIcon
-                          className="flex-shrink-0 h-5 w-5 text-gray-400 dark:text-gray-200 text-xs"
-                          aria-hidden="true"
-                        />
+                        <div className="ml-1">
+                          <ChevronLeftIcon
+                            className="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-200 text-xs"
+                            aria-hidden="true"
+                          />
+                        </div>
                       ))}
                   </div>
                 </li>

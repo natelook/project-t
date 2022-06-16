@@ -17,30 +17,26 @@ export default function TeamInvitations({
       {invitation.filter((invite) => invite.status === 'Pending').length !==
       0 ? (
         <React.Fragment>
-          <div className="flow-root mt-6">
-            <ul className="-my-5 divide-y divide-gray-600">
+          <div>
+            <ul>
               {invitation
                 .filter((invite) => invite.status === 'Pending')
                 .map((invite) => (
-                  <li key={invite.id} className="py-4">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex-shrink-0">
+                  <li key={invite.id} className="card">
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center space-x-3">
                         <Image
-                          className="h-8 w-8 rounded-full"
+                          className="h-10 w-10 rounded-full"
                           src={invite.team.logo || '/default-pfp.png'}
-                          height="32px"
-                          width="32px"
+                          height="40px"
+                          width="40px"
                         />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-white truncate">
+
+                        <p className="text-white truncate">
                           {invite.team.name}
                         </p>
-                        <p className="text-sm text-gray-400 truncate">
-                          {invite.team.players?.length || 0} Players
-                        </p>
                       </div>
-                      <div className="flex items-center space-x-3">
+                      <div className="flex items-center justify-end space-x-3">
                         <button
                           type="button"
                           onClick={() => response('decline', invite.id)}
@@ -61,9 +57,9 @@ export default function TeamInvitations({
                 ))}
             </ul>
           </div>
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <a className="btn w-full flex justify-center">View all</a>
-          </div>
+          </div> */}
         </React.Fragment>
       ) : (
         <p className="mt-3 p-2 text-gray-500">No invitations</p>

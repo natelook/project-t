@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { username } = req.query;
-  console.log(req.query);
 
   try {
     const user = await prisma.user.findUnique({

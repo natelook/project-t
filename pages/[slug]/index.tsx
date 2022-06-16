@@ -24,6 +24,7 @@ import SuperAdminTournament from '@components/admin/SuperAdminTournament';
 import { MatchWithTeam, RegistrantWithTeamInfo } from '@lib/types';
 import Image from 'next/image';
 import randomNumber from '@lib/random-number';
+import TeamStackedList from '@components/common/TeamStackedList';
 
 interface TeamWithPlayers extends Team {
   players: User[];
@@ -171,7 +172,7 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
               <h3 className="text-2xl font-bold mb-5">
                 Tournament Rules and Information
               </h3>
-              <div className="bg-gray-800 rounded-lg p-10">
+              <div className="bg-gray-800 rounded-lg p-10 shadow shadow-gray-700">
                 <div className="mb-5">
                   <Image
                     src={`/TournamentHeader-${randomNumber(5)}.png`}
@@ -192,45 +193,30 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
                     at tenetur repellendus veritatis recusandae mollitia
                     aspernatur eaque eveniet temporibus quae quo saepe corporis
                     adipisci!
-                    <ul>
-                      <li>Do not make up rules</li>
-                      <li>Fake rules are no fun</li>
-                      <li>You will be banned if you keep making up rules</li>
-                    </ul>
-                    <p>
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                      Sunt magnam, sequi consequuntur nam eligendi iste minus,
-                      aspernatur dicta quos, laborum dolor! Quod assumenda
-                      cupiditate voluptatibus velit. Illo excepturi repellendus
-                      officia? Sunt magnam, sequi consequuntur nam eligendi iste
-                      minus, aspernatur dicta quos, laborum dolor! Quod
-                      assumenda cupiditate voluptatibus velit. Illo excepturi
-                      repellendus officia?
-                    </p>
+                  </p>
+                  <ul>
+                    <li>Do not make up rules</li>
+                    <li>Fake rules are no fun</li>
+                    <li>You will be banned if you keep making up rules</li>
+                  </ul>
+                  <p>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Sunt magnam, sequi consequuntur nam eligendi iste minus,
+                    aspernatur dicta quos, laborum dolor! Quod assumenda
+                    cupiditate voluptatibus velit. Illo excepturi repellendus
+                    officia? Sunt magnam, sequi consequuntur nam eligendi iste
+                    minus, aspernatur dicta quos, laborum dolor! Quod assumenda
+                    cupiditate voluptatibus velit. Illo excepturi repellendus
+                    officia?
                   </p>
                 </div>
               </div>
             </div>
             <div>
               <h3 className="text-2xl font-bold mb-5">Registered Teams</h3>
-
-              <ul className="space-y-5">
-                {tournament.registrants.map(({ team: rTeam }) => (
-                  <li
-                    key={rTeam.id}
-                    className="bg-gray-800 p-5 rounded-lg shadow shadow-gray-700 flex items-center space-x-3"
-                  >
-                    <Image
-                      src={rTeam.logo || '/default-pfp.png'}
-                      height="30px"
-                      width="30px"
-                      alt={`${rTeam.name}'s Logo`}
-                      className="rounded-full"
-                    />
-                    <span>{rTeam.name}</span>
-                  </li>
-                ))}
-              </ul>
+              <TeamStackedList
+                team={tournament.registrants.map((reg) => ({ ...reg.team }))}
+              />
             </div>
           </div>
         )}

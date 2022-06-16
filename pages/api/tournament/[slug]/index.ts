@@ -13,6 +13,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     include: {
       registrants: {
+        orderBy: { registeredAt: 'desc' },
         include: {
           team: {
             include: {

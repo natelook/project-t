@@ -137,6 +137,38 @@ export default function Nav() {
                       <Menu.Item>
                         {({ active }: any) => (
                           <div>
+                            <Link href="/teams/create">
+                              <a
+                                className={classNames(
+                                  active ? 'bg-gray-700' : '',
+                                  'block px-4 py-2 text-sm text-white dark:text-gray-200',
+                                )}
+                              >
+                                Create Team
+                              </a>
+                            </Link>
+                          </div>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }: any) => (
+                          <div>
+                            <Link href="/tournaments/create">
+                              <a
+                                className={classNames(
+                                  active ? 'bg-gray-700' : '',
+                                  'block px-4 py-2 text-sm text-white dark:text-gray-200',
+                                )}
+                              >
+                                Create Tournament
+                              </a>
+                            </Link>
+                          </div>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }: any) => (
+                          <div>
                             <button
                               type="button"
                               onClick={() => signOut()}

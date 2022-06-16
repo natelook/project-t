@@ -14,13 +14,17 @@ export default function TournamentTeamListing({
   return (
     <div>
       <TeamHeading
-        breadcrumb={[{ name: 'Tournament Page', slug: `/${tournament.slug}` }]}
+        breadcrumb={[
+          { name: 'All Tournaments', slug: '/tournaments' },
+          { name: 'Tournament Page', slug: `/${tournament.slug}` },
+        ]}
         name={`${tournament.name} - Teams`}
       />
 
       <ul className="grid grid-cols-4 gap-10">
         {tournament.registrants.map((registrant) => (
           <TeamCard
+            logo={registrant.team.logo}
             title={registrant.team.name}
             name="Team"
             slug={`/teams/${registrant.team.id}`}
