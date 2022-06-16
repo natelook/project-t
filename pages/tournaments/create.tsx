@@ -102,7 +102,7 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
         </div>
         <div>
           <label
-            className="block text-sm font-medium text-gray-900 dark:text-white capitalize"
+            className="block text-sm font-medium text-white capitalize"
             htmlFor="startDate"
           >
             Start Date
@@ -152,14 +152,14 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
 
             {roundWinConditions.map((_, i) => (
               /* eslint-disable-next-line */
-              <div className="grid grid-cols-4 gap-x-10" key={i}>
+              <div className="flex flex-col w-full pr-20" key={i}>
                 <label
                   htmlFor={`round-format-${i}`}
-                  className="flex items-center col-span-1"
+                  className="flex items-center col-span-1 text-sm whitespace-nowrap"
                 >
                   Round {i + 1}
                 </label>
-                <div className="col-span-3">
+                <div className="w-full">
                   <Select
                     id={`round-format-${i}`}
                     onChange={(value) => {

@@ -32,7 +32,7 @@ export default function Input({
           name={name}
           id={id}
           value={value}
-          className="input dark:text-black"
+          className="input"
           placeholder={`${label}...`}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             onChange(e.target.value)
