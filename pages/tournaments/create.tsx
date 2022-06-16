@@ -120,6 +120,7 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
         </div>
         <Select
           id="format"
+          value={format}
           label="Tournament Format"
           defaultValue="Single Elimination"
           onChange={(value) => setFormat(value)}
@@ -133,6 +134,7 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
         <Select
           id="max-players"
           label="Max Players"
+          value={maxPlayers}
           onChange={(value) => setMaxPlayers(parseInt(value, 10))}
           defaultValue="32"
           options={[
@@ -167,6 +169,7 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
                       current[i] = parseInt(value, 10);
                       setRoundWinConditions(current);
                     }}
+                    value={roundWinConditions}
                     defaultValue="32"
                     options={[
                       { name: 'Best of 1', value: '1' },

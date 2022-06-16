@@ -5,7 +5,7 @@ interface SelectProps {
   label?: string;
   id: string;
   defaultValue?: string | number;
-  value: number;
+  value: any;
   onChange: (value: string) => void;
 }
 export default function Select({
