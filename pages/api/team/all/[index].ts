@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const teams = await prisma.team.findMany({
     take: 20,
-    where: { name: 'FudgeButts' },
     // skip: 20 * parseInt(index as string, 10),
     include: { _count: true, players: true },
   });
