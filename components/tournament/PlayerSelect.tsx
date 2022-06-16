@@ -20,19 +20,19 @@ export default function PlayerSelect({
 }: PlayerSelectProps) {
   return (
     <fieldset className="mt-5">
-      <legend className="text-lg font-medium text-gray-900 dark:text-white">
+      <legend className="text-lg font-medium text-white">
         Players{' '}
-        <span className="text-xs uppercase text-gray-600 dark:text-gray-400">
+        <span className="text-xs uppercase text-gray-500">
           {selected}/{requiredPlayers}
         </span>
       </legend>
-      <div className="mt-4 border-t border-b border-gray-200 dark:border-gray-600 divide-y divide-gray-200">
+      <div className="mt-4 border-t border-b border-gray-600 divide-y">
         {players.map((player) => (
           <div key={player.id} className="relative flex items-start py-4">
             <div className="min-w-0 flex-1 text-sm">
               <label
                 htmlFor={`player-${player.id}`}
-                className="font-medium text-gray-700 dark:text-gray-300 select-none flex space-x-3"
+                className="font-medium text-gray-300 select-none flex space-x-3"
               >
                 <Image
                   src={player.pfp ? pfp(player.pfp) : 'default-pfp.png'}
@@ -49,7 +49,7 @@ export default function PlayerSelect({
                 id={`player-${player.id}`}
                 name={`player-${player.id}`}
                 type="checkbox"
-                className="focus:ring-sky-500 h-4 w-4 text-sky-600 border-gray-300 dark:border-gray-600 rounded"
+                className="focus:ring-primary-opaque h-4 w-4 text-primary border-gray-600 rounded"
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   e.target.checked
                     ? addPlayer(player.id)

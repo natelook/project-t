@@ -6,7 +6,6 @@ import {
 } from '@components/tournament';
 import { Layout } from '@components/common';
 import Modal from '@components/ui/Modal';
-import { Dialog } from '@headlessui/react';
 import { Match, Registrant, Team, Tournament, User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
@@ -18,8 +17,8 @@ import React, {
   useState,
 } from 'react';
 import { useQuery } from 'react-query';
-import { Banner } from '@components/ui';
-import { CheckIcon } from '@heroicons/react/solid';
+import { Banner, Button, ModalHeading } from '@components/ui';
+import { CheckIcon, PencilIcon } from '@heroicons/react/solid';
 import { AnimatePresence } from 'framer-motion';
 import SuperAdminTournament from '@components/admin/SuperAdminTournament';
 
@@ -170,12 +169,11 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
         >
           {user?.ownedTeams.length > 0 ? (
             <React.Fragment>
-              <Dialog.Title
-                as="h3"
-                className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-300"
-              >
-                Register Team
-              </Dialog.Title>
+              <ModalHeading
+                icon={<PencilIcon />}
+                title="Register a Team"
+                subtext=""
+              />
               <form className="mt-4" onSubmit={registerTeam}>
                 <TeamSelect
                   label="Choose Team"
@@ -213,15 +211,9 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
                   </span>
                 )}
                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                  <button
-                    type="submit"
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-sky-600 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 sm:col-start-2 sm:text-sm"
-                  >
-                    Register
-                  </button>
-                  <button
-                    type="button"
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                  <Button
+                    label="Cancel Registration"
+                    style="secondary"
                     onClick={() => {
                       setRegisterModalOpen(false);
                       setTeam(null);
@@ -231,7 +223,10 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
                     ref={cancelButtonRef}
                   >
                     Cancel
-                  </button>
+                  </Button>
+                  <Button type="submit" label="Register Team">
+                    Register
+                  </Button>
                 </div>
               </form>
             </React.Fragment>
