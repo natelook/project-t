@@ -36,6 +36,9 @@ export default function Home() {
             <p className="text-gray-600 text-xl uppercase tracking-wider">
               Better Tournaments Soon
             </p>
+            <p className="text-sm uppercase text-gray-500">
+              For early access contact nat3#1111 on Discord
+            </p>
           </div>
           <motion.div
             initial={{ y: -5 }}
