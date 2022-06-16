@@ -16,7 +16,7 @@ export default function TeamStackedList({ team }: TeamPanelProps) {
               <a className="py-4 flex">
                 <Image
                   className="h-10 w-10 rounded-full"
-                  src="/default-pfp.png"
+                  src={t.logo || '/default-pfp.png'}
                   height="40px"
                   width="40px"
                   alt=""
