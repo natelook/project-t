@@ -79,6 +79,7 @@ model Tournament {
   maxRegistrants     Int          @default(32)
   roundWinConditions Int[]
   winner             String?
+  started            Boolean      @default(false)
 }
 
 model Match {

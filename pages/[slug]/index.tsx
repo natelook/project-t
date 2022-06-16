@@ -6,7 +6,7 @@ import {
 } from '@components/tournament';
 import { Layout } from '@components/common';
 import Modal from '@components/ui/Modal';
-import { Match, Registrant, Team, Tournament, User } from '@prisma/client';
+import { Team, Tournament, User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
 import React, {
@@ -21,14 +21,17 @@ import { Banner, Button, ModalHeading } from '@components/ui';
 import { CheckIcon, PencilIcon } from '@heroicons/react/solid';
 import { AnimatePresence } from 'framer-motion';
 import SuperAdminTournament from '@components/admin/SuperAdminTournament';
+import { MatchWithTeam, RegistrantWithTeamInfo } from '@lib/types';
+import Image from 'next/image';
+import randomNumber from '@lib/random-number';
 
 interface TeamWithPlayers extends Team {
   players: User[];
 }
 
 interface TournamentWithRegistrantsAndMatches extends Tournament {
-  registrants: Registrant[];
-  matches: Match[];
+  registrants: RegistrantWithTeamInfo[];
+  matches: MatchWithTeam[];
 }
 
 interface TournamentPageProps {
@@ -64,13 +67,14 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
   const isAdmin = useRef(userId === data.createdBy);
   const cancelButtonRef = useRef(null);
 
-  const { data: tournament, refetch } = useQuery(
-    `tournament-${data.id}`,
-    () => fetchTournament(data.slug),
-    {
-      initialData: data,
-    },
-  );
+  const { data: tournament, refetch } =
+    useQuery<TournamentWithRegistrantsAndMatches>(
+      `tournament-${data.id}`,
+      () => fetchTournament(data.slug),
+      {
+        initialData: data,
+      },
+    );
 
   const fetchTeamInfo = useCallback(async () => {
     if (!teamSelected) return;
@@ -155,11 +159,81 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
         slug={tournament.slug}
       />
       <div className="mt-10">
-        <AllMatches
-          matches={tournament.matches}
-          rounds={totalRounds}
-          slug={tournament.slug}
-        />
+        {tournament.started ? (
+          <AllMatches
+            matches={tournament.matches}
+            rounds={totalRounds}
+            slug={tournament.slug}
+          />
+        ) : (
+          <div className="grid grid-cols-4 gap-x-10 ">
+            <div className="col-span-3">
+              <h3 className="text-2xl font-bold mb-5">
+                Tournament Rules and Information
+              </h3>
+              <div className="bg-gray-800 rounded-lg p-10">
+                <div className="mb-5">
+                  <Image
+                    src={`/TournamentHeader-${randomNumber(5)}.png`}
+                    width="258px"
+                    height="120px"
+                    alt="Tournament Image"
+                    layout="responsive"
+                    className="rounded"
+                  />
+                </div>
+                <div className="prose text-white w-full max-w-full">
+                  <h4 className="text-white font-bold text-xl">
+                    Tournament Info
+                  </h4>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Vitae, quas laboriosam. Qui ratione, reiciendis voluptatum
+                    at tenetur repellendus veritatis recusandae mollitia
+                    aspernatur eaque eveniet temporibus quae quo saepe corporis
+                    adipisci!
+                    <ul>
+                      <li>Do not make up rules</li>
+                      <li>Fake rules are no fun</li>
+                      <li>You will be banned if you keep making up rules</li>
+                    </ul>
+                    <p>
+                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                      Sunt magnam, sequi consequuntur nam eligendi iste minus,
+                      aspernatur dicta quos, laborum dolor! Quod assumenda
+                      cupiditate voluptatibus velit. Illo excepturi repellendus
+                      officia? Sunt magnam, sequi consequuntur nam eligendi iste
+                      minus, aspernatur dicta quos, laborum dolor! Quod
+                      assumenda cupiditate voluptatibus velit. Illo excepturi
+                      repellendus officia?
+                    </p>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold mb-5">Registered Teams</h3>
+
+              <ul className="space-y-5">
+                {tournament.registrants.map(({ team: rTeam }) => (
+                  <li
+                    key={rTeam.id}
+                    className="bg-gray-800 p-5 rounded-lg shadow shadow-gray-700 flex items-center space-x-3"
+                  >
+                    <Image
+                      src={rTeam.logo || '/default-pfp.png'}
+                      height="30px"
+                      width="30px"
+                      alt={`${rTeam.name}'s Logo`}
+                      className="rounded-full"
+                    />
+                    <span>{rTeam.name}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
       </div>
       {registerModalOpen && (
         <Modal
@@ -243,7 +317,9 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
           />
         )}
       </AnimatePresence>
-      {process.env.SUPERADMIN === userId && <SuperAdminTournament />}
+      {process.env.SUPERADMIN === userId && (
+        <SuperAdminTournament tournamentId={tournament.id} />
+      )}
     </div>
   );
 }

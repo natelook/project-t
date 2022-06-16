@@ -1,9 +1,13 @@
-export default function SuperAdminTournament() {
+interface AdminProps {
+  tournamentId: string;
+}
+
+export default function SuperAdminTournament({ tournamentId }: AdminProps) {
   const registerTeams = async () => {
     await fetch('/api/admin/register-teams', {
       method: 'POST',
       body: JSON.stringify({
-        tournamentId: 'cl4g4dn9u2297tlp2tsgk1nu6',
+        tournamentId,
         numberOfTeams: 40,
       }),
     });

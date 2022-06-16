@@ -5,12 +5,6 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import { useState } from 'react';
 
-interface AllMatchesProps {
-  matches: MatchWithTeam[];
-  rounds: number[] | null;
-  slug: string;
-}
-
 interface TeamProps {
   name?: string | null;
   score?: number;
@@ -93,6 +87,12 @@ function BracketMatch({ match, slug }: { match: MatchWithTeam; slug: string }) {
       </div>
     </div>
   );
+}
+
+interface AllMatchesProps {
+  matches: MatchWithTeam[];
+  rounds: number[] | null;
+  slug: string;
 }
 
 export default function AllMatches({ matches, rounds, slug }: AllMatchesProps) {

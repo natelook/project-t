@@ -199,7 +199,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   await prisma.tournament.update({
     where: { id: tournament.id },
-    data: { maxRegistrants: bracketSize },
+    data: { maxRegistrants: bracketSize, started: true },
   });
 
   try {

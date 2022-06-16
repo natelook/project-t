@@ -2,14 +2,13 @@
 import React, { Fragment } from 'react';
 import {
   ArrowLeftIcon,
-  BriefcaseIcon,
   CalendarIcon,
   CheckIcon,
   ChevronDownIcon,
   CogIcon,
-  LinkIcon,
   LocationMarkerIcon,
   PencilAltIcon,
+  UserGroupIcon,
 } from '@heroicons/react/solid';
 import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
@@ -48,18 +47,20 @@ export default function TournamentHeading({
   return (
     <div className="lg:flex lg:items-center lg:justify-between">
       <div className="flex-1 min-w-0">
-        <span className="text-sm text-gray-500 uppercase font-bold flex space-x-1 items-center mb-2">
-          <div className="w-3 h-3">
-            <ArrowLeftIcon />
-          </div>
-          <span>All Tournaments</span>
-        </span>
+        <Link href="/tournaments">
+          <a className="text-sm text-gray-500 hover:text-gray-200 uppercase font-bold flex space-x-1 items-center mb-2">
+            <div className="w-3 h-3">
+              <ArrowLeftIcon />
+            </div>
+            <span>All Tournaments</span>
+          </a>
+        </Link>
         <h2 className="text-2xl font-bold leading-7 text-white sm:text-3xl sm:truncate">
           {name}
         </h2>
         <div className="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
           <div className="mt-2 flex items-center text-sm  text-gray-500">
-            <BriefcaseIcon
+            <UserGroupIcon
               className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
               aria-hidden="true"
             />
@@ -121,8 +122,11 @@ export default function TournamentHeading({
             style="secondary"
           >
             <span className="flex items-center">
-              <LinkIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-              Teams
+              <UserGroupIcon
+                className="-ml-1 mr-2 h-5 w-5"
+                aria-hidden="true"
+              />
+              View Teams
             </span>
           </Button>
         </span>
