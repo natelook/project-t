@@ -29,7 +29,7 @@ export default function PlayerPage({ player }: { player: PlayerWithTeams }) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const request = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/user/${context.params?.id}`,
+    `${process.env.NEXTAUTH_URL}/api/user/by-username/${context.params?.username}`,
   );
   const player = await request.json();
   if (!player) {

@@ -62,7 +62,7 @@ export default function NotificationMenu({
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
           >
-            <Popover.Panel className="absolute z-10 left-1/2 transform -translate-x-1/2 px-2 w-96 h-96 sm:px-0 mt-5">
+            <Popover.Panel className="absolute z-20 left-1/2 transform -translate-x-1/2 px-2 w-96 h-96 sm:px-0 mt-5">
               <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                 <div className="relative bg-gray-800 sm:p-4 h-80 overflow-scroll">
                   {notifications

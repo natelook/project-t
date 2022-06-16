@@ -41,7 +41,7 @@ export default function TeamsPage({ data }: { data: TeamWithPlayers[] }) {
               title={team.name}
               name="Team"
               slug={`/teams/${team.id}`}
-              subtitle={`Total Players ${team.players.length}`}
+              subtitle={`Players ${team.players.length}`}
               key={team.id}
               players={team.players}
             />

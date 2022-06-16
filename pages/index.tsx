@@ -21,7 +21,7 @@ export default function Home({ tournaments }: HomeProps) {
         transition={{ delay: 0.5, duration: 0.3 }}
         className="col-span-2"
       >
-        <div className="flex justify-evenly items-center w-full mb-10 py-12">
+        <div className="flex justify-evenly items-center w-full mb-10 py-32">
           <motion.div
             initial={{ y: 5 }}
             animate={{ y: -5 }}
@@ -43,10 +43,10 @@ export default function Home({ tournaments }: HomeProps) {
             <h1 className="text-6xl uppercase font-bold tracking-tighter">
               Tournaments.wtf
             </h1>
-            <p className="text-gray-400 text-lg">
-              Your primary hub for competing in Esport tournaments
+            <p className="text-gray-500 uppercase tracking-widest font-bold">
+              The backbone behind competitions
             </p>
-            <div className="flex space-x-5 px-10 mt-3">
+            <div className="flex space-x-5 px-10 mt-5">
               <Button
                 label="Find a Team"
                 onClick={() => router.push('/teams')}
