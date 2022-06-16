@@ -142,60 +142,6 @@ export default function Nav() {
                       <Menu.Item>
                         {({ active }: any) => (
                           <div>
-                            <Link href="/settings">
-                              <a
-                                className={classNames(
-                                  active ? 'bg-gray-700' : '',
-                                  'block px-4 py-2 text-sm text-white dark:text-gray-200',
-                                )}
-                              >
-                                Settings
-                              </a>
-                            </Link>
-                          </div>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }: any) => (
-                          <div>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const theme = localStorage.getItem('theme');
-
-                                if (!theme) {
-                                  localStorage.setItem('theme', 'dark');
-                                  document.documentElement.classList.add(
-                                    'dark',
-                                  );
-                                }
-                                if (theme === 'dark') {
-                                  localStorage.setItem('theme', 'light');
-                                  document.documentElement.classList.remove(
-                                    'dark',
-                                  );
-                                }
-
-                                if (theme === 'light') {
-                                  localStorage.setItem('theme', 'dark');
-                                  document.documentElement.classList.add(
-                                    'dark',
-                                  );
-                                }
-                              }}
-                              className={classNames(
-                                active ? 'bg-gray-700' : '',
-                                'block px-4 py-2 text-sm text-white dark:text-gray-200 w-full text-left',
-                              )}
-                            >
-                              Toggle Darkmode
-                            </button>
-                          </div>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }: any) => (
-                          <div>
                             <button
                               type="button"
                               onClick={() => signOut()}
