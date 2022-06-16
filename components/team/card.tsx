@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 
 interface TeamCardProps {
   title: string;
+  logo?: string;
   subtitle?: string | ReactNode;
   slug: string;
   name: 'Team' | 'Player' | 'Tournament';
@@ -17,6 +18,7 @@ interface TeamCardProps {
 
 export default function TeamCard({
   title,
+  logo,
   subtitle,
   slug,
   name,
@@ -27,13 +29,9 @@ export default function TeamCard({
   return (
     <li className="col-span-1 flex flex-col text-center bg-gray-700 rounded-lg divide-y divide-gray-600 ">
       <div className="flex flex-col pb-4">
-        <div className="relative w-full h-32 overflow-hidden rounded-tl rounded-tr border-gray-600">
+        <div className="relative w-full h-24 overflow-hidden rounded-tl rounded-tr border-gray-600">
           <div className="bg-[#d5d7e1] flex flex-col justify-between h-full">
-            <h3 className="text-gray-900 dark:text-white text-lg font-bold pt-3">
-              {title}
-            </h3>
             <span className="text-gray-700">{playerName}</span>
-
             <div className="flex items-end mx-auto px-2">
               <div className="flex justify-evenly items-end w-full relative h-full">
                 {players?.slice(0, 5).map((player, i) => (
@@ -72,9 +70,16 @@ export default function TeamCard({
 
         <div className="mt-6">
           {subtitle && (
-            <span className="font-bold text-xs uppercase text-gray-400 dark:text-gray-300">
-              {subtitle}
-            </span>
+            <div className="flex items-center justify-center space-x-3">
+              <Image
+                src={logo || '/logo-left.svg'}
+                height="30px"
+                width="30px"
+                alt={`${title}'s logo`}
+                className="rounded-full"
+              />
+              <span className="text-2xl">{title}</span>
+            </div>
           )}
         </div>
       </div>
@@ -97,4 +102,5 @@ export default function TeamCard({
 TeamCard.defaultProps = {
   subtitle: null,
   players: null,
+  logo: null,
 };

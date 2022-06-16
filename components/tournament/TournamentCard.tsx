@@ -1,5 +1,6 @@
 import { Button } from '@components/ui';
 import { CalendarIcon, UsersIcon } from '@heroicons/react/solid';
+import randomNumber from '@lib/random-number';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -23,7 +24,7 @@ export default function TournamentCard({
       <div className="">
         <div className="">
           <Image
-            src="/tourney-header.png"
+            src={`/TournamentHeader-${randomNumber(5)}.png`}
             width="258px"
             height="120px"
             alt="Tournament Image"

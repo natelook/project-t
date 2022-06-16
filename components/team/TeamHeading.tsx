@@ -1,5 +1,6 @@
 import { Button } from '@components/ui';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -9,6 +10,7 @@ interface TeamHeadingProps {
   isOwner?: boolean;
   secondaryButtonText?: string;
   primaryButtonText?: string;
+  image?: string;
   breadcrumb?: {
     name: string;
     slug: string;
@@ -23,6 +25,7 @@ export default function TeamHeading({
   isOwner,
   secondaryButtonText,
   primaryButtonText,
+  image,
   breadcrumb,
   primaryButton,
   secondaryButton,
@@ -68,9 +71,20 @@ export default function TeamHeading({
       )}
       <div className="md:flex md:items-center md:justify-between mb-10">
         <div className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold text-white sm:text-3xl sm:truncate">
-            {name}
-          </h2>
+          <div className="flex items-center space-x-3">
+            {image && (
+              <Image
+                src={image}
+                height="75px"
+                width="75px"
+                alt={`${name}'s logo`}
+                className="rounded-full"
+              />
+            )}
+            <h2 className="text-2xl font-bold text-white sm:text-3xl sm:truncate">
+              {name}
+            </h2>
+          </div>
           {subtitle && <h3 className="text-gray-400">{subtitle}</h3>}
         </div>
         {isOwner && (
@@ -104,5 +118,6 @@ TeamHeading.defaultProps = {
   subtitle: null,
   secondaryButtonText: null,
   primaryButtonText: null,
+  image: null,
   breadcrumb: null,
 };

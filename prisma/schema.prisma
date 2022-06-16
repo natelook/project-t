@@ -110,6 +110,7 @@ model Team {
   invitations    TeamInvitation[]
   teamOneMatches Match[]          @relation("TeamOne")
   teamTwoMatches Match[]          @relation("TeamTwo")
+  logo           String?
 }
 
 model Registrant {
@@ -141,5 +142,5 @@ model Notification {
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
-  read Boolean @default(false)
+  read      Boolean  @default(false)
 }

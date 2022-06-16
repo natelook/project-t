@@ -44,6 +44,7 @@ export default function TeamsPage({ data }: { data: TeamWithPlayers[] }) {
               subtitle={`Players ${team.players.length}`}
               key={team.id}
               players={team.players}
+              logo={team.logo}
             />
           ))}
         </ul>
