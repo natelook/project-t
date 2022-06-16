@@ -75,12 +75,18 @@ export default function NotificationMenu({
                           <Link href={notification.link}>
                             <a
                               key={notification.id}
-                              className="transition ease-in-out duration-150 flex items-center justify-between p-3"
+                              className={classNames(
+                                'transition ease-in-out duration-150 flex items-center justify-between p-3',
+                                {
+                                  'text-white': !notification.read,
+                                  'text-gray-500': notification.read,
+                                },
+                              )}
                             >
-                              <p className="text-base font-medium text-white text-left">
+                              <p className="text-base font-medium text-left">
                                 {notification.message}
                               </p>
-                              <span className="text-xs text-gray-300 uppercase block">
+                              <span className="text-xs uppercase block">
                                 {dayjs(notification.createdAt).format(
                                   'h:mma MM/DD/YY',
                                 )}
