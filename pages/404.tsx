@@ -1,4 +1,3 @@
-import { Layout } from '@components/common';
 import Link from 'next/link';
 
 /* This example requires Tailwind CSS v2.0+ */
@@ -48,5 +47,3 @@ export default function NotFound() {
     </div>
   );
 }
-
-NotFound.Layout = Layout;

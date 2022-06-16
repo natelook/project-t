@@ -1,25 +1,15 @@
-import { Layout } from '@components/common';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import React from 'react';
-import TournamentCard from '@components/tournament/TournamentCard';
-import { TournamentWithRegistrants } from '@lib/types';
-import { Button } from '@components/ui';
-import { useRouter } from 'next/router';
 
-interface HomeProps {
-  tournaments: TournamentWithRegistrants[];
-}
-
-export default function Home({ tournaments }: HomeProps) {
-  const router = useRouter();
+export default function Home() {
   return (
-    <div className="">
+    <div className="h-screen flex items-center justify-center w-full">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.3 }}
-        className="col-span-2"
+        className="w-full"
       >
         <div className="flex justify-evenly items-center w-full mb-10 py-12">
           <motion.div
@@ -43,24 +33,9 @@ export default function Home({ tournaments }: HomeProps) {
             <h1 className="text-6xl uppercase font-bold tracking-tighter">
               Tournaments.wtf
             </h1>
-            <p className="text-gray-400 text-lg">
-              Your primary hub for competing in Esport tournaments
+            <p className="text-gray-600 text-xl uppercase tracking-wider">
+              Better Tournaments Soon
             </p>
-            <div className="flex space-x-5 px-10 mt-3">
-              <Button
-                label="Find a Team"
-                onClick={() => router.push('/teams')}
-                style="secondary"
-              >
-                Find a Team
-              </Button>
-              <Button
-                label="Tournament Link"
-                onClick={() => router.push('/tournaments')}
-              >
-                All Tournaments
-              </Button>
-            </div>
           </div>
           <motion.div
             initial={{ y: -5 }}
@@ -81,36 +56,6 @@ export default function Home({ tournaments }: HomeProps) {
           </motion.div>
         </div>
       </motion.div>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="col-span-4 mb-10"
-      >
-        <div>
-          <h2 className="text-3xl font-bold mb-1">Featured Tournaments</h2>
-          <div className="grid md:grid-cols-2 gap-10">
-            {tournaments.map((tournament) => (
-              <TournamentCard
-                name={tournament.name}
-                totalPlayers={tournament.registrants.length}
-                slug={tournament.slug}
-                maxPlayers={tournament.maxRegistrants}
-              />
-            ))}
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 }
-
-export async function getServerSideProps() {
-  const request = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/tournaments/featured`,
-  );
-  const featuredTournaments = await request.json();
-  return { props: { tournaments: featuredTournaments } };
-}
-
-Home.Layout = Layout;
