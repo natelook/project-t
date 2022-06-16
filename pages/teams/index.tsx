@@ -38,11 +38,11 @@ export default function TeamsPage({ data }: { data: TeamWithPlayers[] }) {
         <ul className="grid grid-cols-4 gap-10">
           {teams?.map((team) => (
             <TeamCard
+              key={team.id}
               title={team.name}
               name="Team"
               slug={`/teams/${team.id}`}
               subtitle={`Players ${team.players.length}`}
-              key={team.id}
               players={team.players}
               logo={team.logo}
             />

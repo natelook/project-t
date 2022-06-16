@@ -36,6 +36,7 @@ export default function TeamCard({
               <div className="flex justify-evenly items-end w-full relative h-full">
                 {players?.slice(0, 5).map((player, i) => (
                   <motion.div
+                    key={player.id}
                     className="relative h-12 w-12 z-10"
                     onMouseEnter={() => {
                       setHovered(i);

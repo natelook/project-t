@@ -49,6 +49,6 @@ Button.defaultProps = {
   style: 'primary',
   size: 'text-base',
   icon: undefined,
-  ref: null,
+  ref: undefined,
   onClick: undefined,
 };

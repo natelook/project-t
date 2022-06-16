@@ -87,15 +87,10 @@ export default function Nav() {
             </div>
             {session ? (
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button
-                  type="button"
-                  className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
-                >
-                  <NotificationMenu
-                    notifications={data}
-                    userId={session.user.id}
-                  />
-                </button>
+                <NotificationMenu
+                  notifications={data}
+                  userId={session.user.id}
+                />
                 <Menu as="div" className="ml-3 relative z-20">
                   <div>
                     <Menu.Button className="rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">

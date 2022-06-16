@@ -64,39 +64,43 @@ export default function NotificationMenu({
           >
             <Popover.Panel className="absolute z-20 left-1/2 transform -translate-x-1/2 px-2 w-96 h-96 sm:px-0 mt-5">
               <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                <div className="relative bg-gray-800 sm:p-4 h-80 overflow-scroll">
-                  {notifications
-                    ? notifications?.map((notification) => (
-                        <div
-                          key={notification.id}
-                          className="flex items-center border-b last:border-b-0 border-gray-700 hover:bg-gray-700 py-3 rounded-md"
-                          onMouseEnter={() => readNotification(notification.id)}
-                        >
-                          <Link href={notification.link}>
-                            <a
-                              key={notification.id}
-                              className={classNames(
-                                'transition ease-in-out duration-150 flex items-center justify-between p-3',
-                                {
-                                  'text-white': !notification.read,
-                                  'text-gray-500': notification.read,
-                                },
+                {notifications?.length !== 0 ? (
+                  <div className="relative bg-gray-800 sm:p-4 h-80 overflow-scroll">
+                    {notifications?.map((notification) => (
+                      <div
+                        key={notification.id}
+                        className="flex items-center border-b last:border-b-0 border-gray-700 hover:bg-gray-700 py-3 rounded-md"
+                        onMouseEnter={() => readNotification(notification.id)}
+                      >
+                        <Link href={notification.link}>
+                          <a
+                            key={notification.id}
+                            className={classNames(
+                              'transition ease-in-out duration-150 flex items-center justify-between p-3',
+                              {
+                                'text-white': !notification.read,
+                                'text-gray-500': notification.read,
+                              },
+                            )}
+                          >
+                            <p className="text-base font-medium text-left">
+                              {notification.message}
+                            </p>
+                            <span className="text-xs uppercase block">
+                              {dayjs(notification.createdAt).format(
+                                'h:mma MM/DD/YY',
                               )}
-                            >
-                              <p className="text-base font-medium text-left">
-                                {notification.message}
-                              </p>
-                              <span className="text-xs uppercase block">
-                                {dayjs(notification.createdAt).format(
-                                  'h:mma MM/DD/YY',
-                                )}
-                              </span>
-                            </a>
-                          </Link>
-                        </div>
-                      ))
-                    : 'No messages'}
-                </div>
+                            </span>
+                          </a>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="relative bg-gray-800 sm:p-4">
+                    <span>No messages</span>
+                  </div>
+                )}
               </div>
             </Popover.Panel>
           </Transition>

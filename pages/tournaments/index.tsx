@@ -25,6 +25,7 @@ export default function TournamentsPage({ tournaments }: TournamentsPageProps) {
             maxPlayers={tournament.maxRegistrants}
             totalPlayers={tournament.registrants.length}
             slug={tournament.slug}
+            key={tournament.id}
           />
         ))}
       </ul>
