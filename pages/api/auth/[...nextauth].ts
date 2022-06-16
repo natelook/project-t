@@ -30,6 +30,6 @@ export default NextAuth({
   },
   adapter: PrismaAdapter(prisma),
   pages: {
-    newUser: '/settings',
+    newUser: '/welcome',
   },
 });

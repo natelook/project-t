@@ -11,6 +11,7 @@ import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
 import { FormEvent, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
+import usePlayground from '@lib/hooks/usePlayground';
 
 interface UserProfile extends User {
   tournaments: Tournament[];
@@ -34,6 +35,7 @@ export default function Profile({ data }: ProfileProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [newUsername, setNewUsername] = useState('');
   const [playgroundOpen, setPlaygroundOpen] = useState(false);
+  const { setNounAsPfp } = usePlayground(data.id);
 
   const {
     data: user,
@@ -126,6 +128,24 @@ export default function Profile({ data }: ProfileProps) {
             <ModalHeading title="Generate Noun" icon={<CogIcon />} subtext="" />
             <div className="mx-auto">
               <Playground userId={data.id} />
+              <div className="flex space-x-3 mt-5">
+                <Button
+                  onClick={() => setPlaygroundOpen(false)}
+                  label="Close Playground"
+                  style="secondary"
+                >
+                  Close
+                </Button>
+                <Button
+                  onClick={() => {
+                    setNounAsPfp();
+                    setPlaygroundOpen(false);
+                  }}
+                  label="Set Noun as Pfp"
+                >
+                  Set PFP
+                </Button>
+              </div>
             </div>
           </Modal>
         )}

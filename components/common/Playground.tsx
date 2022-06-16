@@ -26,6 +26,7 @@ export default function Playground({ userId }: PlaygroundProps) {
               name: cleanName(filename),
               value: i,
             }))}
+            value={noun.body}
             label="Body"
             id="body"
             onChange={(value) => setBody(parseInt(value, 10))}
@@ -35,6 +36,7 @@ export default function Playground({ userId }: PlaygroundProps) {
               name: cleanName(filename),
               value: i,
             }))}
+            value={noun.accessory}
             label="Accessory"
             id="accessory"
             onChange={(value) => setAccessory(parseInt(value, 10))}
@@ -44,6 +46,7 @@ export default function Playground({ userId }: PlaygroundProps) {
               name: cleanName(filename),
               value: i,
             }))}
+            value={noun.head}
             label="Head"
             id="head"
             onChange={(value) => setHead(parseInt(value, 10))}
@@ -53,8 +56,9 @@ export default function Playground({ userId }: PlaygroundProps) {
               name: cleanName(filename),
               value: i,
             }))}
+            value={noun.glasses}
             label="Glasses"
-            id="glasess"
+            id="glasses"
             onChange={(value) => setGlasses(parseInt(value, 10))}
           />
         </div>
