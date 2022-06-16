@@ -8,36 +8,26 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: id as string },
-      select: {
-        id: true,
-        username: true,
+      include: {
         teams: {
-          select: {
-            name: true,
+          include: {
             players: true,
             owner: true,
-            id: true,
           },
         },
         ownedTeams: {
-          select: {
-            name: true,
-            id: true,
+          include: {
             players: true,
           },
         },
         tournaments: true,
         teamInvitations: {
-          select: {
-            id: true,
+          include: {
             team: {
-              select: {
-                name: true,
-                id: true,
+              include: {
                 players: true,
               },
             },
-            status: true,
           },
         },
       },
