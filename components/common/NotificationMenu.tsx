@@ -1,5 +1,5 @@
 import type { Notification } from '@prisma/client';
-import React, { Fragment } from 'react';
+import React, { Fragment, useCallback } from 'react';
 import Link from 'next/link';
 import { Popover, Transition } from '@headlessui/react';
 import { BellIcon } from '@heroicons/react/outline';
@@ -8,11 +8,22 @@ import dayjs from 'dayjs';
 
 interface NotificationMenuProps {
   notifications: Notification[];
+  userId: string;
 }
 
 export default function NotificationMenu({
   notifications,
+  userId,
 }: NotificationMenuProps) {
+  const readNotification = useCallback(
+    (notificationId: string) => {
+      fetch('/api/notification/read', {
+        method: 'POST',
+        body: JSON.stringify({ userId, notificationId }),
+      });
+    },
+    [userId],
+  );
   return (
     <Popover className="relative">
       {({ open }: any) => (
@@ -27,9 +38,15 @@ export default function NotificationMenu({
               <div className="h-7 w-7 flex relative">
                 <BellIcon />
               </div>
-              {notifications?.length !== 0 && (
+              {notifications?.filter(
+                (notification) => notification.read === false,
+              ).length !== 0 && (
                 <span className="bg-primary text-xs text-white p-1 absolute -top-2 -right-1 px-1.5 py-0.5 rounded-full">
-                  {notifications?.length}
+                  {
+                    notifications?.filter(
+                      (notification) => notification.read === false,
+                    ).length
+                  }
                 </span>
               )}
             </div>
@@ -53,6 +70,7 @@ export default function NotificationMenu({
                         <div
                           key={notification.id}
                           className="flex items-center border-b last:border-b-0 border-gray-700 hover:bg-gray-700 py-3 rounded-md"
+                          onMouseEnter={() => readNotification(notification.id)}
                         >
                           <Link href={notification.link}>
                             <a

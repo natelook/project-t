@@ -14,6 +14,7 @@ export default async function GetUserNotifications(
   }
 
   const notifications = await prisma.notification.findMany({
+    take: 10,
     where: { userId: session.user.id },
   });
 

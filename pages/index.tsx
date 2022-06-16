@@ -92,6 +92,7 @@ export default function Home({ tournaments }: HomeProps) {
           <div className="grid md:grid-cols-2 gap-10">
             {tournaments.map((tournament) => (
               <TournamentCard
+                key={tournament.id}
                 name={tournament.name}
                 totalPlayers={tournament.registrants.length}
                 slug={tournament.slug}

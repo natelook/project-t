@@ -92,7 +92,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   });
 
-  const firstRoundByes: { matchId: number; teamId: string }[] = [];
+  const firstRoundByes: {
+    matchId: number;
+    teamId: string;
+  }[] = [];
 
   const firstRoundWithByes = firstRound.map((match) => {
     if (!match.teamTwoId && match.teamOneId) {
@@ -100,7 +103,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         matchId: match.nextMatch,
         teamId: match.teamOneId,
       });
-      return { ...match, winner: match.teamOneId };
+      return {
+        ...match,
+        winner: match.teamOneId,
+        teamOneScore: match.winningScore,
+      };
     }
 
     return match;

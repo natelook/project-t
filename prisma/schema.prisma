@@ -135,10 +135,11 @@ model TeamInvitation {
 }
 
 model Notification {
-  id      String @id @unique @default(cuid())
-  message String
-  link    String
-  userId  String
-  user    User   @relation(fields: [userId], references: [id])
-  createdAt DateTime   @default(now())
+  id        String   @id @unique @default(cuid())
+  message   String
+  link      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  read Boolean @default(false)
 }

@@ -91,7 +91,10 @@ export default function Nav() {
                   type="button"
                   className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
                 >
-                  <NotificationMenu notifications={data} />
+                  <NotificationMenu
+                    notifications={data}
+                    userId={session.user.id}
+                  />
                 </button>
                 <Menu as="div" className="ml-3 relative z-20">
                   <div>
