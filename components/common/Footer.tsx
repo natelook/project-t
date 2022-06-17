@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import Link from 'next/link';
-// import { AiOutlineTwitter } from 'react-icons/ai';
-// import { SiDiscord } from 'react-icons/si';
+import { AiOutlineTwitter } from 'react-icons/ai';
+import { SiDiscord } from 'react-icons/si';
 
 /* This example requires Tailwind CSS v2.0+ */
 const navigation = {
@@ -11,16 +11,16 @@ const navigation = {
     { name: 'Partners', href: '#' },
   ],
   social: [
-    // {
-    //   name: 'Twitter',
-    //   href: 'https://twitter.com/TournamentsWTF',
-    //   icon: <AiOutlineTwitter size="1.4em" />,
-    // },
-    // {
-    //   name: 'Discord',
-    //   href: 'https://discord.gg/KEWBVvGRJs',
-    //   icon: <SiDiscord size="1.4em" />,
-    // },
+    {
+      name: 'Twitter',
+      href: 'https://twitter.com/TournamentsWTF',
+      icon: <AiOutlineTwitter size="1.4em" />,
+    },
+    {
+      name: 'Discord',
+      href: 'https://discord.gg/KEWBVvGRJs',
+      icon: <SiDiscord size="1.4em" />,
+    },
   ],
 };
 
