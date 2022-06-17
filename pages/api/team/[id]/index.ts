@@ -45,6 +45,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }));
 
   const matches = teamOneMatches?.concat(teamTwoMatches || []);
+
+  // TODO: Sort by date and then by round
+  // const matchesSorted = matches.sort((a, b) => {
+
+  //   if (a.round < b.round) {
+  //     console.log(1);
+  //     return 1;
+  //   }
+
+  //   if (b.round < a.round) {
+  //     console.log(-1);
+  //     return -1;
+  //   }
+  //   console.log(0);
+  //   return 0;
+  // });
+
   const team = {
     ...teamRequest,
     teamOneMatches: null,

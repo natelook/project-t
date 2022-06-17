@@ -58,10 +58,10 @@ export default function AddPlayer({
               }
               height="40px"
               width="40px"
-              alt={`${playerResults.name}'s profile picture`}
+              alt={`${playerResults.username}'s profile picture`}
               className="rounded-full"
             />
-            <span className="text-xl font-bold">{playerResults.name}</span>
+            <span className="text-xl font-bold">{playerResults.username}</span>
           </div>
           <div className="grid grid-cols-2 gap-x-5 mt-3">
             <Button label="Add Player" style="secondary" onClick={cancelSearch}>

@@ -27,7 +27,7 @@ export default function TeamInvitations({
                       <div className="flex items-center space-x-3">
                         <Image
                           className="h-10 w-10 rounded-full"
-                          src={invite.team.logo || '/default-pfp.png'}
+                          src={invite.team.logo || '/no-team-logo.png'}
                           height="40px"
                           width="40px"
                         />

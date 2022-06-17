@@ -192,7 +192,7 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
         <div className="col-span-3">
           <h3 className="text-3xl font-bold leading-6 mb-5">Recent Matches</h3>
           <div className="space-y-8">
-            {team.matches.length < 0 ? (
+            {team.matches.length !== 0 ? (
               team.matches?.map((match) => (
                 <MatchCard
                   tournamentName={match.tournament.name}
@@ -201,6 +201,8 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
                   teamScore={match.teamScore}
                   opponentName={match.opponent?.name}
                   opponentScore={match.oppenentScore}
+                  tournamentSlug={match.tournament.slug}
+                  matchSlug={`${match.tournament.slug}/${match.matchId}`}
                 />
               ))
             ) : (
