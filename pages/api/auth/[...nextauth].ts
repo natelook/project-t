@@ -11,6 +11,7 @@ const allowed = [
   'obcd@tournaments.wtf',
   'mach@tournaments.wtf',
   '0x2a7f@gmail.com',
+  'chris.lwlr@gmail.com',
 ];
 
 export default NextAuth({
