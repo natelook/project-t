@@ -6,6 +6,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     include: {
       registrants: true,
     },
+    orderBy: { startDate: 'asc' },
   });
   return res.status(200).json(tournaments);
 };
