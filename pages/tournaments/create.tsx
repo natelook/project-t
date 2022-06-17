@@ -1,84 +1,22 @@
-import type { PresignedPost } from 'aws-sdk/clients/s3';
 import Button from '@components/ui/Button';
 import Input from '@components/ui/Input';
 import { Layout } from '@components/common';
 import React, { FormEvent, useCallback, useEffect, useState } from 'react';
-import dayjs from 'dayjs';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { Tournament } from '@prisma/client';
 import { Select } from '@components/ui';
 import countTotalRounds from '@lib/count-total-rounds';
 import FileInput from '@components/ui/FileInput';
+import createTournament from '@lib/createTournament';
 
 const convertTitleToSlug = (title: string) => {
   const slug = title.replace(/\s+/g, '-').toLowerCase();
   return slug;
 };
 
-// t = tournament
-const createTournament = async (
-  t: Partial<Tournament>,
-  bannerFile: File,
-  creatorId: string,
-) => {
-  if (!creatorId) {
-    return { error: 'You must be signed in.' };
-  }
-
-  const request = await fetch('/api/tournament/create', {
-    method: 'POST',
-    body: JSON.stringify({
-      name: t.name,
-      format: t.format,
-      startDate: dayjs(t.startDate).toISOString(),
-      createdBy: creatorId,
-      slug: t.slug,
-      game: 'VALORANT',
-      maxRegistrants: t.maxRegistrants,
-      mainStream: t.mainStream,
-      roundWinConditions: t.roundWinConditions,
-      bannerFileType: bannerFile ? encodeURIComponent(bannerFile.type) : null,
-    }),
-  });
-
-  const {
-    tournament,
-    post,
-  }: {
-    tournament: Tournament;
-    post: { fields: PresignedPost.Fields; url: string } | null;
-  } = await request.json();
-
-  if (bannerFile && post) {
-    // rename to file here because Jeff wants it that way
-    const file = bannerFile;
-    const formData = new FormData();
-    Object.entries({ ...post.fields, file }).forEach(([key, value]) => {
-      formData.append(key, value as string);
-    });
-
-    const bannerUpload = await fetch(post.url, {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (bannerUpload.status !== 204) {
-      return {
-        error: 'There was a problem uploading your banner to our server.',
-      };
-    }
-  }
-
-  if (request.status !== 200 || !tournament) {
-    // console.log(request.status, tournament)
-    return { error: 'something went wrong' };
-  }
-  return { success: true, slug: `/${tournament.slug}` };
-};
 interface CreateTournamentProps {
   userId: string;
 }
@@ -197,7 +135,6 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
               <div>
                 <Select
                   id="format"
-                  value={format}
                   label="Tournament Format"
                   defaultValue="Single Elimination"
                   onChange={(value) => setFormat(value)}
@@ -213,7 +150,6 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
                 <Select
                   id="max-players"
                   label="Max Players"
-                  value={maxPlayers}
                   onChange={(value) => setMaxPlayers(parseInt(value, 10))}
                   defaultValue="32"
                   options={[
@@ -252,7 +188,6 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
                               current[i] = parseInt(value, 10);
                               setRoundWinConditions(current);
                             }}
-                            value={roundWinConditions}
                             defaultValue="32"
                             options={[
                               { name: 'Best of 1', value: '1' },

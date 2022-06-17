@@ -55,3 +55,10 @@ export interface PostProps {
   body: TypedObject;
   createdAt: Date;
 }
+
+export interface Noun {
+  head: number;
+  body: number;
+  accessory: number;
+  glasses: number;
+}

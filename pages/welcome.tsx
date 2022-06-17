@@ -27,7 +27,15 @@ export default function SettingsPage() {
   } = useQuery<User>('user-settings', () => fetcher(session?.user.id));
   const router = useRouter();
 
-  const { setNounAsPfp } = usePlayground(session?.user.id);
+  const {
+    setNounAsPfp,
+    noun,
+    setBody,
+    setAccessory,
+    setGlasses,
+    setHead,
+    error: playgroundError,
+  } = usePlayground(session?.user.id);
 
   useEffect(() => {
     if (user && !user.username) {
@@ -90,7 +98,14 @@ export default function SettingsPage() {
             />
           </div>
           <h3 className="text-xl font-bold mb-1">Create Your PFP</h3>
-          <Playground userId={session?.user.id} />
+          <Playground
+            noun={noun}
+            setBody={(body) => setBody(body)}
+            setAccessory={(ass) => setAccessory(ass)}
+            setGlasses={(glass) => setGlasses(glass)}
+            setHead={(head) => setHead(head)}
+            error={playgroundError}
+          />
           <div className="mt-3">
             <Button
               label="Submit Profile Information"

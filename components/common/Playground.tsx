@@ -1,7 +1,7 @@
+import type { Noun } from '@lib/types';
 import { ImageData } from '@nouns/assets';
 import Image from 'next/image';
 import Select from '../ui/Select';
-import usePlayground from '../../lib/hooks/usePlayground';
 
 function cleanName(name: string) {
   const split = name.split('-');
@@ -11,12 +11,22 @@ function cleanName(name: string) {
 }
 
 interface PlaygroundProps {
-  userId: string;
+  noun: Noun;
+  setBody: (value) => void;
+  setAccessory: (value) => void;
+  setGlasses: (value) => void;
+  setHead: (value) => void;
+  error: string;
 }
 
-export default function Playground({ userId }: PlaygroundProps) {
-  const { noun, setBody, setAccessory, setGlasses, setHead, error } =
-    usePlayground(userId);
+export default function Playground({
+  noun,
+  setBody,
+  setAccessory,
+  setGlasses,
+  setHead,
+  error,
+}: PlaygroundProps) {
   return (
     <div className="w-full">
       <div className="grid grid-cols-2 gap-x-3">
@@ -26,7 +36,6 @@ export default function Playground({ userId }: PlaygroundProps) {
               name: cleanName(filename),
               value: i,
             }))}
-            value={noun.body}
             label="Body"
             id="body"
             onChange={(value) => setBody(parseInt(value, 10))}
@@ -36,7 +45,6 @@ export default function Playground({ userId }: PlaygroundProps) {
               name: cleanName(filename),
               value: i,
             }))}
-            value={noun.accessory}
             label="Accessory"
             id="accessory"
             onChange={(value) => setAccessory(parseInt(value, 10))}
@@ -46,7 +54,6 @@ export default function Playground({ userId }: PlaygroundProps) {
               name: cleanName(filename),
               value: i,
             }))}
-            value={noun.head}
             label="Head"
             id="head"
             onChange={(value) => setHead(parseInt(value, 10))}
@@ -56,7 +63,6 @@ export default function Playground({ userId }: PlaygroundProps) {
               name: cleanName(filename),
               value: i,
             }))}
-            value={noun.glasses}
             label="Glasses"
             id="glasses"
             onChange={(value) => setGlasses(parseInt(value, 10))}

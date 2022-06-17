@@ -35,7 +35,15 @@ export default function Profile({ data }: ProfileProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [newUsername, setNewUsername] = useState('');
   const [playgroundOpen, setPlaygroundOpen] = useState(false);
-  const { setNounAsPfp } = usePlayground(data.id);
+  const {
+    setNounAsPfp,
+    noun,
+    setBody,
+    setAccessory,
+    setGlasses,
+    setHead,
+    error: playgroundError,
+  } = usePlayground(data.id);
 
   const {
     data: user,
@@ -127,7 +135,14 @@ export default function Profile({ data }: ProfileProps) {
           >
             <ModalHeading title="Generate Noun" icon={<CogIcon />} subtext="" />
             <div className="mx-auto">
-              <Playground userId={data.id} />
+              <Playground
+                noun={noun}
+                setBody={(body) => setBody(body)}
+                setAccessory={(ass) => setAccessory(ass)}
+                setGlasses={(glass) => setGlasses(glass)}
+                setHead={(head) => setHead(head)}
+                error={playgroundError}
+              />
               <div className="flex space-x-3 mt-5">
                 <Button
                   onClick={() => setPlaygroundOpen(false)}
