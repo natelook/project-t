@@ -3,7 +3,7 @@ import { CheckIcon } from '@heroicons/react/solid';
 import { MatchWithTeam } from '@lib/types';
 import classNames from 'classnames';
 import Link from 'next/link';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 interface TeamProps {
   name?: string | null;
@@ -98,24 +98,26 @@ interface AllMatchesProps {
 export default function AllMatches({ matches, rounds, slug }: AllMatchesProps) {
   const [isCollapsed, setCollapsed] = useState(false);
 
-  const roundName = (roundNumber: number, roundArray: number[]) => {
-    if (roundArray.length === roundNumber) {
-      return 'Final Match';
-    }
+  // Round names are hidden until we can get the scroll bar on the y axis to go away
 
-    if (roundArray.length - 1 === roundNumber) {
-      return 'Semi-Finals';
-    }
+  // const roundName = (roundNumber: number, roundArray: number[]) => {
+  //   if (roundArray.length === roundNumber) {
+  //     return 'Final Match';
+  //   }
 
-    if (roundArray.length - 2 === roundNumber) {
-      return 'Quarter-Finals';
-    }
+  //   if (roundArray.length - 1 === roundNumber) {
+  //     return 'Semi-Finals';
+  //   }
 
-    return `Round ${roundNumber}`;
-  };
+  //   if (roundArray.length - 2 === roundNumber) {
+  //     return 'Quarter-Finals';
+  //   }
+
+  //   return `Round ${roundNumber}`;
+  // };
   return (
     <div>
-      <div className="flex justify-start w-full mb-3">
+      <div className="flex justify-end w-full mb-3">
         <button
           type="button"
           onClick={() => setCollapsed(!isCollapsed)}
@@ -127,16 +129,16 @@ export default function AllMatches({ matches, rounds, slug }: AllMatchesProps) {
           </span>
         </button>
       </div>
-      <div className="flex space-x-16 overflow-scroll">
+      <div className="flex space-x-16 overflow-x-scroll relative">
         {rounds &&
           rounds.map((round) => (
             <div>
-              <h4 className="mb-2 font-bold uppercase tracking-wide text-gray-300">
+              {/* <h4 className="font-bold uppercase tracking-wide text-gray-300">
                 {roundName(round, rounds)}
-              </h4>
+              </h4> */}
               <div
                 key={`round-${round}`}
-                className={classNames('flex flex-col h-full space-y-5', {
+                className={classNames('flex flex-col space-y-12 h-full', {
                   'justify-start': isCollapsed,
                   'justify-around': !isCollapsed,
                 })}

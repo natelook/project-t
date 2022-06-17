@@ -161,11 +161,16 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
       />
       <div className="mt-10">
         {tournament.started ? (
-          <AllMatches
-            matches={tournament.matches}
-            rounds={totalRounds}
-            slug={tournament.slug}
-          />
+          <div>
+            <h3 className="text-2xl font-bold mb-2">Tournament Bracket</h3>
+            <div className="p-10 bg-gray-800 shadow shadow-gray-700 rounded">
+              <AllMatches
+                matches={tournament.matches}
+                rounds={totalRounds}
+                slug={tournament.slug}
+              />
+            </div>
+          </div>
         ) : (
           <div className="grid grid-cols-4 gap-x-10 ">
             <div className="col-span-3">
