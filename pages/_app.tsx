@@ -42,4 +42,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   );
 }
 
+MyApp.auth = true;
+
 export default MyApp;
