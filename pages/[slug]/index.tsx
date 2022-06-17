@@ -23,7 +23,6 @@ import { AnimatePresence } from 'framer-motion';
 import SuperAdminTournament from '@components/admin/SuperAdminTournament';
 import { MatchWithTeam, RegistrantWithTeamInfo } from '@lib/types';
 import Image from 'next/image';
-import randomNumber from '@lib/random-number';
 import TeamStackedList from '@components/common/TeamStackedList';
 
 interface TeamWithPlayers extends Team {
@@ -178,16 +177,18 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
                 Tournament Rules and Information
               </h3>
               <div className="bg-gray-800 rounded-lg p-10 shadow shadow-gray-700">
-                <div className="mb-5">
-                  <Image
-                    src={`/TournamentHeader-${randomNumber(5)}.png`}
-                    width="258px"
-                    height="120px"
-                    alt="Tournament Image"
-                    layout="responsive"
-                    className="rounded"
-                  />
-                </div>
+                {tournament.banner && (
+                  <div className="mb-5">
+                    <Image
+                      src={tournament.banner}
+                      width="258px"
+                      height="120px"
+                      alt="Tournament Image"
+                      layout="responsive"
+                      className="rounded"
+                    />
+                  </div>
+                )}
                 <div className="prose text-white w-full max-w-full">
                   <h4 className="text-white font-bold text-xl">
                     Tournament Info

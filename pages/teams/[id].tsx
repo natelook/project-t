@@ -9,7 +9,7 @@ import {
 import { Team, User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { AnimatePresence } from 'framer-motion';
 import { Banner, Button, ModalHeading } from '@components/ui';
@@ -19,8 +19,7 @@ import TeamPlayers from '@components/team/TeamPlayers';
 import { ImageData } from '@nouns/assets';
 import MatchCard from '@components/team/MatchCard';
 import { UploadIcon } from '@heroicons/react/solid';
-// import { SpeakerphoneIcon } from '@heroicons/react/solid';
-// import validateTeamOwner from '@lib/validateUser';
+import FileInput from '@components/ui/FileInput';
 
 interface MatchesRenamedForTeam extends MatchWithTeamsAndTournament {
   teamScore: number;
@@ -242,13 +241,7 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
               }}
             >
               <div className="py-8 flex justify-center">
-                <input
-                  type="file"
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setFile(e.target.files)
-                  }
-                  accept="image/png"
-                />
+                <FileInput setFile={(files) => setFile(files)} />
               </div>
               {uploadError && (
                 <span className="text-danger">{uploadError}</span>

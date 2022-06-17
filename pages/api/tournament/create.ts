@@ -1,8 +1,16 @@
+import presignImage from '@lib/presignImage';
 import prisma from '@lib/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const body = JSON.parse(req.body);
+  const session = await getSession({ req });
+  if (!session) {
+    return res
+      .status(401)
+      .json({ error: 'You must be signed in to create a tournament.' });
+  }
+
   const {
     name,
     format,
@@ -13,7 +21,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     maxRegistrants,
     mainStream,
     roundWinConditions,
-  } = body;
+    bannerFileType,
+  } = JSON.parse(req.body);
+
+  let post: any;
+  if (bannerFileType) {
+    post = presignImage(bannerFileType, 'banner');
+  }
 
   const tournament = await prisma.tournament.create({
     data: {
@@ -26,8 +40,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       maxRegistrants,
       mainStream,
       roundWinConditions,
+      banner: post ? `${post.url}/${post.fields.key}` : null,
     },
   });
 
-  return res.status(200).json(tournament);
+  return res.status(200).json({ post, tournament });
 };

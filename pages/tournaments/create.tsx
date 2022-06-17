@@ -1,3 +1,4 @@
+import type { PresignedPost } from 'aws-sdk/clients/s3';
 import Button from '@components/ui/Button';
 import Input from '@components/ui/Input';
 import { Layout } from '@components/common';
@@ -11,20 +12,82 @@ import { useRouter } from 'next/router';
 import { Tournament } from '@prisma/client';
 import { Select } from '@components/ui';
 import countTotalRounds from '@lib/count-total-rounds';
+import FileInput from '@components/ui/FileInput';
 
 const convertTitleToSlug = (title: string) => {
   const slug = title.replace(/\s+/g, '-').toLowerCase();
   return slug;
 };
 
+// t = tournament
+const createTournament = async (
+  t: Partial<Tournament>,
+  bannerFile: File,
+  creatorId: string,
+) => {
+  if (!creatorId) {
+    return { error: 'You must be signed in.' };
+  }
+
+  const request = await fetch('/api/tournament/create', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: t.name,
+      format: t.format,
+      startDate: dayjs(t.startDate).toISOString(),
+      createdBy: creatorId,
+      slug: t.slug,
+      game: 'VALORANT',
+      maxRegistrants: t.maxRegistrants,
+      mainStream: t.mainStream,
+      roundWinConditions: t.roundWinConditions,
+      bannerFileType: bannerFile ? encodeURIComponent(bannerFile.type) : null,
+    }),
+  });
+
+  const {
+    tournament,
+    post,
+  }: {
+    tournament: Tournament;
+    post: { fields: PresignedPost.Fields; url: string } | null;
+  } = await request.json();
+
+  if (bannerFile && post) {
+    // rename to file here because Jeff wants it that way
+    const file = bannerFile;
+    const formData = new FormData();
+    Object.entries({ ...post.fields, file }).forEach(([key, value]) => {
+      formData.append(key, value as string);
+    });
+
+    const bannerUpload = await fetch(post.url, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (bannerUpload.status !== 204) {
+      return {
+        error: 'There was a problem uploading your banner to our server.',
+      };
+    }
+  }
+
+  if (request.status !== 200 || !tournament) {
+    // console.log(request.status, tournament)
+    return { error: 'something went wrong' };
+  }
+  return { success: true, slug: `/${tournament.slug}` };
+};
 interface CreateTournamentProps {
   userId: string;
 }
 
 export default function CreateTournament({ userId }: CreateTournamentProps) {
   const [name, setName] = useState('');
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState<Date>(new Date());
   const [slug, setSlug] = useState('');
+  const [banner, setBanner] = useState<File | null>();
   const [format, setFormat] = useState('Single Elimination');
   const [maxPlayers, setMaxPlayers] = useState(32);
   const [roundWinConditions, setRoundWinConditions] = useState<
@@ -54,31 +117,32 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
 
   const create = async (e: FormEvent) => {
     e.preventDefault();
-    if (!userId) {
-      setError('You must be signed in.');
+    setError(null);
+
+    const tournament = {
+      name,
+      format,
+      startDate,
+      createdBy: userId,
+      slug,
+      game: 'VALORANT',
+      maxRegistrants: maxPlayers,
+      mainStream: stream,
+      roundWinConditions,
+    };
+
+    const { slug: url, error: err } = await createTournament(
+      tournament,
+      banner,
+      userId,
+    );
+
+    if (err) {
+      setError(err);
       return;
     }
 
-    const request = await fetch('/api/tournament/create', {
-      method: 'POST',
-      body: JSON.stringify({
-        name,
-        format,
-        startDate: dayjs(startDate).toISOString(),
-        createdBy: userId,
-        slug,
-        game: 'VALORANT',
-        maxRegistrants: maxPlayers,
-        mainStream: stream,
-        roundWinConditions,
-      }),
-    });
-    const createdTournament: Tournament = await request.json();
-
-    if (request.status !== 200) {
-      setError('something went wrong');
-    }
-    router.push(`/${createdTournament.slug}`);
+    router.push(url);
   };
 
   return (
@@ -107,6 +171,10 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
                   }
                 />
                 <span className="text-xs text-gray-500">{`${process.env.NEXTAUTH_URL}/${slug}`}</span>
+              </div>
+              <div>
+                <span className="label">Banner 1032x480</span>
+                <FileInput setFile={(files) => setBanner(files[0])} />
               </div>
               <div>
                 <label
@@ -217,9 +285,7 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
                   Create
                 </Button>
               </div>
-              {error && (
-                <span className="text-red-600 uppercase text-sm">{error}</span>
-              )}
+              {error && <span className="form-warning">{error}</span>}
             </form>
           </div>
         </div>

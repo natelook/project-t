@@ -27,6 +27,7 @@ export default function TournamentsPage({ tournaments }: TournamentsPageProps) {
             slug={tournament.slug}
             key={tournament.id}
             date={tournament.startDate}
+            banner={tournament.banner}
           />
         ))}
       </ul>

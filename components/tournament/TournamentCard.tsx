@@ -12,6 +12,7 @@ interface TournamentCardProps {
   maxPlayers: number;
   slug: string;
   date: Date;
+  banner?: string;
 }
 
 export default function TournamentCard({
@@ -20,6 +21,7 @@ export default function TournamentCard({
   maxPlayers,
   slug,
   date,
+  banner,
 }: TournamentCardProps) {
   const router = useRouter();
   return (
@@ -28,7 +30,7 @@ export default function TournamentCard({
         <a>
           <div>
             <Image
-              src={`/TournamentHeader-${randomNumber(5)}.png`}
+              src={banner || '/default-t-banner.png'}
               width="258px"
               height="120px"
               alt="Tournament Image"
@@ -71,3 +73,7 @@ export default function TournamentCard({
     </div>
   );
 }
+
+TournamentCard.defaultProps = {
+  banner: null,
+};

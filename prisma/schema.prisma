@@ -80,6 +80,7 @@ model Tournament {
   roundWinConditions Int[]
   winner             String?
   started            Boolean      @default(false)
+  banner             String?
 }
 
 model Match {
