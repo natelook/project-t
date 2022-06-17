@@ -11,6 +11,7 @@ interface TournamentCardProps {
   totalPlayers: number;
   maxPlayers: number;
   slug: string;
+  date: Date;
 }
 
 export default function TournamentCard({
@@ -18,6 +19,7 @@ export default function TournamentCard({
   totalPlayers,
   maxPlayers,
   slug,
+  date,
 }: TournamentCardProps) {
   const router = useRouter();
   return (
@@ -55,7 +57,9 @@ export default function TournamentCard({
             <div className="w-5 h-5">
               <CalendarIcon />
             </div>
-            <p className="tracking-wide">{dayjs().format('MM/DD/YY h:mma')}</p>
+            <p className="tracking-wide">
+              {dayjs(date).format('MM/DD/YY h:mma')}
+            </p>
           </div>
         </div>
         <div className="mt-3">

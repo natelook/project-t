@@ -97,6 +97,7 @@ export default function Home({ tournaments }: HomeProps) {
                 totalPlayers={tournament.registrants.length}
                 slug={tournament.slug}
                 maxPlayers={tournament.maxRegistrants}
+                date={tournament.startDate}
               />
             ))}
           </div>
