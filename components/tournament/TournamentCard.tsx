@@ -1,6 +1,5 @@
 import { Button } from '@components/ui';
 import { CalendarIcon, UsersIcon } from '@heroicons/react/solid';
-import randomNumber from '@lib/random-number';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
