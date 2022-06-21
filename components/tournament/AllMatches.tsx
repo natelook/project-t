@@ -117,7 +117,7 @@ export default function AllMatches({ matches, rounds, slug }: AllMatchesProps) {
       <div className="flex space-x-16 overflow-x-scroll relative">
         {rounds &&
           rounds.map((round) => (
-            <div>
+            <div key={round}>
               {/* <h4 className="font-bold uppercase tracking-wide text-gray-300">
                 {roundName(round, rounds)}
               </h4> */}
