@@ -3,43 +3,35 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { slug, matchId } = req.query;
-  const match = await prisma.tournament.findUnique({
+
+  const tournament = await prisma.tournament.findUnique({
     where: { slug: slug as string },
-    select: {
+    include: {
       matches: {
         where: { matchId: parseInt(matchId as string, 10) },
-        select: {
+        include: {
           teamOne: {
-            select: {
+            include: {
+              owner: true,
               players: true,
-              name: true,
-              id: true,
             },
           },
           teamTwo: {
-            select: {
+            include: {
+              owner: true,
               players: true,
-              name: true,
-              id: true,
             },
           },
-          nextMatch: true,
-          round: true,
-          tournament: true,
-          matchId: true,
-          tournamentId: true,
-          winningScore: true,
-          winner: true,
-          teamOneScore: true,
-          teamTwoScore: true,
         },
       },
     },
   });
 
-  if (!match) {
-    return res.status(404).json({ error: 'Match Not Found' });
+  const match = tournament.matches[0];
+
+  if (!tournament || !match) {
+    return res.status(404).json({ error: 'Not Found' });
   }
 
-  return res.status(200).json(match?.matches[0]);
+  return res.status(200).json({ tournament, match });
 };

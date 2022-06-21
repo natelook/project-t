@@ -1,7 +1,13 @@
 import Button from '@components/ui/Button';
 import Input from '@components/ui/Input';
 import { Layout } from '@components/common';
-import React, { FormEvent, useCallback, useEffect, useState } from 'react';
+import React, {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { GetServerSidePropsContext } from 'next';
@@ -11,6 +17,13 @@ import { Select } from '@components/ui';
 import countTotalRounds from '@lib/count-total-rounds';
 import FileInput from '@components/ui/FileInput';
 import createTournament from '@lib/createTournament';
+import dynamic from 'next/dynamic';
+import SunEditorCore from 'suneditor/src/lib/core';
+import 'suneditor/dist/css/suneditor.min.css';
+
+const SunEditor = dynamic(() => import('suneditor-react'), {
+  ssr: false,
+});
 
 const convertTitleToSlug = (title: string) => {
   const slug = title.replace(/\s+/g, '-').toLowerCase();
@@ -40,6 +53,8 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
     [],
   );
 
+  const editor = useRef<SunEditorCore>();
+
   useEffect(() => {
     const totalRounds = calculateTotalRounds(`${maxPlayers}`);
     const winConditions = [];
@@ -53,9 +68,12 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
     setSlug(convertTitleToSlug(name));
   }, [name]);
 
+  const getSunEditorInstance = (sunEditor: SunEditorCore) => {
+    editor.current = sunEditor;
+  };
+
   const create = async (e: FormEvent) => {
     e.preventDefault();
-    setError(null);
 
     const tournament = {
       name,
@@ -226,6 +244,12 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
         </div>
         <div>
           <h3 className="text-2xl font-bold mb-5">Details & Rules</h3>
+          <div className="bg-white text-black">
+            <SunEditor
+              height="500px"
+              getSunEditorInstance={getSunEditorInstance}
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -17,6 +17,7 @@ import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { Button } from '@components/ui';
 import { useRouter } from 'next/router';
+import { ExclamationCircleIcon } from '@heroicons/react/outline';
 
 interface TournamentHeadingProps {
   name: string;
@@ -86,6 +87,21 @@ export default function TournamentHeading({
         {isAdmin && (
           <React.Fragment>
             <span className="block">
+              <Button
+                onClick={() => router.push(`/${slug}/disputes`)}
+                label="View Disputes Page"
+                style="secondary"
+              >
+                <span className="flex items-center">
+                  <ExclamationCircleIcon
+                    className="-ml-1 mr-2 h-5 w-5"
+                    aria-hidden="true"
+                  />
+                  View Disputes
+                </span>
+              </Button>
+            </span>
+            <span className="ml-3 block">
               <Button
                 onClick={startTournament}
                 label="Start Tournament"

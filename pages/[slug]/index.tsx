@@ -24,6 +24,7 @@ import SuperAdminTournament from '@components/admin/SuperAdminTournament';
 import { MatchWithTeam, RegistrantWithTeamInfo } from '@lib/types';
 import Image from 'next/image';
 import TeamStackedList from '@components/common/TeamStackedList';
+import getTotalRounds from '@lib/get-total-rounds';
 
 interface TeamWithPlayers extends Team {
   players: User[];
@@ -85,9 +86,7 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
 
   useEffect(() => {
     if (data.matches.length !== 0) {
-      const rounds = data.matches
-        .map((item) => item.round)
-        .filter((value, index, self) => self.indexOf(value) === index);
+      const rounds = getTotalRounds(data.matches);
       setTotalRounds(rounds);
     }
   }, [data.matches]);

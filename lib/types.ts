@@ -1,4 +1,5 @@
 import {
+  Dispute,
   Match,
   Registrant,
   Team,
@@ -61,4 +62,11 @@ export interface Noun {
   body: number;
   accessory: number;
   glasses: number;
+}
+
+export type NotifcationColors = 'danger' | 'primary' | 'success';
+
+export interface DisputeWithReporterAndTeam extends Dispute {
+  reporter: User;
+  team: Team;
 }

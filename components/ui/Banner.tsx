@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 
 interface BannerProps {
   message: string;
-  color?: string;
+  color?: 'primary' | 'danger' | 'success';
   icon: JSX.Element;
   actionText?: string;
   actionLink?: string;
@@ -29,8 +29,9 @@ export default function Banner({
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div
           className={classNames('p-2 rounded-lg shadow-lg sm:p-3', {
-            'bg-primary': color === 'sky',
-            'bg-danger': color === 'red',
+            'bg-primary': color === 'primary',
+            'bg-danger': color === 'danger',
+            'hover:bg-success': color === 'success',
           })}
         >
           <div className="flex items-center justify-between flex-wrap">
@@ -38,8 +39,9 @@ export default function Banner({
               {icon && (
                 <span
                   className={classNames('flex p-2 rounded-lg', {
-                    'bg-primary-lighter': color === 'sky',
-                    'bg-danger': color === 'red',
+                    'bg-primary-lighter': color === 'primary',
+                    'bg-danger': color === 'danger',
+                    'hover:bg-success': color === 'success',
                   })}
                 >
                   <div className="h-6 w-6 text-white" aria-hidden="true">
@@ -67,8 +69,9 @@ export default function Banner({
                 className={classNames(
                   '-mr-1 flex p-2 rounded-md  focus:outline-none focus:ring-2 focus:ring-white',
                   {
-                    'hover:bg-sky-500': color === 'sky',
-                    'hover:bg-red-600': color === 'red',
+                    'hover:bg-primary-lighter': color === 'primary',
+                    'hover:bg-red-600': color === 'danger',
+                    'hover:bg-success': color === 'success',
                   },
                 )}
               >

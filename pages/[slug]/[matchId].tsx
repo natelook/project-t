@@ -1,121 +1,64 @@
+import { Team, Tournament } from '@prisma/client';
 import { Layout } from '@components/common';
-import { TeamHeading } from '@components/team';
-import { Banner, Button, Modal, ModalHeading } from '@components/ui';
+import { MatchHeading } from '@components/tournament';
 import {
   ExclamationCircleIcon,
   LightningBoltIcon,
-  MinusCircleIcon,
-  PlusCircleIcon,
 } from '@heroicons/react/solid';
-import pfp from '@lib/pfp';
-import {
-  MatchWithTeamsAndTournament,
-  TeamWithPlayersAndOwner,
-} from '@lib/types';
-import { AnimatePresence } from 'framer-motion';
+import { MatchWithTeamsAndTournament } from '@lib/types';
+import { AnimatePresence, motion } from 'framer-motion';
 import { GetServerSidePropsContext } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { FormEvent, useEffect, useRef, useState } from 'react';
-import { useQuery } from 'react-query';
+import React, { FormEvent, useEffect, useRef, useState, Fragment } from 'react';
+import { Banner, Modal, ModalHeading } from '@components/ui';
+import MatchTeam from '@components/tournament/MatchTeam';
+import useNotification from '@lib/hooks/useNotification';
+import MatchReport from '@components/tournament/MatchReport';
+import { useSession } from 'next-auth/react';
+import useFetch from '@lib/hooks/useFetch';
+import FileDispute from '@components/tournament/FileDispute';
 
 interface MatchPageProps {
-  matchData: MatchWithTeamsAndTournament;
+  data: {
+    match: MatchWithTeamsAndTournament;
+    tournament: Tournament;
+  };
 }
 
-interface TeamProps {
-  team: TeamWithPlayersAndOwner;
-  score: number;
-}
-
-const Team: React.FC<TeamProps> = ({ team, score }) => (
-  <div className="space-y-8">
-    <Link href={`/teams/${team.id}`}>
-      <a>
-        <h4 className="text-5xl font-bold text-center">{team.name}</h4>
-      </a>
-    </Link>
-    <span className="block text-center text-7xl">{score}</span>
-    <div className="flex justify-between bg-nouns-bg px-10 pt-5 rounded">
-      {team?.players.map((player) => (
-        <div key={player.id} className="w-20 h-20">
-          <Image
-            src={player.pfp ? pfp(player.pfp) : '/default-pfp.png'}
-            layout="responsive"
-            height={50}
-            width={50}
-          />
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
-interface ScoreInputProps {
-  name: string;
-  score: number;
-  updateScore: (value: number) => void;
-}
-
-const ScoreInput = ({ name, score, updateScore }: ScoreInputProps) => (
-  <div className="mb-3">
-    <label
-      htmlFor="team-two-score"
-      className="text-2xl text-center w-full block mb-3"
-    >
-      {name}&apos;s Score
-    </label>
-    <div className="flex justify-evenly space-x-3">
-      <button
-        type="button"
-        className="block w-6 text-gray-500"
-        onClick={() => updateScore(score - 1)}
-      >
-        <MinusCircleIcon />
-      </button>
-      <span className="text-2xl">{score}</span>
-      <button
-        type="button"
-        className="block w-6 text-gray-500"
-        onClick={() => updateScore(score + 1)}
-      >
-        <PlusCircleIcon />
-      </button>
-    </div>
-  </div>
-);
-
-const fetcher = (slug: string, matchId: number) =>
-  fetch(`/api/tournament/${slug}/${matchId}`).then((data) => data.json());
-
-export default function MatchPage({ matchData }: MatchPageProps) {
+export default function MatchPage({ data }: MatchPageProps) {
   const [scoreModal, setScoreModal] = useState(false);
-  const [teamOneScore, setTeamOneScore] = useState(matchData.teamOneScore);
-  const [teamTwoScore, setTeamTwoScore] = useState(matchData.teamTwoScore);
-  const [error, setError] = useState<string | null>();
+  const [disputeModal, setDisputeModal] = useState(false);
+  const [teamOneScore, setTeamOneScore] = useState(data.match.teamOneScore);
+  const [teamTwoScore, setTeamTwoScore] = useState(data.match.teamTwoScore);
+  const [disputeMessage, setDisputeMessage] = useState('');
+  const [disputeError, setDisputeError] = useState<string | null>();
+  const [matchWinner, setMatchWinner] = useState<Team | null>();
+  const { isActive, message, triggerNotification, notificationColor } =
+    useNotification();
+  const { data: session } = useSession();
 
-  const { data: match } = useQuery(
-    `match-${matchData.tournamentId}-${matchData.matchId}`,
-    () => fetcher(matchData.tournament.slug, matchData.matchId),
-    { initialData: matchData },
+  const {
+    data: { tournament, match },
+    refetch,
+  } = useFetch(
+    `/api/tournament/${data.tournament.slug}/${data.match.matchId}`,
+    `match-${data.tournament.id}-${data.match.matchId}`,
+    data,
   );
-
   useEffect(() => {
-    if (error) {
+    if (isActive) {
       setScoreModal(false);
     }
-  }, [error]);
+  }, [isActive]);
 
   useEffect(() => {
-    if (error) {
-      setScoreModal(false);
-      setTimeout(() => {
-        setError(null);
-      }, 5000);
-    }
+    if (match.winner) {
+      const bothTeams = [];
+      bothTeams.push(match.teamOne, match.teamTwo);
+      const winningTeam = bothTeams.filter(({ id }) => id === match.winner);
 
-    return () => clearTimeout();
-  }, [error]);
+      setMatchWinner(winningTeam[0]);
+    }
+  }, [match]);
 
   const submitScore = async (e: FormEvent) => {
     e.preventDefault();
@@ -133,37 +76,109 @@ export default function MatchPage({ matchData }: MatchPageProps) {
     );
     const response = await request.json();
     if (response.error) {
-      setError(response.error);
+      triggerNotification(response.error, 'danger');
     }
     setScoreModal(false);
+    refetch();
   };
 
+  const createDispute = async (e: FormEvent) => {
+    e.preventDefault();
+    setDisputeError(null);
+
+    if (!session) {
+      setDisputeError('You must be signed in');
+      return;
+    }
+
+    const ownedTeam = [match.teamOne, match.teamTwo].filter(
+      (team) => team.ownerUserId === session.user.id,
+    );
+
+    if (ownedTeam.length === 0) {
+      setDisputeError('You must be an owner to dispute a match');
+      return;
+    }
+
+    const request = await fetch(
+      `/api/tournament/${tournament.id}/${match.matchId}/dispute`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          message: disputeMessage,
+          team: ownedTeam[0],
+        }),
+      },
+    );
+
+    if (request.status !== 200) {
+      setDisputeError(`Something went wrong. Error code ${request.status}`);
+      return;
+    }
+
+    const dispute = await request.json();
+    if (dispute.error) {
+      setDisputeError(dispute.error);
+      return;
+    }
+
+    setDisputeModal(false);
+    triggerNotification('You have sent an admin your dispute', 'primary');
+  };
   const cancelRef = useRef(null);
 
-  // const report = () => {};
   return (
-    <React.Fragment>
-      <div>
-        <TeamHeading
-          breadcrumb={[
-            { name: 'Tournament Page', slug: `/${match.tournament.slug}` },
-          ]}
-          name={`${match.tournament.name} - Match ${match.matchId}`}
+    <Fragment>
+      {/* @ts-ignore */}
+      <motion.div layout>
+        <MatchHeading
+          name={`${tournament.name} - Round ${match.round}`}
           primaryButton={() => setScoreModal(true)}
+          subtitle={`Match ${match.matchId}`}
           primaryButtonText="Submit Score"
-          secondaryButton={() => {}}
+          secondaryButton={() => setDisputeModal(true)}
           secondaryButtonText="Report a Problem"
-          isOwner
+          tournamentSlug={`/${tournament.slug}`}
+          tournamentName={tournament.name}
+          isAuthorized={
+            session?.user.id === match?.teamTwo.ownerUserId ||
+            session?.user.id === match?.teamOne.ownerUserId ||
+            session?.user.id === process.env.SUPERADMIN
+          }
         />
-        <p>Winner: {match.winner}</p>
-        <div className="grid grid-cols-match gap-x-10 mt-20">
-          {match.teamOne && <Team team={match.teamOne} score={teamOneScore} />}
+        <AnimatePresence>
+          {matchWinner && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mx-auto w-full"
+            >
+              <p className="text-success text-center text-3xl">
+                {matchWinner.name} won the match
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <motion.div layout className="grid grid-cols-match gap-x-10 mt-20">
+          {match.teamOne && (
+            <MatchTeam
+              team={match.teamOne}
+              score={teamOneScore}
+              winner={matchWinner?.id}
+            />
+          )}
           <div className="h-full flex items-center justify-center">
             <span className="font-bold font-nouns text-5xl">VS</span>
           </div>
-          {match.teamTwo && <Team team={match.teamTwo} score={teamTwoScore} />}
-        </div>
-      </div>
+          {match.teamTwo && (
+            <MatchTeam
+              team={match.teamTwo}
+              score={teamTwoScore}
+              winner={matchWinner?.id}
+            />
+          )}
+        </motion.div>
+      </motion.div>
       {scoreModal && (
         <Modal
           open={scoreModal}
@@ -175,64 +190,55 @@ export default function MatchPage({ matchData }: MatchPageProps) {
             icon={<LightningBoltIcon />}
             subtext="Report the final score for this match. If you have a dispute please contact an admin."
           />
-          <form onSubmit={submitScore}>
-            <div className="grid grid-cols-2 gap-x-10 gap-y-3 place-content-center">
-              <ScoreInput
-                name={match.teamOne.name}
-                score={teamOneScore}
-                updateScore={(score) =>
-                  score <= match.winningScore &&
-                  setTeamOneScore(score <= 0 ? 0 : score)
-                }
-              />
-              <ScoreInput
-                name={match.teamTwo.name}
-                score={teamTwoScore}
-                updateScore={(score) =>
-                  score <= match.winningScore &&
-                  setTeamTwoScore(score <= 0 ? 0 : score)
-                }
-              />
-              <div className="col-span-2 flex space-x-3 w-full">
-                <Button
-                  label="Close Modal"
-                  onClick={() => setScoreModal(false)}
-                  style="secondary"
-                  ref={cancelRef}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit" label="submit score" onClick={() => {}}>
-                  Submit Score
-                </Button>
-              </div>
-            </div>
-          </form>
+          <MatchReport
+            submitScore={submitScore}
+            match={match}
+            teamOneScore={teamOneScore}
+            teamTwoScore={teamTwoScore}
+            close={() => setScoreModal(false)}
+            setTeamOneScore={setTeamOneScore}
+            setTeamTwoScore={setTeamTwoScore}
+          />
+        </Modal>
+      )}
+      {disputeModal && (
+        <Modal open={disputeModal} setOpen={() => setDisputeModal(true)}>
+          <ModalHeading
+            title="File an Issue"
+            icon={<ExclamationCircleIcon />}
+            subtext="Report an issue so an admin can review"
+          />
+          <FileDispute
+            message={disputeMessage}
+            inputOnChange={(value) => setDisputeMessage(value)}
+            formSubmit={createDispute}
+            error={disputeError}
+            close={() => setDisputeModal(false)}
+          />
         </Modal>
       )}
       <AnimatePresence>
-        {error && (
+        {isActive && (
           <Banner
             icon={<ExclamationCircleIcon />}
-            message={error}
-            color="red"
+            message={message}
+            color={notificationColor}
           />
         )}
       </AnimatePresence>
-    </React.Fragment>
+    </Fragment>
   );
 }
 
 MatchPage.Layout = Layout;
+MatchPage.auth = true;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const request = await fetch(
     `${process.env.NEXTAUTH_URL}/api/tournament/${context.params?.slug}/${context.params?.matchId}`,
   );
-  if (request.status !== 200) {
-    return { notFound: true };
-  }
-  const matchData = await request.json();
 
-  return { props: { matchData } };
+  const data = await request.json();
+
+  return { props: { data } };
 }

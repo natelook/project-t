@@ -100,21 +100,6 @@ export default function AllMatches({ matches, rounds, slug }: AllMatchesProps) {
 
   // Round names are hidden until we can get the scroll bar on the y axis to go away
 
-  // const roundName = (roundNumber: number, roundArray: number[]) => {
-  //   if (roundArray.length === roundNumber) {
-  //     return 'Final Match';
-  //   }
-
-  //   if (roundArray.length - 1 === roundNumber) {
-  //     return 'Semi-Finals';
-  //   }
-
-  //   if (roundArray.length - 2 === roundNumber) {
-  //     return 'Quarter-Finals';
-  //   }
-
-  //   return `Round ${roundNumber}`;
-  // };
   return (
     <div>
       <div className="flex justify-end w-full mb-3">

@@ -52,7 +52,8 @@ model User {
   teams            Team[]           @relation("Players")
   ownedTeams       Team[]           @relation("Owned")
   teamInvitations  TeamInvitation[]
-  Notification     Notification[]
+  notifications    Notification[]
+  disputes         Dispute[]
 }
 
 model VerificationToken {
@@ -81,6 +82,7 @@ model Tournament {
   winner             String?
   started            Boolean      @default(false)
   banner             String?
+  disputes           Dispute[]
 }
 
 model Match {
@@ -98,7 +100,21 @@ model Match {
   round        Int
   tournament   Tournament @relation(fields: [tournamentId], references: [id])
 
+  Dispute Dispute[]
   @@id([tournamentId, matchId])
+}
+
+model Dispute {
+  id           String     @id @unique @default(cuid())
+  reporterId   String
+  reporter     User       @relation(fields: [reporterId], references: [id])
+  teamId       String
+  team         Team       @relation(fields: [teamId], references: [id])
+  matchId      Int
+  match        Match      @relation(fields: [matchId, tournamentId], references: [matchId, tournamentId])
+  tournamentId String
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+  message      String?
 }
 
 model Team {
@@ -113,6 +129,7 @@ model Team {
   teamOneMatches Match[]          @relation("TeamOne")
   teamTwoMatches Match[]          @relation("TeamTwo")
   logo           String?
+  Dispute        Dispute[]
 }
 
 model Registrant {
