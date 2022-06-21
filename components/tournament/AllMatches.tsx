@@ -109,8 +109,8 @@ export default function AllMatches({ matches, rounds, slug }: AllMatchesProps) {
           className="text-gray-500"
         >
           <span className="flex items-center space-x-1">
-            <CollectionIcon className="w-5 h-5" />
             <span>{!isCollapsed ? 'Collapse' : 'Uncollapse'} Matches</span>
+            <CollectionIcon className="w-5 h-5" />
           </span>
         </button>
       </div>
