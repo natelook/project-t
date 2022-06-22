@@ -83,6 +83,7 @@ model Tournament {
   started            Boolean      @default(false)
   banner             String?
   disputes           Dispute[]
+  description        String?
 }
 
 model Match {

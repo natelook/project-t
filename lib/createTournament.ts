@@ -25,6 +25,7 @@ const createTournament = async (
       mainStream: t.mainStream,
       roundWinConditions: t.roundWinConditions,
       bannerFileType: bannerFile ? encodeURIComponent(bannerFile.type) : null,
+      description: t.description,
     }),
   });
 

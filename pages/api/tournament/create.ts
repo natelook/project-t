@@ -22,6 +22,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     mainStream,
     roundWinConditions,
     bannerFileType,
+    description,
   } = JSON.parse(req.body);
 
   let post: any;
@@ -40,6 +41,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       maxRegistrants,
       mainStream,
       roundWinConditions,
+      description,
       banner: post ? `${post.url}/${post.fields.key}` : null,
     },
   });

@@ -13,6 +13,7 @@ import React, {
   FormEvent,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -25,6 +26,9 @@ import { MatchWithTeam, RegistrantWithTeamInfo } from '@lib/types';
 import Image from 'next/image';
 import TeamStackedList from '@components/common/TeamStackedList';
 import getTotalRounds from '@lib/get-total-rounds';
+import { generateHTML } from '@tiptap/html';
+import StarterKit from '@tiptap/starter-kit';
+import { sanitize } from 'dompurify';
 
 interface TeamWithPlayers extends Team {
   players: User[];
@@ -67,6 +71,14 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
   const { data: user } = useQuery('user', () => fetchUser(userId));
   const isAdmin = useRef(userId === data.createdBy);
   const cancelButtonRef = useRef(null);
+  const output = useMemo(
+    () =>
+      generateHTML(JSON.parse(data.description), [
+        StarterKit,
+        // other extensions …
+      ]),
+    [data.description],
+  );
 
   const { data: tournament, refetch } =
     useQuery<TournamentWithRegistrantsAndMatches>(
@@ -188,32 +200,8 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
                     />
                   </div>
                 )}
-                <div className="prose text-white w-full max-w-full">
-                  <h4 className="text-white font-bold text-xl">
-                    Tournament Info
-                  </h4>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Vitae, quas laboriosam. Qui ratione, reiciendis voluptatum
-                    at tenetur repellendus veritatis recusandae mollitia
-                    aspernatur eaque eveniet temporibus quae quo saepe corporis
-                    adipisci!
-                  </p>
-                  <ul>
-                    <li>Do not make up rules</li>
-                    <li>Fake rules are no fun</li>
-                    <li>You will be banned if you keep making up rules</li>
-                  </ul>
-                  <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Sunt magnam, sequi consequuntur nam eligendi iste minus,
-                    aspernatur dicta quos, laborum dolor! Quod assumenda
-                    cupiditate voluptatibus velit. Illo excepturi repellendus
-                    officia? Sunt magnam, sequi consequuntur nam eligendi iste
-                    minus, aspernatur dicta quos, laborum dolor! Quod assumenda
-                    cupiditate voluptatibus velit. Illo excepturi repellendus
-                    officia?
-                  </p>
+                <div className="prose-invert prose w-full max-w-full">
+                  <div dangerouslySetInnerHTML={{ __html: sanitize(output) }} />
                 </div>
               </div>
             </div>

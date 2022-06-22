@@ -1,13 +1,7 @@
 import Button from '@components/ui/Button';
 import Input from '@components/ui/Input';
 import { Layout } from '@components/common';
-import React, {
-  FormEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { GetServerSidePropsContext } from 'next';
@@ -17,13 +11,10 @@ import { Select } from '@components/ui';
 import countTotalRounds from '@lib/count-total-rounds';
 import FileInput from '@components/ui/FileInput';
 import createTournament from '@lib/createTournament';
-import dynamic from 'next/dynamic';
-import SunEditorCore from 'suneditor/src/lib/core';
-import 'suneditor/dist/css/suneditor.min.css';
-
-const SunEditor = dynamic(() => import('suneditor-react'), {
-  ssr: false,
-});
+import TextEditor from '@components/common/TextEditor';
+import StarterKit from '@tiptap/starter-kit';
+import { useEditor } from '@tiptap/react';
+import Placeholder from '@tiptap/extension-placeholder';
 
 const convertTitleToSlug = (title: string) => {
   const slug = title.replace(/\s+/g, '-').toLowerCase();
@@ -48,12 +39,24 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
   const [error, setError] = useState<string | null>();
   const router = useRouter();
 
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        placeholder: 'Write the description and rules for the tournament',
+      }),
+    ],
+    editorProps: {
+      attributes: {
+        class: 'prose prose-sm m-5 focus:outline-none',
+      },
+    },
+  });
+
   const calculateTotalRounds = useCallback(
     (players: string) => countTotalRounds(players),
     [],
   );
-
-  const editor = useRef<SunEditorCore>();
 
   useEffect(() => {
     const totalRounds = calculateTotalRounds(`${maxPlayers}`);
@@ -68,13 +71,8 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
     setSlug(convertTitleToSlug(name));
   }, [name]);
 
-  const getSunEditorInstance = (sunEditor: SunEditorCore) => {
-    editor.current = sunEditor;
-  };
-
   const create = async (e: FormEvent) => {
     e.preventDefault();
-
     const tournament = {
       name,
       format,
@@ -85,8 +83,8 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
       maxRegistrants: maxPlayers,
       mainStream: stream,
       roundWinConditions,
+      description: JSON.stringify(editor.getJSON()),
     };
-
     const { slug: url, error: err } = await createTournament(
       tournament,
       banner,
@@ -244,12 +242,7 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
         </div>
         <div>
           <h3 className="text-2xl font-bold mb-5">Details & Rules</h3>
-          <div className="bg-white text-black">
-            <SunEditor
-              height="500px"
-              getSunEditorInstance={getSunEditorInstance}
-            />
-          </div>
+          <TextEditor editor={editor} />
         </div>
       </div>
     </div>

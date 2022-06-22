@@ -52,6 +52,10 @@
   .form-warning {
     @apply text-red-600 text-center block mt-3;
   }
+
+  .text-editor-floating-button {
+    @apply bg-gray-700 px-2 py-1 border-gray-600 border rounded;
+  }
 }
 
 @layer utilities {
