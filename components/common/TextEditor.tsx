@@ -9,7 +9,7 @@ interface TextEditorProps {
 /* eslint-disable-next-line */
 const TextEditor = ({ editor }: TextEditorProps) => {
   return (
-    <div className="bg-white p-3 rounded-lg">
+    <div className="min-h-full bg-white p-0.5 rounded-lg">
       {editor && (
         <FloatingMenu
           editor={editor}
