@@ -1,5 +1,5 @@
-import countTotalRounds from '@lib/count-total-rounds';
 import prisma from '@lib/prisma';
+import { countTotalRounds } from '@lib/tournament-utils';
 import { Match } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';

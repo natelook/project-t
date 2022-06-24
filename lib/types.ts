@@ -70,3 +70,12 @@ export interface DisputeWithReporterAndTeam extends Dispute {
   reporter: User;
   team: Team;
 }
+
+export interface FormValues {
+  name: string;
+  format: string;
+  maxPlayers: number;
+  stream: string;
+  slug: string;
+  roundWinConditions: number[];
+}

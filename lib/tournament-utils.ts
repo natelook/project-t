@@ -3,31 +3,35 @@ import type { PresignedPost } from 'aws-sdk/clients/s3';
 import dayjs from 'dayjs';
 
 // t = tournament
-const createTournament = async (
+export const createTournament = async (
   t: Partial<Tournament>,
   bannerFile: File,
   creatorId: string,
+  slug?: string,
 ) => {
   if (!creatorId) {
     return { error: 'You must be signed in.' };
   }
 
-  const request = await fetch('/api/tournament/create', {
-    method: 'POST',
-    body: JSON.stringify({
-      name: t.name,
-      format: t.format,
-      startDate: dayjs(t.startDate).toISOString(),
-      createdBy: creatorId,
-      slug: t.slug,
-      game: 'VALORANT',
-      maxRegistrants: t.maxRegistrants,
-      mainStream: t.mainStream,
-      roundWinConditions: t.roundWinConditions,
-      bannerFileType: bannerFile ? encodeURIComponent(bannerFile.type) : null,
-      description: t.description,
-    }),
-  });
+  const request = await fetch(
+    slug ? '/api/tournament/create' : `/api/tournament/${slug}/update`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        name: t.name,
+        format: t.format,
+        startDate: dayjs(t.startDate).toISOString(),
+        createdBy: creatorId,
+        slug: t.slug,
+        game: 'VALORANT',
+        maxRegistrants: t.maxRegistrants,
+        mainStream: t.mainStream,
+        roundWinConditions: t.roundWinConditions,
+        bannerFileType: bannerFile ? encodeURIComponent(bannerFile.type) : null,
+        description: t.description,
+      }),
+    },
+  );
 
   const {
     tournament,
@@ -64,4 +68,23 @@ const createTournament = async (
   return { success: true, slug: `/${tournament.slug}` };
 };
 
-export default createTournament;
+export const convertTitleToSlug = (title: string) => {
+  const slug = title.replace(/\s+/g, '-').toLowerCase();
+  return slug;
+};
+
+export const countTotalRounds = (totalPlayers: string) => {
+  const players = parseInt(totalPlayers, 10);
+  let roundMatches = players / 2;
+  let totalRounds = 1;
+  const addRound = () => {
+    if (roundMatches % 2 === 0) {
+      roundMatches /= 2;
+      totalRounds += 1;
+      addRound();
+    }
+  };
+  addRound();
+
+  return totalRounds;
+};

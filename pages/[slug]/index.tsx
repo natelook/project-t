@@ -73,6 +73,7 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
   const cancelButtonRef = useRef(null);
   const output = useMemo(
     () =>
+      data.description &&
       generateHTML(JSON.parse(data.description), [
         StarterKit,
         // other extensions …
@@ -200,9 +201,13 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
                     />
                   </div>
                 )}
-                <div className="prose-invert prose w-full max-w-full">
-                  <div dangerouslySetInnerHTML={{ __html: sanitize(output) }} />
-                </div>
+                {tournament.description && (
+                  <div className="prose-invert prose w-full max-w-full">
+                    <div
+                      dangerouslySetInnerHTML={{ __html: sanitize(output) }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
             <div>
