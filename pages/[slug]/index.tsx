@@ -203,9 +203,7 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
                 )}
                 {tournament.description ? (
                   <div className="prose-invert prose w-full max-w-full">
-                    <div
-                      dangerouslySetInnerHTML={{ __html: sanitize(output) }}
-                    />
+                    <div dangerouslySetInnerHTML={{ __html: output }} />
                   </div>
                 ) : (
                   <p className="text-gray-600">No description</p>

@@ -65,6 +65,7 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
 
   const create = async (values: any) => {
     const { name, format, mainStream, maxPlayers } = values;
+    console.log(editor.getJSON());
     const tournament = {
       name,
       format,
