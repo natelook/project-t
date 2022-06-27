@@ -24,6 +24,10 @@ export default function Settings({ tournament, userId }: SettingsProps) {
   );
   const [banner, setBanner] = useState<File | null>();
   const [error, setError] = useState<string | null>();
+  const [roundWinConditions, setRoundWinConditions] = useState(
+    tournament.roundWinConditions,
+  );
+  const [slug] = useState(tournament.slug);
 
   const { isActive, message, triggerNotification, notificationColor } =
     useNotification();
@@ -50,15 +54,13 @@ export default function Settings({ tournament, userId }: SettingsProps) {
       maxPlayers: tournament.maxRegistrants,
       stream: tournament.mainStream,
       slug: tournament.slug,
-      roundWinConditions: tournament.roundWinConditions,
     },
   });
 
   const { handleSubmit, register } = methods;
 
   const update = async (values: any) => {
-    const { name, format, slug, roundWinConditions, stream, maxPlayers } =
-      values;
+    const { name, format, mainStream, maxPlayers } = values;
     const t = {
       name,
       format,
@@ -67,7 +69,7 @@ export default function Settings({ tournament, userId }: SettingsProps) {
       slug,
       game: 'VALORANT',
       maxRegistrants: maxPlayers,
-      mainStream: stream,
+      mainStream,
       roundWinConditions,
       description: JSON.stringify(editor.getJSON()),
     };
@@ -100,8 +102,10 @@ export default function Settings({ tournament, userId }: SettingsProps) {
           setBanner={(f) => setBanner(f)}
           setStartDate={(d) => setStartDate(d)}
           submit={handleSubmit(update)}
-          roundWinConditions={tournament.roundWinConditions}
+          roundWinConditions={roundWinConditions}
           startDate={startDate}
+          setRoundWinConditions={(arr) => setRoundWinConditions(arr)}
+          slugPreview={slug}
         />
       </div>
       {isActive && (

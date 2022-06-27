@@ -12,9 +12,10 @@ export const createTournament = async (
   if (!creatorId) {
     return { error: 'You must be signed in.' };
   }
+  console.log(slug);
 
   const request = await fetch(
-    slug ? '/api/tournament/create' : `/api/tournament/${slug}/update`,
+    !slug ? '/api/tournament/create' : `/api/tournament/${slug}/update`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -62,6 +63,7 @@ export const createTournament = async (
   }
 
   if (request.status !== 200 || !tournament) {
+    console.log(tournament);
     // console.log(request.status, tournament)
     return { error: 'something went wrong' };
   }

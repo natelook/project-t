@@ -98,6 +98,7 @@ export default function BasicInfo({
                     current[i] = parseInt(value, 10);
                     setRoundWinConditions(current);
                   }}
+                  defaultValue={roundWinConditions[i]}
                   options={[
                     { name: 'Best of 1', value: '1' },
                     { name: 'Best of 3', value: '2' },

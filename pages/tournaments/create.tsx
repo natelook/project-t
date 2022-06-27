@@ -65,7 +65,6 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
 
   const create = async (values: any) => {
     const { name, format, mainStream, maxPlayers } = values;
-    console.log(editor.getJSON());
     const tournament = {
       name,
       format,
@@ -78,7 +77,6 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
       roundWinConditions,
       description: JSON.stringify(editor.getJSON()),
     };
-
     const { slug: url, error: err } = await createTournament(
       tournament,
       banner,
