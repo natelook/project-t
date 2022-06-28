@@ -1,16 +1,10 @@
-import {
-  AllMatches,
-  PlayerSelect,
-  TeamSelect,
-  TournamentHeading,
-} from '@components/tournament';
+import { AllMatches, TournamentHeading } from '@components/tournament';
 import { Layout } from '@components/common';
 import Modal from '@components/ui/Modal';
-import { Team, Tournament, User } from '@prisma/client';
+import { Tournament } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
 import React, {
-  FormEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -18,8 +12,13 @@ import React, {
   useState,
 } from 'react';
 import { useQuery } from 'react-query';
-import { Banner, Button, ModalHeading } from '@components/ui';
-import { CheckIcon, PencilIcon } from '@heroicons/react/solid';
+import { Banner, ModalHeading } from '@components/ui';
+import {
+  CheckIcon,
+  KeyIcon,
+  PencilIcon,
+  StopIcon,
+} from '@heroicons/react/solid';
 import { AnimatePresence } from 'framer-motion';
 import SuperAdminTournament from '@components/admin/SuperAdminTournament';
 import { MatchWithTeam, RegistrantWithTeamInfo } from '@lib/types';
@@ -28,11 +27,9 @@ import TeamStackedList from '@components/common/TeamStackedList';
 import getTotalRounds from '@lib/get-total-rounds';
 import { generateHTML } from '@tiptap/html';
 import StarterKit from '@tiptap/starter-kit';
-import { sanitize } from 'dompurify';
-
-interface TeamWithPlayers extends Team {
-  players: User[];
-}
+import Link from 'next/link';
+import useNotification from '@lib/hooks/useNotification';
+import { Register } from '@components/tournament/registration';
 
 interface TournamentWithRegistrantsAndMatches extends Tournament {
   registrants: RegistrantWithTeamInfo[];
@@ -46,7 +43,6 @@ interface TournamentPageProps {
 
 const fetchUser = async (userId: string) => {
   if (!userId) return null;
-
   const request = await fetch(`/api/user/${userId}`);
   const user = await request.json();
   return user;
@@ -60,24 +56,28 @@ const fetchTournament = async (slug: string) => {
 
 export default function TournamentPage({ data, userId }: TournamentPageProps) {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
-  const [teamSelected, setTeamSelected] = useState<Team | null>(null);
-  const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
-  const [team, setTeam] = useState<TeamWithPlayers | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [notification, setNotification] = useState(false);
-  const [registeredTeam, setRegisteredTeam] = useState<Team | null>(null);
-
+  // const [error, setError] = useState<string | null>(null);
   const [totalRounds, setTotalRounds] = useState<number[] | null>(null);
   const { data: user } = useQuery('user', () => fetchUser(userId));
   const isAdmin = useRef(userId === data.createdBy);
   const cancelButtonRef = useRef(null);
+
+  const {
+    isActive,
+    message: notificationMessage,
+    // triggerNotification,
+  } = useNotification();
+
+  const {
+    isActive: errorActive,
+    message: errorMessage,
+    triggerNotification: triggerError,
+  } = useNotification();
+
   const output = useMemo(
     () =>
       data.description &&
-      generateHTML(JSON.parse(data.description), [
-        StarterKit,
-        // other extensions …
-      ]),
+      generateHTML(JSON.parse(data.description), [StarterKit]),
     [data.description],
   );
 
@@ -90,12 +90,14 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
       },
     );
 
-  const fetchTeamInfo = useCallback(async () => {
-    if (!teamSelected) return;
-    const request = await fetch(`/api/team/${teamSelected.id}`);
-    const teamData = await request.json();
-    setTeam(teamData);
-  }, [teamSelected]);
+  const startTournament = useCallback(async () => {
+    const request = await fetch(`/api/tournament/${tournament.id}/start`);
+    if (request.status !== 200) {
+      triggerError('Something went wrong', 'danger');
+      return;
+    }
+    refetch();
+  }, [refetch, tournament.id, triggerError]);
 
   useEffect(() => {
     if (data.matches.length !== 0) {
@@ -103,58 +105,6 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
       setTotalRounds(rounds);
     }
   }, [data.matches]);
-
-  useEffect(() => {
-    if (!teamSelected) return;
-    fetchTeamInfo();
-    if (error) setError(null);
-  }, [teamSelected, error, fetchTeamInfo]);
-
-  useEffect(() => {
-    if (registeredTeam) {
-      setNotification(true);
-
-      setTimeout(() => {
-        setNotification(false);
-      }, 5000);
-    }
-
-    return () => clearTimeout();
-  }, [registeredTeam]);
-
-  const registerTeam = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!team) {
-      setError('No team selected.');
-      return;
-    }
-
-    const request = await fetch(`/api/tournament/${tournament.id}/register`, {
-      method: 'POST',
-      body: JSON.stringify({ teamId: team?.id }),
-    });
-    if (request.status !== 200) {
-      setError('Something went wrong registering your team.');
-      return;
-    }
-
-    const response = await request.json();
-    refetch();
-    setRegisteredTeam(response.team);
-    setRegisterModalOpen(false);
-    setTeam(null);
-    setTeamSelected(null);
-    setSelectedPlayers([]);
-  };
-
-  const startTournament = async () => {
-    const request = await fetch(`/api/tournament/${tournament.id}/start`);
-    if (request.status !== 200) {
-      setError('Something went wrong');
-      return;
-    }
-    refetch();
-  };
 
   return (
     <div>
@@ -203,6 +153,7 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
                 )}
                 {tournament.description ? (
                   <div className="prose-invert prose w-full max-w-full">
+                    {/* eslint-disable-next-line */}
                     <div dangerouslySetInnerHTML={{ __html: output }} />
                   </div>
                 ) : (
@@ -232,75 +183,42 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
                 title="Register a Team"
                 subtext=""
               />
-              <form className="mt-4" onSubmit={registerTeam}>
-                <TeamSelect
-                  label="Choose Team"
-                  options={user.ownedTeams}
-                  selected={teamSelected}
-                  setSelected={(selectedTeam) => setTeamSelected(selectedTeam)}
-                />
-                {teamSelected && (
-                  <div>
-                    {!team ? (
-                      <span>Loading...</span>
-                    ) : (
-                      <PlayerSelect
-                        players={team.players}
-                        requiredPlayers={1}
-                        selected={selectedPlayers.length}
-                        addPlayer={(playerId) => {
-                          const updatePlayers = [...selectedPlayers, playerId];
-                          setSelectedPlayers(updatePlayers);
-                        }}
-                        removePlayer={(playerId) => {
-                          const updatePlayers = selectedPlayers.filter(
-                            (id) => playerId !== id,
-                          );
-                          setSelectedPlayers(updatePlayers);
-                        }}
-                      />
-                    )}
-                  </div>
-                )}
-
-                {error && (
-                  <span className="text-red-600 text-uppercase text-sm">
-                    {error}
-                  </span>
-                )}
-                <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                  <Button
-                    label="Cancel Registration"
-                    style="secondary"
-                    onClick={() => {
-                      setRegisterModalOpen(false);
-                      setTeam(null);
-                      setTeamSelected(null);
-                      setSelectedPlayers([]);
-                    }}
-                    ref={cancelButtonRef}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" label="Register Team">
-                    Register
-                  </Button>
-                </div>
-              </form>
+              <Register
+                tournament={tournament}
+                userTeams={user.ownedTeams}
+                cancel={() => setRegisterModalOpen(false)}
+                // triggerNotification={triggerNotification}
+              />
             </React.Fragment>
           ) : (
-            <p>You are not signed in.</p>
+            <div>
+              <ModalHeading
+                icon={<KeyIcon />}
+                title="Tournament Registeration"
+                subtext="You must create a team to register for this tournament"
+              />
+              <div className="px-10">
+                <Link href="/teams/create">
+                  <a className="btn block text-center mx-auto">Create Team</a>
+                </Link>
+              </div>
+            </div>
           )}
         </Modal>
       )}
       <AnimatePresence>
-        {notification && registeredTeam && (
+        {isActive && (
           <Banner
-            message={`Successfully registered ${registeredTeam.name}`}
+            message={notificationMessage}
             icon={<CheckIcon />}
+            color="primary"
           />
         )}
+        {errorActive && (
+          <Banner message={errorMessage} icon={<StopIcon />} color="danger" />
+        )}
       </AnimatePresence>
+
       {process.env.SUPERADMIN === userId && (
         <SuperAdminTournament tournamentId={tournament.id} />
       )}

@@ -81,7 +81,6 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
       tournament,
       banner,
       userId,
-      'create',
     );
 
     if (err) {

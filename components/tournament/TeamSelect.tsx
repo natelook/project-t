@@ -5,12 +5,13 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import Image from 'next/image';
 import classNames from 'classnames';
 import { Team } from '@prisma/client';
+import { TeamWithPlayers } from '@lib/types';
 
 interface SelectProps {
   label: string;
   options: Team[];
   selected: Team | null;
-  setSelected: (team: Team) => void;
+  setSelected: (team: TeamWithPlayers) => void;
 }
 
 export default function TeamSelect({

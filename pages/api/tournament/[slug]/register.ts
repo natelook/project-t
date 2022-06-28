@@ -21,10 +21,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       .status(401)
       .json({ error: 'You are not authorized to register this team' });
   }
+  try {
+    const register = await prisma.registrant.create({
+      data: { userId: user.id, teamId, tournamentId, players },
+      select: { team: true },
+    });
+    return res.status(200).json(register);
+  } catch (error) {
+    if (error.code === 'P2002') {
+      return res.status(409).json({ error: 'Team is already registered' });
+    }
 
-  const register = await prisma.registrant.create({
-    data: { userId: user.id, teamId, tournamentId, players },
-    select: { team: true },
-  });
-  return res.status(200).json(register);
+    return res.status(400).json({ error: 'Something went wrong' });
+  }
 };

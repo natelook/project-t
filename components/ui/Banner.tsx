@@ -31,7 +31,7 @@ export default function Banner({
           className={classNames('p-2 rounded-lg shadow-lg sm:p-3', {
             'bg-primary': color === 'primary',
             'bg-danger': color === 'danger',
-            'hover:bg-success': color === 'success',
+            'bg-success': color === 'success',
           })}
         >
           <div className="flex items-center justify-between flex-wrap">

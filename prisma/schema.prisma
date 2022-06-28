@@ -84,6 +84,7 @@ model Tournament {
   banner             String?
   disputes           Dispute[]
   description        String?
+  checkInStarted Boolean @default(false)
 }
 
 model Match {
@@ -142,6 +143,7 @@ model Registrant {
   registeredAt DateTime   @default(now())
   players      String[]
   userId       String
+  checkedIn    Boolean    @default(false)
 
   @@id([tournamentId, teamId])
 }
