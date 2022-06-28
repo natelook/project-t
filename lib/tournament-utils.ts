@@ -12,7 +12,6 @@ export const createTournament = async (
   if (!creatorId) {
     return { error: 'You must be signed in.' };
   }
-  console.log(slug);
 
   const request = await fetch(
     !slug ? '/api/tournament/create' : `/api/tournament/${slug}/update`,

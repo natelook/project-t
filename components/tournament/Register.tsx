@@ -2,8 +2,8 @@ import { Button } from '@components/ui';
 import useRegister from '@lib/hooks/useRegister';
 import { Team, Tournament } from '@prisma/client';
 import { FormEvent } from 'react';
-import PlayerSelect from '../PlayerSelect';
-import TeamSelect from '../TeamSelect';
+import PlayerSelect from './PlayerSelect';
+import TeamSelect from './TeamSelect';
 
 interface RegisterProps {
   tournament: Tournament;

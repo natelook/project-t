@@ -1,4 +1,9 @@
-import { AllMatches, TournamentHeading } from '@components/tournament';
+import {
+  AllMatches,
+  Info,
+  TournamentHeading,
+  Register,
+} from '@components/tournament';
 import { Layout } from '@components/common';
 import Modal from '@components/ui/Modal';
 import { Tournament } from '@prisma/client';
@@ -11,7 +16,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useQuery } from 'react-query';
 import { Banner, ModalHeading } from '@components/ui';
 import {
   CheckIcon,
@@ -22,14 +26,12 @@ import {
 import { AnimatePresence } from 'framer-motion';
 import SuperAdminTournament from '@components/admin/SuperAdminTournament';
 import { MatchWithTeam, RegistrantWithTeamInfo } from '@lib/types';
-import Image from 'next/image';
-import TeamStackedList from '@components/common/TeamStackedList';
 import getTotalRounds from '@lib/get-total-rounds';
 import { generateHTML } from '@tiptap/html';
 import StarterKit from '@tiptap/starter-kit';
 import Link from 'next/link';
 import useNotification from '@lib/hooks/useNotification';
-import { Register } from '@components/tournament/registration';
+import useFetch from '@lib/hooks/useFetch';
 
 interface TournamentWithRegistrantsAndMatches extends Tournament {
   registrants: RegistrantWithTeamInfo[];
@@ -41,26 +43,20 @@ interface TournamentPageProps {
   userId: string;
 }
 
-const fetchUser = async (userId: string) => {
-  if (!userId) return null;
-  const request = await fetch(`/api/user/${userId}`);
-  const user = await request.json();
-  return user;
-};
-
-const fetchTournament = async (slug: string) => {
-  const request = await fetch(`/api/tournament/${slug}`);
-  const tournament = await request.json();
-  return tournament;
-};
-
 export default function TournamentPage({ data, userId }: TournamentPageProps) {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
-  // const [error, setError] = useState<string | null>(null);
   const [totalRounds, setTotalRounds] = useState<number[] | null>(null);
-  const { data: user } = useQuery('user', () => fetchUser(userId));
+
   const isAdmin = useRef(userId === data.createdBy);
   const cancelButtonRef = useRef(null);
+
+  const { data: user } = useFetch(`/api/user/${userId}`, 'user');
+
+  const { data: tournament, refetch } = useFetch(
+    `/api/tournament/${data.slug}`,
+    `tournament-${data.id}`,
+    data,
+  );
 
   const {
     isActive,
@@ -80,15 +76,6 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
       generateHTML(JSON.parse(data.description), [StarterKit]),
     [data.description],
   );
-
-  const { data: tournament, refetch } =
-    useQuery<TournamentWithRegistrantsAndMatches>(
-      `tournament-${data.id}`,
-      () => fetchTournament(data.slug),
-      {
-        initialData: data,
-      },
-    );
 
   const startTournament = useCallback(async () => {
     const request = await fetch(`/api/tournament/${tournament.id}/start`);
@@ -133,41 +120,7 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-4 gap-x-10 ">
-            <div className="col-span-3">
-              <h3 className="text-2xl font-bold mb-5">
-                Tournament Rules and Information
-              </h3>
-              <div className="bg-gray-800 rounded-lg p-10 shadow shadow-gray-700">
-                {tournament.banner && (
-                  <div className="mb-5">
-                    <Image
-                      src={tournament.banner}
-                      width="258px"
-                      height="120px"
-                      alt="Tournament Image"
-                      layout="responsive"
-                      className="rounded"
-                    />
-                  </div>
-                )}
-                {tournament.description ? (
-                  <div className="prose-invert prose w-full max-w-full">
-                    {/* eslint-disable-next-line */}
-                    <div dangerouslySetInnerHTML={{ __html: output }} />
-                  </div>
-                ) : (
-                  <p className="text-gray-600">No description</p>
-                )}
-              </div>
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold mb-5">Registered Teams</h3>
-              <TeamStackedList
-                team={tournament.registrants.map((reg) => ({ ...reg.team }))}
-              />
-            </div>
-          </div>
+          <Info tournament={tournament} output={output} />
         )}
       </div>
       {registerModalOpen && (
@@ -218,7 +171,6 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
           <Banner message={errorMessage} icon={<StopIcon />} color="danger" />
         )}
       </AnimatePresence>
-
       {process.env.SUPERADMIN === userId && (
         <SuperAdminTournament tournamentId={tournament.id} />
       )}

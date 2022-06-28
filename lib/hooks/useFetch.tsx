@@ -6,7 +6,7 @@ const fetcher = async (url: string) => {
   return data;
 };
 
-export default function useFetch(url: string, name: string, initialData: any) {
+export default function useFetch(url: string, name: string, initialData?: any) {
   return useQuery(name, () => fetcher(url), {
     initialData,
   });
