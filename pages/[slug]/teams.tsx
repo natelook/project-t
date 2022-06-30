@@ -1,5 +1,4 @@
-import { Layout } from '@components/common';
-import { TeamHeading } from '@components/team';
+import { Layout, Heading } from '@components/common';
 import TeamCard from '@components/team/card';
 import { TournamentWithRegistrants } from '@lib/types';
 import { GetServerSidePropsContext } from 'next';
@@ -13,7 +12,7 @@ export default function TournamentTeamListing({
 }: TournamentTeamListingProps) {
   return (
     <div>
-      <TeamHeading
+      <Heading
         breadcrumb={[
           { name: 'All Tournaments', slug: '/tournaments' },
           { name: 'Tournament Page', slug: `/${tournament.slug}` },

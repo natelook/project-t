@@ -1,6 +1,5 @@
-import { AddPlayer, TeamHeading, TeamStats } from '@components/team';
-import { Layout } from '@components/common';
-import Modal from '@components/ui/Modal';
+import { AddPlayer, TeamStats } from '@components/team';
+import { Heading, Layout } from '@components/common';
 import {
   MatchWithTeamsAndTournament,
   RegistrantWithTournamentInfo,
@@ -12,7 +11,7 @@ import { getSession } from 'next-auth/react';
 import { FormEvent, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { AnimatePresence } from 'framer-motion';
-import { Banner, Button, ModalHeading } from '@components/ui';
+import { Modal, Banner, Button, ModalHeading } from '@components/ui';
 import { CheckIcon } from '@heroicons/react/outline';
 import useNotification from '@lib/hooks/useNotification';
 import TeamPlayers from '@components/team/TeamPlayers';
@@ -149,7 +148,7 @@ export default function TeamPage({ data, userId }: TeamPageProps) {
 
   return (
     <div className="container">
-      <TeamHeading
+      <Heading
         name={team.name}
         primaryButton={() => setAddPlayerModalOpen(true)}
         primaryButtonText="Invite Player"

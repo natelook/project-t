@@ -1,5 +1,4 @@
-import { Layout } from '@components/common';
-import { TeamHeading } from '@components/team';
+import { Heading, Layout } from '@components/common';
 import TeamCard from '@components/team/card';
 import { TeamWithPlayers } from '@lib/types';
 import { useRouter } from 'next/router';
@@ -26,7 +25,7 @@ export default function TeamsPage({ data }: { data: TeamWithPlayers[] }) {
   const router = useRouter();
   return (
     <main className="container">
-      <TeamHeading
+      <Heading
         name="All Teams"
         isOwner
         primaryButton={() => router.push('/teams/create')}

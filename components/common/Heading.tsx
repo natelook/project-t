@@ -1,8 +1,8 @@
-import { Button } from '@components/ui';
 import { ChevronLeftIcon } from '@heroicons/react/solid';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { Button } from '@components/ui';
 
 interface TeamHeadingProps {
   name: string;
@@ -19,7 +19,7 @@ interface TeamHeadingProps {
   secondaryButton?: () => void;
 }
 
-export default function TeamHeading({
+export default function Heading({
   name,
   subtitle,
   isOwner,
@@ -113,7 +113,7 @@ export default function TeamHeading({
   );
 }
 
-TeamHeading.defaultProps = {
+Heading.defaultProps = {
   primaryButton: null,
   secondaryButton: null,
   isOwner: null,
