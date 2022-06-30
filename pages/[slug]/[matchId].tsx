@@ -202,7 +202,11 @@ export default function MatchPage({ data }: MatchPageProps) {
         </Modal>
       )}
       {disputeModal && (
-        <Modal open={disputeModal} setOpen={() => setDisputeModal(true)}>
+        <Modal
+          open={disputeModal}
+          setOpen={() => setDisputeModal(true)}
+          width="sm:max-w-2xl"
+        >
           <ModalHeading
             title="File an Issue"
             icon={<ExclamationCircleIcon />}

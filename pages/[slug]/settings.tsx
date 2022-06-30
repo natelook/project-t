@@ -1,4 +1,4 @@
-import { Layout } from '@components/common';
+import { Heading, Layout } from '@components/common';
 import TournamentForm from '@components/tournament/TournamentForm';
 import Placeholder from '@tiptap/extension-placeholder';
 import { useEditor } from '@tiptap/react';
@@ -91,23 +91,24 @@ export default function Settings({ tournament, userId }: SettingsProps) {
 
   return (
     <React.Fragment>
-      <div>
-        <h1>Settings</h1>
-
-        <TournamentForm
-          methods={methods}
-          register={register}
-          error={error}
-          editor={editor}
-          setBanner={(f) => setBanner(f)}
-          setStartDate={(d) => setStartDate(d)}
-          submit={handleSubmit(update)}
-          roundWinConditions={roundWinConditions}
-          startDate={startDate}
-          setRoundWinConditions={(arr) => setRoundWinConditions(arr)}
-          slugPreview={slug}
-        />
-      </div>
+      <Heading
+        name="Settings"
+        breadcrumb={[{ name: 'Tournament Home', slug: `/${tournament.slug}` }]}
+      />
+      <TournamentForm
+        methods={methods}
+        register={register}
+        error={error}
+        editor={editor}
+        setBanner={(f) => setBanner(f)}
+        setStartDate={(d) => setStartDate(d)}
+        submit={handleSubmit(update)}
+        roundWinConditions={roundWinConditions}
+        startDate={startDate}
+        setRoundWinConditions={(arr) => setRoundWinConditions(arr)}
+        slugPreview={slug}
+        update
+      />
       {isActive && (
         <Banner
           icon={<CheckCircleIcon />}

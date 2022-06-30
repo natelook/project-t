@@ -15,6 +15,7 @@ interface TournamentFormProps {
   roundWinConditions: number[];
   setRoundWinConditions: (arr: number[]) => void;
   startDate: Date;
+  update: boolean;
 }
 
 export default function TournamentForm({
@@ -29,6 +30,7 @@ export default function TournamentForm({
   roundWinConditions,
   setRoundWinConditions,
   startDate,
+  update,
 }: TournamentFormProps) {
   return (
     <div>
@@ -62,7 +64,7 @@ export default function TournamentForm({
             <div className="flex justify-end">
               <div>
                 <Button type="submit" label="create tournament">
-                  Create Tournament
+                  {update ? 'Update' : 'Create'} Tournament
                 </Button>
               </div>
             </div>
