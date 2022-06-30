@@ -13,7 +13,6 @@ export default function Layout({ children }: LayoutProps) {
       <Head>
         <meta charSet="utf-8" />
         <title>tournaments.wtf</title>
-
         <link
           rel="apple-touch-icon"
           sizes="180x180"
