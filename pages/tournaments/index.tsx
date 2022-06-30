@@ -1,5 +1,4 @@
-import { Layout } from '@components/common';
-import { TeamHeading } from '@components/team';
+import { Layout, Heading } from '@components/common';
 import TournamentCard from '@components/tournament/TournamentCard';
 import { TournamentWithRegistrants } from '@lib/types';
 import { useRouter } from 'next/router';
@@ -12,7 +11,7 @@ export default function TournamentsPage({ tournaments }: TournamentsPageProps) {
   const router = useRouter();
   return (
     <div className="w-full">
-      <TeamHeading
+      <Heading
         name="Tournaments"
         primaryButton={() => router.push('/tournaments/create')}
         primaryButtonText="Create tournament"
