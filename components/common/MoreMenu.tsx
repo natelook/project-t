@@ -10,6 +10,10 @@ const links = [
     href: '/teams',
   },
   {
+    name: 'CSGO',
+    href: '/csgo',
+  },
+  {
     name: 'Leagues',
     description: 'Coming Soon',
     href: '/leagues',

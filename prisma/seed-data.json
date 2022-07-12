@@ -2034,162 +2034,6 @@
       "startDate": "2021-09-21T02:12:09Z",
       "format": "Single Elimination",
       "game": "StarCraft 2"
-    },
-    {
-      "name": "Buko",
-      "startDate": "2022-05-24T18:58:49Z",
-      "format": "Single Elimination",
-      "game": "StarCraft 2"
-    },
-    {
-      "name": "Mearns' Bird's-foot Trefoil",
-      "startDate": "2022-04-04T07:16:49Z",
-      "format": "Single Elimination",
-      "game": "StarCraft 2"
-    },
-    {
-      "name": "Leadplant",
-      "startDate": "2022-10-21T02:41:09Z",
-      "format": "Single Elimination",
-      "game": "League of Legends"
-    },
-    {
-      "name": "Black Pyrenothrix Lichen",
-      "startDate": "2022-06-17T02:52:25Z",
-      "format": "Single Elimination",
-      "game": "Valorant"
-    },
-    {
-      "name": "Blackandwhite Sedge",
-      "startDate": "2021-06-17T13:30:16Z",
-      "format": "Single Elimination",
-      "game": "CS:GO"
-    },
-    {
-      "name": "Thompson's Buckwheat",
-      "startDate": "2022-07-08T17:44:50Z",
-      "format": "Single Elimination",
-      "game": "League of Legends"
-    },
-    {
-      "name": "Lichenostigma Lichen",
-      "startDate": "2022-01-11T05:31:46Z",
-      "format": "Single Elimination",
-      "game": "League of Legends"
-    },
-    {
-      "name": "Cooper's Milkvetch",
-      "startDate": "2021-08-09T16:53:30Z",
-      "format": "Single Elimination",
-      "game": "League of Legends"
-    },
-    {
-      "name": "Kobuk Locoweed",
-      "startDate": "2022-07-29T20:12:53Z",
-      "format": "Single Elimination",
-      "game": "Valorant"
-    },
-    {
-      "name": "Stonecrop",
-      "startDate": "2022-02-28T14:40:22Z",
-      "format": "Single Elimination",
-      "game": "Valorant"
-    },
-    {
-      "name": "Limeberry",
-      "startDate": "2022-09-30T05:24:51Z",
-      "format": "Single Elimination",
-      "game": "League of Legends"
-    },
-    {
-      "name": "Little-leaf Angelica",
-      "startDate": "2022-04-16T13:19:20Z",
-      "format": "Single Elimination",
-      "game": "Valorant"
-    },
-    {
-      "name": "Cockspur Pricklypear",
-      "startDate": "2021-07-22T20:44:50Z",
-      "format": "Single Elimination",
-      "game": "StarCraft 2"
-    },
-    {
-      "name": "Whisperingbells",
-      "startDate": "2021-07-21T18:45:46Z",
-      "format": "Single Elimination",
-      "game": "Valorant"
-    },
-    {
-      "name": "Bunchberry Dogwood",
-      "startDate": "2021-12-05T22:24:54Z",
-      "format": "Single Elimination",
-      "game": "Valorant"
-    },
-    {
-      "name": "Mt. Lassen Clarkia",
-      "startDate": "2022-07-09T03:48:08Z",
-      "format": "Single Elimination",
-      "game": "CS:GO"
-    },
-    {
-      "name": "Phaeocalicium Lichen",
-      "startDate": "2022-02-11T10:32:41Z",
-      "format": "Single Elimination",
-      "game": "StarCraft 2"
-    },
-    {
-      "name": "Haupa Mountain Melicope",
-      "startDate": "2022-01-13T22:22:52Z",
-      "format": "Single Elimination",
-      "game": "Valorant"
-    },
-    {
-      "name": "Lecania Lichen",
-      "startDate": "2022-06-22T04:29:19Z",
-      "format": "Single Elimination",
-      "game": "StarCraft 2"
-    },
-    {
-      "name": "Florida Bluestem",
-      "startDate": "2022-05-09T12:42:54Z",
-      "format": "Single Elimination",
-      "game": "Valorant"
-    },
-    {
-      "name": "Sonderegger Pine",
-      "startDate": "2022-08-04T15:17:26Z",
-      "format": "Single Elimination",
-      "game": "CS:GO"
-    },
-    {
-      "name": "Henderson's Triteleia",
-      "startDate": "2021-08-11T21:02:57Z",
-      "format": "Single Elimination",
-      "game": "Valorant"
-    },
-    {
-      "name": "Kellogg's Blackberry",
-      "startDate": "2021-06-16T20:13:28Z",
-      "format": "Single Elimination",
-      "game": "League of Legends"
-    },
-    {
-      "name": "Barnacle Lichen",
-      "startDate": "2022-10-10T07:51:49Z",
-      "format": "Single Elimination",
-      "game": "Valorant"
-    },
-    {
-      "name": "Sideoats Grama",
-      "startDate": "2022-06-17T07:34:32Z",
-      "format": "Single Elimination",
-      "game": "StarCraft 2"
-    },
-    {
-      "name": "Widepetal Lousewort",
-      "startDate": "2022-03-31T05:00:18Z",
-      "format": "Single Elimination",
-      "game": "CS:GO"
     }
   ],
   "teams": [
@@ -2198,11 +2042,12 @@
     { "name": "Regrant" },
     { "name": "Zamit" },
     { "name": "Andalax" },
-    { "name": "Nouns Esports" },
-    { "name": "Team Liquid" },
-    { "name": "Evil Geniuses" },
-    { "name": "Castle Gaming" },
-    { "name": "Sentinals" },
+    { "name": "Andalax" },
+    { "name": "Overhold" },
+    { "name": "Regrant" },
+    { "name": "Bamity" },
+    { "name": "Zontrax" },
+    { "name": "Aerified" },
     { "name": "Stim" },
     { "name": "Cardguard" },
     { "name": "Tresom" },
@@ -2211,8 +2056,7 @@
     { "name": "Namfix" },
     { "name": "Wrapsafe" },
     { "name": "Sonsing" },
-    { "name": "Orgless" },
-    { "name": "Cloud 9" },
+    { "name": "Domainer" },
     { "name": "Tin" },
     { "name": "Holdlamis" },
     { "name": "Y-find" },
@@ -2223,17 +2067,75 @@
     { "name": "Sonair" },
     { "name": "Treeflex" },
     { "name": "Aerified" },
-    { "name": "Nate's Anime Aimers" },
+    { "name": "Wrapsafe" },
     { "name": "Lotstring" },
-    { "name": "Optic Gaming" },
+    { "name": "It" },
     { "name": "Zaam-Dox" },
     { "name": "Gembucket" },
     { "name": "Redhold" },
     { "name": "Trippledex" },
-    { "name": "NRG" },
+    { "name": "Holdlamis" },
     { "name": "Overhold" },
     { "name": "Bamity" },
     { "name": "Voyatouch" },
-    { "name": "Flowdesk" }
+    { "name": "Flowdesk" },
+    { "name": "Wrapsafe" },
+    { "name": "Rank" },
+    { "name": "Aerified" },
+    { "name": "Stim" },
+    { "name": "Keylex" },
+    { "name": "Daltfresh" },
+    { "name": "Tresom" },
+    { "name": "Sonair" },
+    { "name": "Tin" },
+    { "name": "Mat Lam Tam" },
+    { "name": "Alphazap" },
+    { "name": "Stim" },
+    { "name": "Andalax" },
+    { "name": "Tempsoft" },
+    { "name": "Ventosanzap" },
+    { "name": "Transcof" },
+    { "name": "Opela" },
+    { "name": "Biodex" },
+    { "name": "Wrapsafe" },
+    { "name": "Rank" },
+    { "name": "Fixflex" },
+    { "name": "Job" },
+    { "name": "Vagram" },
+    { "name": "Lotlux" },
+    { "name": "Zamit" },
+    { "name": "Bitwolf" },
+    { "name": "Voltsillam" },
+    { "name": "Sub-Ex" },
+    { "name": "Y-find" },
+    { "name": "Bamity" },
+    { "name": "Span" },
+    { "name": "Vagram" },
+    { "name": "Andalax" },
+    { "name": "Transcof" },
+    { "name": "Alpha" },
+    { "name": "Voyatouch" },
+    { "name": "Namfix" },
+    { "name": "Domainer" },
+    { "name": "Fintone" },
+    { "name": "Pannier" },
+    { "name": "Konklux" },
+    { "name": "Ventosanzap" },
+    { "name": "Biodex" },
+    { "name": "Treeflex" },
+    { "name": "Tres-Zap" },
+    { "name": "Job" },
+    { "name": "Toughjoyfax" },
+    { "name": "Subin" },
+    { "name": "Zontrax" },
+    { "name": "Holdlamis" },
+    { "name": "Span" },
+    { "name": "Regrant" },
+    { "name": "Voyatouch" },
+    { "name": "Viva" },
+    { "name": "Daltfresh" },
+    { "name": "Lotstring" },
+    { "name": "Bamity" },
+    { "name": "Greenlam" }
   ]
 }

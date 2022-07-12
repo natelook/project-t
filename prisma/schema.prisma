@@ -84,7 +84,7 @@ model Tournament {
   banner             String?
   disputes           Dispute[]
   description        String?
-  checkInStarted Boolean @default(false)
+  checkInStarted     Boolean      @default(false)
 }
 
 model Match {
@@ -165,4 +165,21 @@ model Notification {
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   read      Boolean  @default(false)
+}
+
+model CSGOMatch {
+  id            String   @id @unique @default(cuid())
+  team1Players  String[]
+  team2Players  String[]
+  team1Score    Int      @default(0)
+  team2Score    Int      @default(0)
+  createdAt     DateTime @default(now())
+  ip            String?
+  serverMatchId String?
+  playerStats   String?
+  started       Boolean  @default(false)
+  finished      Boolean  @default(false)
+  roundsPlayed  Int      @default(0)
+  maps          Json
+  map           String?
 }
