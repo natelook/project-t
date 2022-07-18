@@ -15,7 +15,7 @@ interface TournamentFormProps {
   roundWinConditions: number[];
   setRoundWinConditions: (arr: number[]) => void;
   startDate: Date;
-  update: boolean;
+  update?: boolean;
 }
 
 export default function TournamentForm({
@@ -74,3 +74,7 @@ export default function TournamentForm({
     </div>
   );
 }
+
+TournamentForm.defaultProps = {
+  update: false,
+};
