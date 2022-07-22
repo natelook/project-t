@@ -5,7 +5,7 @@ const createMatch = async () => {
     team1Players: ['STEAM_1:0:445790386'],
     maps: {
       de_mirage: true,
-      de_inferno: false,
+      de_inferno: true,
       de_dust2: true,
       de_nuke: true,
       de_overpass: true,
@@ -14,7 +14,6 @@ const createMatch = async () => {
       de_ancient: true,
     },
   });
-  console.log(newMatch.error);
 
   if (!newMatch?.body) return null;
 

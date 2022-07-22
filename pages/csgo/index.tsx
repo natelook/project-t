@@ -1,5 +1,4 @@
-import { Layout } from '@components/common';
-import { Button } from '@components/ui';
+import { Heading, Layout } from '@components/common';
 import createMatch from '@lib/csgo/create-match';
 import prisma from '@lib/prisma';
 import { Match } from '@lib/types/csgo';
@@ -8,18 +7,22 @@ import { useRouter } from 'next/router';
 
 export default function Matches({ matches }: { matches: Match[] }) {
   const router = useRouter();
+  console.log(matches[0]);
 
   return (
     <div>
       <div>
-        <Button
-          label="Create Match"
-          onClick={() =>
-            createMatch().then((id: string) => router.push(`/csgo/match/${id}`))
+        <Heading
+          name="Counter-Strike Matches"
+          isOwner={true}
+          primaryButtonText="Create Match"
+          primaryButton={() =>
+            createMatch().then((id: string) => {
+              id && router.push(`/csgo/match/${id}`);
+              console.log(id);
+            })
           }
-        >
-          Create Match
-        </Button>
+        />
       </div>
       <div className="grid grid-cols-3">
         {matches?.map((match) => (
@@ -35,7 +38,7 @@ export default function Matches({ matches }: { matches: Match[] }) {
 }
 
 export async function getServerSideProps() {
-  const matches = await prisma.cSGOMatch.findMany({ select: { id: true } });
+  const matches = await prisma.cSGOMatch.findMany();
 
   return { props: { matches } };
 }
