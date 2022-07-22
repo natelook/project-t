@@ -1,3 +1,4 @@
+import { Layout } from '@components/common';
 import { Button } from '@components/ui';
 import createMatch from '@lib/csgo/create-match';
 import prisma from '@lib/prisma';
@@ -38,3 +39,5 @@ export async function getServerSideProps() {
 
   return { props: { matches } };
 }
+
+Matches.Layout = Layout;
