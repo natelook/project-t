@@ -8,7 +8,6 @@ import { Button } from '@components/ui';
 import Link from 'next/link';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
-import pfp from '@lib/pfp';
 import MoreMenu from './MoreMenu';
 import NotificationMenu from './NotificationMenu';
 
@@ -97,7 +96,7 @@ export default function Nav() {
                       <span className="sr-only">Open user menu</span>
                       <Image
                         className="h-12 w-12 rounded-full"
-                        src={'/default-pfp.png'}
+                        src="/default-pfp.png"
                         height="45px"
                         width="45px"
                         alt="Your profile picture"

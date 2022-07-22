@@ -1,16 +1,14 @@
 import { Heading, Layout } from '@components/common';
 import TeamStackedList from '@components/common/TeamStackedList';
-import Playground from '@components/common/Playground';
-import { Button, Input, Modal, ModalHeading } from '@components/ui';
+import { Button, Input, Modal } from '@components/ui';
 import TeamInvitations from '@components/ui/TeamInvitations';
-import { BadgeCheckIcon, CogIcon } from '@heroicons/react/solid';
+import { BadgeCheckIcon } from '@heroicons/react/solid';
 import { TeamInvitationWithTeam, TeamWithPlayersAndOwner } from '@lib/types';
 import { Registrant, Tournament, User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
 import { FormEvent, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
-import usePlayground from '@lib/hooks/usePlayground';
 
 interface UserProfile extends User {
   tournaments: Tournament[];

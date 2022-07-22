@@ -73,18 +73,14 @@ export default function Playground({
           className="relative flex items-center justify-center"
         >
           <div className="absolute bottom-0" style={{ zIndex: 8 }}>
-            <button onClick={() => console.log(ImageData.images.glasses)}>
-              Test
-            </button>
-            {noun.glasses}
-            {/* <Image
+            <Image
               src={`/noun/glasses/${
                 ImageData.images.glasses[noun.glasses].filename
               }.png`}
               height="275px"
               width="275px"
               alt=""
-            /> */}
+            />
           </div>
           <div className="absolute bottom-0" style={{ zIndex: 6 }}>
             <Image
