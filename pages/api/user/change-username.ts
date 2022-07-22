@@ -24,10 +24,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  const updateUser = await prisma.user.update({
-    where: { id: session.user.id },
-    data: { username: newUsername },
-  });
+  try {
+    const updateUser = await prisma.user.update({
+      where: { id: session.user.id },
+      data: { username: newUsername },
+    });
 
-  return res.status(200).json({ message: 'Username updated', updateUser });
+    console.log({ updateUser });
+
+    return res.status(200).json({ message: 'Username updated', updateUser });
+  } catch (error) {
+    return res.status(403).json({ error: 'Username is already taken' });
+  }
 };

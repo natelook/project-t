@@ -33,6 +33,7 @@ const fetcher = async (userId: string) => {
 export default function Profile({ data }: ProfileProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [newUsername, setNewUsername] = useState('');
+  const [nameError, setNameError] = useState<string | null>('');
   const [playgroundOpen, setPlaygroundOpen] = useState(false);
   const {
     setNounAsPfp,
@@ -75,6 +76,7 @@ export default function Profile({ data }: ProfileProps) {
       body: JSON.stringify({ newUsername }),
     });
     const response = await request.json();
+    if (response.error) return setNameError(response.error);
     setModalOpen(false);
     refetch();
     return response;
@@ -194,6 +196,11 @@ export default function Profile({ data }: ProfileProps) {
               Update
             </Button>
           </form>
+          {nameError && (
+            <span className="text-danger block text-center mt-5">
+              {nameError}
+            </span>
+          )}
         </Modal>
       )}
     </div>
