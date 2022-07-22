@@ -97,11 +97,7 @@ export default function Nav() {
                       <span className="sr-only">Open user menu</span>
                       <Image
                         className="h-12 w-12 rounded-full"
-                        src={
-                          session.user.pfp
-                            ? pfp(session.user.pfp)
-                            : '/default-pfp.png'
-                        }
+                        src={'/default-pfp.png'}
                         height="45px"
                         width="45px"
                         alt="Your profile picture"

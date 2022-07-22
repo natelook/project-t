@@ -1,8 +1,8 @@
 import { Layout } from '@components/common';
-import Playground from '@components/common/Playground';
+// import Playground from '@components/common/Playground';
 import { Button, Input, Modal, ModalHeading } from '@components/ui';
 import { UserIcon } from '@heroicons/react/solid';
-import usePlayground from '@lib/hooks/usePlayground';
+// import usePlayground from '@lib/hooks/usePlayground';
 import { User } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -27,15 +27,15 @@ export default function SettingsPage() {
   } = useQuery<User>('user-settings', () => fetcher(session?.user.id));
   const router = useRouter();
 
-  const {
-    setNounAsPfp,
-    noun,
-    setBody,
-    setAccessory,
-    setGlasses,
-    setHead,
-    error: playgroundError,
-  } = usePlayground(session?.user.id);
+  // const {
+  //   setNounAsPfp,
+  //   noun,
+  //   setBody,
+  //   setAccessory,
+  //   setGlasses,
+  //   setHead,
+  //   error: playgroundError,
+  // } = usePlayground(session?.user.id);
 
   useEffect(() => {
     if (user && !user.username) {
@@ -62,7 +62,7 @@ export default function SettingsPage() {
   }
 
   const submitProfileInfo = async () => {
-    setNounAsPfp();
+    // setNounAsPfp();
     const request = await fetch('/api/user/change-username', {
       method: 'POST',
       body: JSON.stringify({ newUsername }),
@@ -98,14 +98,14 @@ export default function SettingsPage() {
             />
           </div>
           <h3 className="text-xl font-bold mb-1">Create Your PFP</h3>
-          <Playground
+          {/* <Playground
             noun={noun}
             setBody={(body) => setBody(body)}
             setAccessory={(ass) => setAccessory(ass)}
             setGlasses={(glass) => setGlasses(glass)}
             setHead={(head) => setHead(head)}
             error={playgroundError}
-          />
+          /> */}
           <div className="mt-3">
             <Button
               label="Submit Profile Information"
