@@ -11,6 +11,7 @@ import { getSession } from 'next-auth/react';
 import { FormEvent, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import usePlayground from '@lib/hooks/usePlayground';
+import { useRouter } from 'next/router';
 
 interface UserProfile extends User {
   tournaments: Tournament[];
@@ -35,15 +36,7 @@ export default function Profile({ data }: ProfileProps) {
   const [newUsername, setNewUsername] = useState('');
   const [nameError, setNameError] = useState<string | null>('');
   const [playgroundOpen, setPlaygroundOpen] = useState(false);
-  const {
-    setNounAsPfp,
-    noun,
-    setBody,
-    setAccessory,
-    setGlasses,
-    setHead,
-    error: playgroundError,
-  } = usePlayground(data.id);
+  const router = useRouter();
 
   const {
     data: user,
@@ -91,8 +84,8 @@ export default function Profile({ data }: ProfileProps) {
         name="Your Profile"
         subtitle={user.username || undefined}
         isOwner
-        secondaryButton={() => setPlaygroundOpen(true)}
-        secondaryButtonText="Update PFP"
+        secondaryButton={() => router.push('/profile/settings')}
+        secondaryButtonText="User Settings"
         primaryButtonText="Change Username"
         primaryButton={() => setModalOpen(true)}
       />
@@ -128,43 +121,6 @@ export default function Profile({ data }: ProfileProps) {
             <p className="mt-3 p-2 text-gray-500">No Invitations</p>
           )}
         </div>
-        {playgroundOpen && (
-          <Modal
-            open={playgroundOpen}
-            setOpen={() => setPlaygroundOpen(true)}
-            width="sm:max-w-2xl"
-          >
-            <ModalHeading title="Generate Noun" icon={<CogIcon />} subtext="" />
-            <div className="mx-auto">
-              <Playground
-                noun={noun}
-                setBody={(body) => setBody(body)}
-                setAccessory={(ass) => setAccessory(ass)}
-                setGlasses={(glass) => setGlasses(glass)}
-                setHead={(head) => setHead(head)}
-                error={playgroundError}
-              />
-              <div className="flex space-x-3 mt-5">
-                <Button
-                  onClick={() => setPlaygroundOpen(false)}
-                  label="Close Playground"
-                  style="secondary"
-                >
-                  Close
-                </Button>
-                <Button
-                  onClick={() => {
-                    setNounAsPfp();
-                    setPlaygroundOpen(false);
-                  }}
-                  label="Set Noun as Pfp"
-                >
-                  Set PFP
-                </Button>
-              </div>
-            </div>
-          </Modal>
-        )}
       </div>
       {modalOpen && (
         <Modal
