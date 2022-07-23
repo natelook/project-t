@@ -1,9 +1,11 @@
 import React, { FC, ReactNode, useEffect } from 'react';
+import { withTRPC } from '@trpc/next';
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { AppRouter } from './api/trpc/[trpc]';
 
 const Noop: FC<{ children: ReactNode }> = ({ children }) => (
   <React.Fragment key="noop">{children}</React.Fragment>
@@ -44,4 +46,13 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 
 MyApp.auth = true;
 
-export default MyApp;
+export default withTRPC<AppRouter>({
+  config() {
+    const url = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}/api/trpc`
+      : 'http://localhost:3000/api/trpc';
+
+    return { url };
+  },
+  ssr: true,
+})(MyApp);
