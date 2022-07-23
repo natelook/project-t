@@ -1,44 +1,26 @@
-import React, { ChangeEvent, useCallback } from 'react';
+import React, { ChangeEvent } from 'react';
 import { Layout } from '@components/common';
 import { Button } from '@components/ui';
 import useSetupMatch, { veto } from '@lib/hooks/useSetupCSMatch';
-import supabase from '@lib/supabase';
 import classNames from 'classnames';
-import { GetServerSidePropsContext } from 'next';
+import { trpc } from '@lib/trpc';
 
 // Get match ID from serverside props to elimate re-renders by using useRouter()
 export default function MatchPage({ matchId }: { matchId: string }) {
   const [team1PlayerId, setTeam1PlayerId] = React.useState<string>('');
   const [team2PlayerId, setTeam2PlayerId] = React.useState<string>('');
 
+  const addPlayer = trpc.useMutation('addPlayerToCsgoMatch');
+
+  const { data } = trpc.useQuery([
+    'csgoMatch',
+    { matchId: 'cl5xgkzx605394ng4hj0zy347' },
+  ]);
+
   const { match } = useSetupMatch(matchId);
+  console.log({ match });
 
-  const addPlayer = useCallback(
-    async (steamId: string, team: 1 | 2) => {
-      if (team === 1) {
-        const updatedTeam = match.team1Players
-          ? match.team1Players.concat([steamId])
-          : [steamId];
-        await supabase
-          .from('CSGOMatch')
-          .update({ team1Players: updatedTeam })
-          .match({ id: match.id });
-        setTeam1PlayerId('');
-      } else {
-        const updatedTeam = match.team2Players
-          ? match.team2Players.concat([steamId])
-          : [steamId];
-        await supabase
-          .from('CSGOMatch')
-          .update({ team2Players: updatedTeam })
-          .match({ id: match.id });
-        setTeam2PlayerId('');
-      }
-    },
-    [match],
-  );
-
-  if (!match) {
+  if (!data?.match) {
     return <div>Loading...</div>;
   }
 
@@ -57,8 +39,8 @@ export default function MatchPage({ matchId }: { matchId: string }) {
       </div>
       <div className="grid grid-cols-3">
         <div>
-          <h2>Team 1: {match.team1Score}</h2>
-          {match.team1Players?.map((player) => (
+          <h2>Team 1: {data.match.team1Score}</h2>
+          {data.match.team1Players?.map((player) => (
             <div key={player}>{player}</div>
           ))}
           <div className="flex">
@@ -72,7 +54,13 @@ export default function MatchPage({ matchId }: { matchId: string }) {
             />
             <Button
               label="add player"
-              onClick={() => addPlayer(team1PlayerId, 1)}
+              onClick={() =>
+                addPlayer.mutate({
+                  matchId,
+                  playerId: team1PlayerId,
+                  team: '1',
+                })
+              }
             >
               Add
             </Button>
@@ -80,8 +68,8 @@ export default function MatchPage({ matchId }: { matchId: string }) {
         </div>
         <div className="flex justify-center items-center">
           <div className="space-y-3">
-            {!match.map ? (
-              Object.entries(match.maps).map(([name, active]) => (
+            {!data.match.map ? (
+              Object.entries(data?.match.maps).map(([name, active]) => (
                 <div
                   key={name}
                   className={classNames('bg-gray-800 px-6 py-3 text-center', {
@@ -129,7 +117,13 @@ export default function MatchPage({ matchId }: { matchId: string }) {
             />
             <Button
               label="add player"
-              onClick={() => addPlayer(team2PlayerId, 2)}
+              onClick={() =>
+                addPlayer.mutate({
+                  matchId,
+                  playerId: team2PlayerId,
+                  team: '2',
+                })
+              }
             >
               Add
             </Button>
@@ -141,11 +135,3 @@ export default function MatchPage({ matchId }: { matchId: string }) {
 }
 
 MatchPage.Layout = Layout;
-
-export async function getServerSideProps({ query }: GetServerSidePropsContext) {
-  return {
-    props: {
-      matchId: query.id,
-    },
-  };
-}

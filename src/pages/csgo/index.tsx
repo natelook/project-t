@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 export default function Matches() {
   const router = useRouter();
   const createMatch = trpc.useMutation('createCSGOMatch');
-  const { data } = trpc.useQuery(['match']);
+  const { data } = trpc.useQuery(['csgoMatches']);
 
   return (
     <div>
