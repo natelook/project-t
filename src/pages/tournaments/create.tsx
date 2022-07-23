@@ -1,18 +1,18 @@
-import type { GetServerSidePropsContext } from 'next';
-import React, { useCallback, useEffect, useState } from 'react';
-import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import StarterKit from '@tiptap/starter-kit';
 import { useEditor } from '@tiptap/react';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Layout } from '@components/common';
-import {
-  createTournament,
-  countTotalRounds,
-  convertTitleToSlug,
-} from '@lib/tournament-utils';
 import TournamentForm from '@components/tournament/TournamentForm';
 import { useForm } from 'react-hook-form';
+import { useCallback, useEffect, useState } from 'react';
+import {
+  convertTitleToSlug,
+  countTotalRounds,
+  createTournament,
+} from '@lib/tournament-utils';
+import { GetServerSidePropsContext } from 'next/types';
+import { getSession } from 'next-auth/react';
 
 interface CreateTournamentProps {
   userId: string;

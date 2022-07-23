@@ -1,7 +1,7 @@
 import { Layout, Heading } from '@components/common';
-import TournamentCard from '@components/tournament/TournamentCard';
-import { TournamentWithRegistrants } from '@lib/types';
 import { useRouter } from 'next/router';
+import { TournamentWithRegistrants } from '@lib/types';
+import { TournamentCard } from '@components/tournament';
 
 interface TournamentsPageProps {
   tournaments: TournamentWithRegistrants[];

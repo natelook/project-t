@@ -17,8 +17,8 @@
     "incremental": true,
     "types": ["node"],
     "paths": {
-      "@components/*": ["components/*"],
-      "@lib/*": ["lib/*"]
+      "@components/*": ["src/components/*"],
+      "@lib/*": ["src/lib/*"]
     }
   },
   "include": ["next-env.d.ts", "auth.d.ts", "**/*.ts", "**/*.tsx"],

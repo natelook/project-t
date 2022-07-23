@@ -1,6 +1,6 @@
 /* eslint-disable */
-import randomNoun from '../lib/random-noun';
-import prisma from '../lib/prisma';
+import randomNoun from '../src/lib/random-noun';
+import prisma from '../src/lib/prisma';
 import seedData from './seed-data.json';
 
 async function main() {

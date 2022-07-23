@@ -1,4 +1,4 @@
-import { FormValues } from '@lib/types';
+// import { FormValues } from '@lib/types';
 import { ChangeEvent } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 
@@ -9,7 +9,7 @@ interface InputProps {
   label: string;
   type?: string;
   hideLabel?: boolean;
-  register?: UseFormRegister<FormValues>;
+  register?: UseFormRegister<any>;
 }
 
 export default function Input({

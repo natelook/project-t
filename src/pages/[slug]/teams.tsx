@@ -1,6 +1,7 @@
 import { Layout, Heading } from '@components/common';
-import TeamCard from '@components/team/card';
+import { TeamCard } from '@components/team';
 import { TournamentWithRegistrants } from '@lib/types';
+
 import { GetServerSidePropsContext } from 'next';
 
 interface TournamentTeamListingProps {

@@ -14,11 +14,11 @@ export default function Matches({ matches }: { matches: Match[] }) {
       <div>
         <Heading
           name="Counter-Strike Matches"
-          isOwner={true}
+          isOwner
           primaryButtonText="Create Match"
           primaryButton={() =>
             createMatch().then((id: string) => {
-              id && router.push(`/csgo/match/${id}`);
+              if (id) router.push(`/csgo/match/${id}`);
               console.log(id);
             })
           }

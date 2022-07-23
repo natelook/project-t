@@ -11,12 +11,12 @@ export default function ProfileSettingsPage() {
       <h2 className="text-2xl">Connect Accounts</h2>
       <form onSubmit={handleSubmit(addSteam)} className="max-w-lg space-y-3">
         <div>
-          <Input name="steam" label="Steam Profile" />
+          <Input name="steam" label="Steam Profile" register={register} />
           <span className="text-xs text-gray-400 block uppercase">
             Get the correct Steam Profile ID{' '}
             <a
-              href=""
-              rel="noreferer"
+              href="https://steamid.io/"
+              rel="noreferrer"
               target="_blank"
               className="text-primary-lighter font-bold"
             >

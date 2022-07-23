@@ -1,10 +1,3 @@
-import { AddPlayer, TeamStats } from '@components/team';
-import { Heading, Layout } from '@components/common';
-import {
-  MatchWithTeamsAndTournament,
-  RegistrantWithTournamentInfo,
-  TeamWithPlayersAndOwner,
-} from '@lib/types';
 import { Team, User } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
@@ -12,13 +5,20 @@ import { FormEvent, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { AnimatePresence } from 'framer-motion';
 import { Modal, Banner, Button, ModalHeading } from '@components/ui';
-import { CheckIcon } from '@heroicons/react/outline';
 import useNotification from '@lib/hooks/useNotification';
 import TeamPlayers from '@components/team/TeamPlayers';
-import { ImageData } from '@nouns/assets';
 import MatchCard from '@components/team/MatchCard';
-import { UploadIcon } from '@heroicons/react/solid';
 import FileInput from '@components/ui/FileInput';
+import {
+  MatchWithTeamsAndTournament,
+  RegistrantWithTournamentInfo,
+  TeamWithPlayersAndOwner,
+} from '@lib/types';
+import { Heading, Layout } from '@components/common';
+import { ImageData } from '@nouns/assets';
+import { AddPlayer, TeamStats } from '@components/team';
+import { UploadIcon } from '@heroicons/react/outline';
+import { CheckIcon } from '@heroicons/react/solid';
 
 interface MatchesRenamedForTeam extends MatchWithTeamsAndTournament {
   teamScore: number;
