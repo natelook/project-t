@@ -52,7 +52,12 @@ export default withTRPC<AppRouter>({
       ? `https://${process.env.VERCEL_URL}/api/trpc`
       : 'http://localhost:3000/api/trpc';
 
-    return { url };
+    return {
+      url,
+      hreaders: {
+        'x-ssr': '1',
+      },
+    };
   },
   ssr: true,
 })(MyApp);

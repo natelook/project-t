@@ -39,6 +39,7 @@ model Session {
 
 model User {
   id               String           @id @default(cuid())
+  password String
   username         String?          @unique
   pfp              String?
   name             String?

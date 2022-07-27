@@ -1,24 +1,61 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useCallback } from 'react';
 import { Layout } from '@components/common';
 import { Button } from '@components/ui';
-import useSetupMatch, { veto } from '@lib/hooks/useSetupCSMatch';
+import useSetupMatch, { createMatchServer } from '@lib/hooks/useSetupCSMatch';
 import classNames from 'classnames';
 import { trpc } from '@lib/trpc';
+import { Maps } from '@lib/types/csgo';
+import { useRouter } from 'next/router';
 
 // Get match ID from serverside props to elimate re-renders by using useRouter()
-export default function MatchPage({ matchId }: { matchId: string }) {
+export default function MatchPage() {
   const [team1PlayerId, setTeam1PlayerId] = React.useState<string>('');
   const [team2PlayerId, setTeam2PlayerId] = React.useState<string>('');
 
   const addPlayer = trpc.useMutation('addPlayerToCsgoMatch');
+  const veto = trpc.useMutation('csgoVeto');
+  const router = useRouter();
 
   const { data } = trpc.useQuery([
     'csgoMatch',
-    { matchId: 'cl5xgkzx605394ng4hj0zy347' },
+    { matchId: router.query?.id as string },
   ]);
 
-  const { match } = useSetupMatch(matchId);
-  console.log({ match });
+  const { match } = useSetupMatch(router.query.id as string);
+
+  const vetoMap = useCallback(
+    async (
+      vetoedMap: string,
+      currentVote: Maps,
+      team1Players?: string[],
+      team2Players?: string[],
+      // eslint-disable-next-line
+    ) => {
+      const matchId = router.query?.id as string;
+      const mapsLeft = Object.entries(currentVote).filter(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        ([_, active]) => active && true,
+      ).length;
+
+      if (mapsLeft === 1) {
+        return 'You cannot veto the last map';
+      }
+
+      const updatedMaps = { ...currentVote, [vetoedMap]: false };
+
+      if (mapsLeft === 2) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const map = Object.entries(updatedMaps).find(([_, active]) => active);
+        if (!map) throw Error('Something went wrong when selecting a map.');
+        // @ts-ignore
+        await veto.mutateAsync({ matchId, updatedMaps, map: map[0] });
+        createMatchServer(map[0], matchId, team1Players, team2Players);
+      }
+      // @ts-ignore
+      veto.mutate({ matchId, updatedMaps });
+    },
+    [veto],
+  );
 
   if (!data?.match) {
     return <div>Loading...</div>;
@@ -27,7 +64,7 @@ export default function MatchPage({ matchId }: { matchId: string }) {
   return (
     <div className="container mx-auto">
       <div className="flex items-end space-x-3">
-        <h1 className="text-3xl">Match: {match.id}</h1>
+        <h1 className="text-3xl">Match: {data.match.id}</h1>
         <a
           href="https://steamid.io/"
           target="_blank"
@@ -68,8 +105,8 @@ export default function MatchPage({ matchId }: { matchId: string }) {
         </div>
         <div className="flex justify-center items-center">
           <div className="space-y-3">
-            {!data.match.map ? (
-              Object.entries(data?.match.maps).map(([name, active]) => (
+            {!data.match.map && data?.match.maps ? (
+              Object.entries(data.match.maps).map(([name, active]) => (
                 <div
                   key={name}
                   className={classNames('bg-gray-800 px-6 py-3 text-center', {
@@ -79,15 +116,14 @@ export default function MatchPage({ matchId }: { matchId: string }) {
                 >
                   <button
                     type="button"
-                    onClick={() =>
-                      veto(
-                        match.id,
+                    onClick={() => {
+                      vetoMap(
                         name,
-                        match.maps,
-                        match.team1Players,
-                        match.team2Players,
-                      )
-                    }
+                        data.match.maps,
+                        data.match?.team1Players,
+                        data.match?.team2Players,
+                      );
+                    }}
                   >
                     {name}
                   </button>
@@ -95,15 +131,19 @@ export default function MatchPage({ matchId }: { matchId: string }) {
               ))
             ) : (
               <React.Fragment>
-                <p>{match.map}</p>
-                {match.ip ? <p>{match.ip}</p> : <p>Creating server...</p>}
+                <p>{data.match.map}</p>
+                {data.match.ip ? (
+                  <p>{data.match.ip}</p>
+                ) : (
+                  <p>Creating server...</p>
+                )}
               </React.Fragment>
             )}
           </div>
         </div>
         <div>
-          <h2>Team 2: {match.team2Score}</h2>
-          {match.team2Players?.map((player) => (
+          <h2>Team 2: {data.match.team2Score}</h2>
+          {data.match.team2Players?.map((player) => (
             <div key={player}>{player}</div>
           ))}
           <div className="flex">

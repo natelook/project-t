@@ -3,74 +3,42 @@ import TeamStackedList from '@components/common/TeamStackedList';
 import { Button, Input, Modal } from '@components/ui';
 import TeamInvitations from '@components/ui/TeamInvitations';
 import { BadgeCheckIcon } from '@heroicons/react/solid';
-import { TeamInvitationWithTeam, TeamWithPlayersAndOwner } from '@lib/types';
-import { Registrant, Tournament, User } from '@prisma/client';
-import { GetServerSidePropsContext } from 'next';
-import { getSession } from 'next-auth/react';
-import { FormEvent, useRef, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import { trpc } from '@lib/trpc';
+import { useForm } from 'react-hook-form';
 
-interface UserProfile extends User {
-  tournaments: Tournament[];
-  teamOnTournament: Registrant[];
-  teams: TeamWithPlayersAndOwner[];
-  ownedTeams: TeamWithPlayersAndOwner[];
-  teamInvitations: TeamInvitationWithTeam[];
-}
-
-interface ProfileProps {
-  data: UserProfile;
-}
-
-const fetcher = async (userId: string) => {
-  const request = await fetch(`/api/user/${userId}`);
-  const data = await request.json();
-  return data;
-};
-
-export default function Profile({ data }: ProfileProps) {
+export default function Profile() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [newUsername, setNewUsername] = useState('');
   const [nameError, setNameError] = useState<string | null>('');
+  const cancelButton = useRef(null);
   const router = useRouter();
 
-  const {
-    data: user,
-    isLoading,
-    refetch,
-  } = useQuery<UserProfile>(['user-profile', data.id], () => fetcher(data.id), {
-    initialData: data,
-  });
+  const { register, handleSubmit } = useForm<{ username: string }>();
+
+  const { data: user, isLoading, refetch } = trpc.useQuery(['user']);
+  const updateUsername = trpc.useMutation('changeUsername');
+  const teamInviteResponse = trpc.useMutation('teamInviteResponse');
 
   const inviteResponse = async (
     answer: 'accept' | 'decline',
     inviteId: string,
   ) => {
-    const request = await fetch('/api/team/invite-response', {
-      method: 'POST',
-      body: JSON.stringify({ answer, inviteId }),
-    });
+    const request = await teamInviteResponse.mutateAsync({ answer, inviteId });
 
-    if (request.status === 200) {
+    if (request.message) {
       refetch();
     }
   };
 
-  const cancelButton = useRef(null);
-
-  const changeUsername = async (e: FormEvent) => {
-    e.preventDefault();
-    const request = await fetch('/api/user/change-username', {
-      method: 'POST',
-      body: JSON.stringify({ newUsername }),
-    });
-    const response = await request.json();
-    if (response.error) return setNameError(response.error);
+  const changeUsername = async ({ username }: { username: string }) => {
+    const request = await updateUsername.mutateAsync({ username });
+    if (!request) return setNameError('Something bad happened');
     setModalOpen(false);
     refetch();
-    return response;
+    return request;
   };
+
   if (isLoading || !user) {
     return <div>Loading...</div>;
   }
@@ -137,12 +105,11 @@ export default function Profile({ data }: ProfileProps) {
               like. If you do it 10 times your account deletes itself though.
             </p>
           </div>
-          <form onSubmit={changeUsername} className="space-y-3">
+          <form onSubmit={handleSubmit(changeUsername)} className="space-y-3">
             <Input
               label="New Username"
               name="username"
-              onChange={(value) => setNewUsername(value)}
-              value={newUsername}
+              register={register}
               hideLabel
             />
             <Button type="submit" label="Update username" onClick={() => {}}>
@@ -158,19 +125,6 @@ export default function Profile({ data }: ProfileProps) {
       )}
     </div>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getSession(context);
-  if (!session) {
-    return { notFound: true };
-  }
-  const request = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/user/${session.user.id}`,
-  );
-  const user = await request.json();
-
-  return { props: { data: user } };
 }
 
 Profile.Layout = Layout;

@@ -1,53 +1,73 @@
 import NextAuth from 'next-auth/next';
-import EmailProvider from 'next-auth/providers/email';
 import prisma from '@lib/prisma';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-// import makeNoun from '@lib/nouns-playground';
+import Credentials from 'next-auth/providers/credentials';
+import { loginSchema } from '@server/validation/auth';
+import { verify } from 'argon2';
+import { NextAuthOptions } from 'next-auth';
 
-const allowed = [
-  'nate@tournaments.wtf',
-  'admin@tournaments.wtf',
-  'nate@natelook.com',
-  'obcd@tournaments.wtf',
-  'mach@tournaments.wtf',
-  '0x2a7f@gmail.com',
-  'chris.lwlr@gmail.com',
-  'spencertpeoples@gmail.com',
-];
-
-export default NextAuth({
+export const nextAuthOptions: NextAuthOptions = {
   providers: [
-    EmailProvider({
-      server: process.env.EMAIL_SERVER,
-      from: process.env.EMAIL_FROM,
+    Credentials({
+      name: 'credentials',
+      credentials: {
+        email: {
+          label: 'Email',
+          type: 'email',
+          placeholder: 'Email...',
+        },
+        password: { label: 'Password', type: 'password' },
+      },
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      authorize: async (crendentials, request) => {
+        const creds = await loginSchema.parseAsync(crendentials);
+        const user = await prisma.user.findFirst({
+          where: { email: creds.email },
+        });
+
+        if (!user) {
+          return null;
+        }
+
+        const isValidPassword = await verify(user.password, creds.password);
+
+        if (!isValidPassword) {
+          return null;
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+        };
+      },
     }),
   ],
   callbacks: {
-    session: async (session: any) => {
-      const user = await prisma.user.findUnique({
-        where: { id: session.user.id },
-        select: { pfp: true },
-      });
+    jwt: async ({ token, user }) => {
       if (user) {
-        session.pfp = user.pfp;
+        token.id = user.id; // eslint-disable-line no-param-reassign
+        token.email = user.email; // eslint-disable-line no-param-reassign
       }
 
-      /* eslint no-param-reassign: "error" */
-      session.userId = session.user.id;
-      session.test = 'hello';
-
-      return Promise.resolve(session);
+      return token;
     },
-    signIn: async ({ user }: Partial<{ user: { email?: string } }>) => {
-      if (!user.email) {
-        return false;
+    session: async ({ session, token }) => {
+      if (token) {
+        session.id = token.id; // eslint-disable-line no-param-reassign
       }
-      const isAllowed = allowed.includes(user.email);
-      return isAllowed;
+
+      return session;
     },
   },
-  adapter: PrismaAdapter(prisma),
+  jwt: {
+    secret: 'super-secret',
+    maxAge: 15 * 24 * 30 * 60, // 15 days
+  },
   pages: {
-    newUser: '/welcome',
+    signIn: '/',
+    newUser: '/sign-up',
   },
-});
+  // adapter: PrismaAdapter(prisma),
+};
+
+export default NextAuth(nextAuthOptions);

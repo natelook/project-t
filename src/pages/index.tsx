@@ -3,16 +3,13 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import React from 'react';
 import TournamentCard from '@components/tournament/TournamentCard';
-import { TournamentWithRegistrants } from '@lib/types';
 import { Button } from '@components/ui';
 import { useRouter } from 'next/router';
+import { trpc } from '@lib/trpc';
 
-interface HomeProps {
-  tournaments: TournamentWithRegistrants[];
-}
-
-export default function Home({ tournaments }: HomeProps) {
+export default function Home() {
   const router = useRouter();
+  const { data } = trpc.useQuery(['tournaments']);
   return (
     <div className="">
       <motion.div
@@ -90,7 +87,7 @@ export default function Home({ tournaments }: HomeProps) {
         <div>
           <h2 className="text-3xl font-bold mb-1">Featured Tournaments</h2>
           <div className="grid md:grid-cols-2 gap-10">
-            {tournaments.map((tournament) => (
+            {data?.tournaments.map((tournament) => (
               <TournamentCard
                 key={tournament.id}
                 name={tournament.name}
@@ -106,14 +103,6 @@ export default function Home({ tournaments }: HomeProps) {
       </motion.div>
     </div>
   );
-}
-
-export async function getServerSideProps() {
-  const request = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/tournaments/featured`,
-  );
-  const featuredTournaments = await request.json();
-  return { props: { tournaments: featuredTournaments } };
 }
 
 Home.Layout = Layout;

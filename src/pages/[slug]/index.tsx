@@ -6,7 +6,6 @@ import {
 } from '@components/tournament';
 import { Layout } from '@components/common';
 import Modal from '@components/ui/Modal';
-import { Tournament } from '@prisma/client';
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
 import React, {
@@ -25,38 +24,35 @@ import {
 } from '@heroicons/react/solid';
 import { AnimatePresence } from 'framer-motion';
 import SuperAdminTournament from '@components/admin/SuperAdminTournament';
-import { MatchWithTeam, RegistrantWithTeamInfo } from '@lib/types';
 import getTotalRounds from '@lib/get-total-rounds';
 import { generateHTML } from '@tiptap/html';
 import StarterKit from '@tiptap/starter-kit';
 import Link from 'next/link';
 import useNotification from '@lib/hooks/useNotification';
-import useFetch from '@lib/hooks/useFetch';
+import { trpc } from '@lib/trpc';
+import { useRouter } from 'next/router';
 
-interface TournamentWithRegistrantsAndMatches extends Tournament {
-  registrants: RegistrantWithTeamInfo[];
-  matches: MatchWithTeam[];
-}
-
-interface TournamentPageProps {
-  data: TournamentWithRegistrantsAndMatches;
-  userId: string;
-}
-
-export default function TournamentPage({ data, userId }: TournamentPageProps) {
+export default function TournamentPage() {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
   const [totalRounds, setTotalRounds] = useState<number[] | null>(null);
+  const userId = useCallback(() => null, []);
+  const user = useCallback(() => null, []);
+  const router = useRouter();
+  const { data, refetch } = trpc.useQuery([
+    'tournament',
+    { slug: router.query?.slug as string },
+  ]);
 
-  const isAdmin = useRef(userId === data.createdBy);
+  const isAdmin = false;
   const cancelButtonRef = useRef(null);
 
-  const { data: user } = useFetch(`/api/user/${userId}`, 'user');
+  // const { data: user } = useFetch(`/api/user/${userId}`, 'user');
 
-  const { data: tournament, refetch } = useFetch(
-    `/api/tournament/${data.slug}`,
-    `tournament-${data.id}`,
-    data,
-  );
+  // const { data: tournament, refetch } = useFetch(
+  //   `/api/tournament/${data.slug}`,
+  //   `tournament-${data.id}`,
+  //   data,
+  // );
 
   const {
     isActive,
@@ -70,28 +66,36 @@ export default function TournamentPage({ data, userId }: TournamentPageProps) {
     triggerNotification: triggerError,
   } = useNotification();
 
+  // For rich text display
   const output = useMemo(
     () =>
-      data.description &&
-      generateHTML(JSON.parse(data.description), [StarterKit]),
-    [data.description],
+      data?.tournament &&
+      data?.tournament.description &&
+      generateHTML(JSON.parse(data?.tournament.description), [StarterKit]),
+    [data?.tournament],
   );
 
   const startTournament = useCallback(async () => {
-    const request = await fetch(`/api/tournament/${tournament.id}/start`);
+    if (!data?.tournament) return;
+    const request = await fetch(`/api/tournament/${data?.tournament.id}/start`);
     if (request.status !== 200) {
       triggerError('Something went wrong', 'danger');
       return;
     }
     refetch();
-  }, [refetch, tournament.id, triggerError]);
+  }, [refetch, data?.tournament, triggerError]);
 
   useEffect(() => {
-    if (data.matches.length !== 0) {
-      const rounds = getTotalRounds(data.matches);
+    if (data?.tournament && data?.tournament.matches.length !== 0) {
+      const rounds = getTotalRounds(data?.tournament.matches);
       setTotalRounds(rounds);
     }
-  }, [data.matches]);
+  }, [data?.tournament]);
+
+  if (!data?.tournament) {
+    return <p>Loading</p>;
+  }
+  const { tournament } = data;
 
   return (
     <div>

@@ -11,7 +11,7 @@ interface TournamentCardProps {
   maxPlayers: number;
   slug: string;
   date: Date;
-  banner?: string;
+  banner?: string | null;
 }
 
 export default function TournamentCard({
