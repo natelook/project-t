@@ -11,14 +11,15 @@ import {
   countTotalRounds,
   createTournament,
 } from '@lib/tournament-utils';
-import { GetServerSidePropsContext } from 'next/types';
-import { getSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
+import { trpc } from '@lib/trpc';
 
 interface CreateTournamentProps {
   userId: string;
 }
 
 export default function CreateTournament({ userId }: CreateTournamentProps) {
+  const { data: session, status } = useSession();
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [slug, setSlug] = useState('');
   const [banner, setBanner] = useState<File | null>();
@@ -27,6 +28,7 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
   >();
   const [error, setError] = useState<string | null>();
   const router = useRouter();
+  const make = trpc.useMutation('createTournament');
 
   const editor = useEditor({
     extensions: [
@@ -65,6 +67,7 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
 
   const create = async (values: any) => {
     const { name, format, mainStream, maxPlayers } = values;
+    if (!editor || banner) return null;
     const tournament = {
       name,
       format,
@@ -77,13 +80,16 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
       roundWinConditions,
       description: JSON.stringify(editor.getJSON()),
     };
+
+    await make.mutateAsync({ ...tournament, bannerFile: banner });
+
     const { slug: url, error: err } = await createTournament(
       tournament,
       banner,
       userId,
     );
 
-    if (err) {
+    if (err || !url) {
       setError(err);
       return;
     }
@@ -109,14 +115,6 @@ export default function CreateTournament({ userId }: CreateTournamentProps) {
       />
     </div>
   );
-}
-
-export async function getServerSideProps({ req }: GetServerSidePropsContext) {
-  const session = await getSession({ req });
-  if (!session) {
-    return { notFound: true };
-  }
-  return { props: { session, userId: session.user.id } };
 }
 
 CreateTournament.Layout = Layout;

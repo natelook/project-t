@@ -188,7 +188,19 @@ export default function Nav() {
               </div>
             ) : (
               <div className="flex items-center py-3 space-x-5">
-                <Button type="button" label="Login" onClick={() => signIn()}>
+                <Button
+                  type="button"
+                  label="Register"
+                  style="secondary"
+                  onClick={() => router.push('/register')}
+                >
+                  Register
+                </Button>
+                <Button
+                  type="button"
+                  label="Login"
+                  onClick={() => router.push('/login')}
+                >
                   Login
                 </Button>
               </div>

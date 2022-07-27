@@ -6,9 +6,46 @@ import maps from '@lib/csmappool';
 import { hash } from 'argon2';
 import { signUpSchema } from 'src/server/validation/auth';
 import { createContext, Context } from 'src/server/ context';
+import presignImage from '@lib/presignImage';
 
 export const appRouter = trpc
   .router<Context>()
+  .mutation('createTournament', {
+    input: z.object({
+      name: z.string(),
+      format: z.string(),
+      startDate: z.date(),
+      createdBy: z.string(),
+      slug: z.string(),
+      game: z.string(),
+      maxRegistrants: z.number(),
+      mainStream: z.string(),
+      roundWinConditions: z.array(z.string()),
+      description: z.string(),
+      bannerFile: z.instanceof(File),
+    }),
+    resolve: async ({ ctx, input }) => {
+      if (!ctx?.session) {
+        throw new trpc.TRPCError({
+          code: 'UNAUTHORIZED',
+        });
+      }
+      const { userId } = await prisma.user.findOne({
+        where: { email: ctx.session.user.email },
+      });
+
+      const post = presignImage(
+        encodeURIComponent(input.bannerFile.type),
+        'banner',
+      );
+
+      const tournament = await prisma.tournament.create({
+        data: { ...input, createdBy: userId },
+      });
+
+      return { tournament, post };
+    },
+  })
   .mutation('teamInviteResponse', {
     input: z.object({
       answer: z.string(),
@@ -51,7 +88,6 @@ export const appRouter = trpc
     }),
     resolve: async ({ ctx, input }) => {
       const { session } = ctx;
-      console.log(session);
       if (!session) {
         throw new trpc.TRPCError({
           code: 'UNAUTHORIZED',
@@ -61,10 +97,10 @@ export const appRouter = trpc
       const { username } = input;
 
       const update = await prisma.user.update({
-        where: { id: session.user.id as string },
-        data: { username },
+        where: { email: session.user.email },
+        data: { username: username as string },
       });
-      console.log({ update });
+
       return { update };
     },
   })
@@ -110,10 +146,10 @@ export const appRouter = trpc
         });
       }
 
-      const hasedPassword = await hash(password);
+      const hashedPassword = await hash(password);
 
       const result = await ctx.prisma.user.create({
-        data: { username, email, password: hasedPassword },
+        data: { username, email, password: hashedPassword },
       });
 
       return {
